@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brick Street — Analyst Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Background layers -->
+  <div class="bg-layer noise"></div>
+  <div class="bg-layer scanlines"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <!-- Digital grid canvas -->
+  <canvas id="gridCanvas"></canvas>
+  <!-- Particle canvas -->
+  <canvas id="particleCanvas"></canvas>
+
+  <!-- FED RATE PANEL -->
+  <div class="fed-panel" id="fedPanel">
+    <div class="fed-tab" id="fedTab">
+      <span class="fed-tab-text">INTEREST RATE</span>
+    </div>
+    <div class="fed-drawer" id="fedDrawer">
+      <div class="fed-drawer-inner" id="fedDrawerInner">
+        <div class="fed-loading">Loading rate data…</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ECONOMIC CALENDAR PANEL -->
+  <div class="cal-panel" id="calPanel">
+    <div class="cal-drawer" id="calDrawer">
+      <div class="cal-drawer-inner" id="calDrawerInner">
+        <div class="cal-loading">Loading calendar…</div>
+      </div>
+    </div>
+    <div class="cal-tab" id="calTab">
+      <span class="cal-tab-text">MARKET EVENTS</span>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">⚡</span>
+        <span class="logo-text">I N<span class="logo-accent">$$</span>D MONEY</span>
+      </div>
+      <div class="header-meta">
+        <div class="live-indicator">
+          <span class="live-dot"></span>
+          <span class="live-label">LIVE ANALYSIS</span>
+        </div>
+        <div class="stock-count" id="stockCount">— stocks</div>
+
+        <!-- Logged out -->
+        <div class="auth-logged-out" id="authLoggedOut">
+          <button class="auth-btn auth-btn--ghost" id="openLoginBtn">Log in</button>
+          <button class="auth-btn auth-btn--primary" id="openRegisterBtn">Register</button>
+        </div>
+
+        <!-- Logged in -->
+        <div class="auth-logged-in" id="authLoggedIn" style="display:none">
+          <span class="auth-username" id="authUsername"></span>
+          <button class="wl-toggle-btn" id="watchlistToggleBtn" style="display:none">
+            <svg class="wl-toggle-star" viewBox="0 0 24 24" fill="currentColor"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+            <span>Watchlist</span>
+            <span class="wl-toggle-count" id="wlHeaderCount"></span>
+          </button>
+          <button class="auth-btn auth-btn--ghost" id="logoutBtn">Log out</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1 class="hero-title">
+        <span class="word">Brick</span>
+        <span class="word accent">Street</span>
+      </h1>
+      <p class="hero-sub">Below you see the stocks with best ratings. According to "Brick Street" analysts.</p>
+      <div class="hero-criteria">
+        <div class="criteria-pill buy-pill">BUY ≥ 10</div>
+        <div class="criteria-pill hold-pill">HOLD ≤ 10</div>
+        <div class="criteria-pill sell-pill">SELL &lt; 5</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS BAR -->
+  <div class="stats-bar" id="statsBar">
+    <div class="stat-item">
+      <span class="stat-value accent-text" id="totalCount">0</span>
+      <span class="stat-label">Stocks Passed</span>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <span class="stat-value buy-text" id="totalAnalysts">0</span>
+      <span class="stat-label">Total Analysts</span>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <span class="stat-value hold-text" id="strongBuyPct">0%</span>
+      <span class="stat-label">Strong Consensus</span>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <span class="stat-value accent-text stat-value--symbol" id="topPick">—</span>
+      <span class="stat-label">Top Pick</span>
+    </div>
+  </div>
+
+  <!-- CONTENT LAYOUT: main table + watchlist sidebar -->
+  <div class="content-layout" id="contentLayout">
+
+    <div class="content-main">
+      <!-- SORT CONTROLS -->
+      <div class="controls-bar">
+        <span class="controls-label">Sort by</span>
+        <button class="sort-btn active" data-sort="buy">⬆ Buy</button>
+        <button class="sort-btn" data-sort="hold">Hold</button>
+        <button class="sort-btn" data-sort="sell">Sell</button>
+        <button class="sort-btn" data-sort="symbol">Symbol</button>
+        <div class="search-wrap">
+          <input class="search-input" type="text" placeholder="Search symbol…" id="searchInput" />
+        </div>
+      </div>
+
+      <!-- TABLE HEADER -->
+      <div class="table-container">
+        <div class="table-header">
+          <div class="col col-rank">#</div>
+          <div class="col col-symbol">Symbol</div>
+          <div class="col col-buy">
+            <span class="col-icon buy-icon">▲</span> Buy
+          </div>
+          <div class="col col-hold">
+            <span class="col-icon hold-icon">⏸</span> Hold
+          </div>
+          <div class="col col-sell">
+            <span class="col-icon sell-icon">🔥</span> Sell
+          </div>
+          <div class="col col-signal">Signal</div>
+          <div class="col col-earnings">Earnings · Last 4Q</div>
+        </div>
+        <div class="table-body" id="tableBody"></div>
+      </div>
+
+      <!-- SHOW MORE -->
+      <div class="showmore-wrap" id="showMoreWrap" style="display:none">
+        <button class="showmore-btn" id="showMoreBtn">
+          <span class="showmore-label">Show more stocks</span>
+          <span class="showmore-icon">▼</span>
+        </button>
+        <span class="showmore-count" id="showMoreCount"></span>
+      </div>
+    </div><!-- end .content-main -->
+
+    <!-- WATCHLIST SIDEBAR -->
+    <aside class="watchlist-sidebar" id="watchlistSidebar">
+      <div class="wl-sidebar-inner">
+        <div class="wl-sidebar-header">
+          <div class="wl-sidebar-title-row">
+            <svg class="wl-sidebar-star" viewBox="0 0 24 24" fill="currentColor"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+            <span class="wl-sidebar-title">Watchlist</span>
+            <span class="watchlist-count" id="watchlistCount">0 stocks</span>
+            <button class="wl-sidebar-close" id="wlSidebarClose">✕</button>
+          </div>
+          <p class="wl-sidebar-hint">Click ★ on any stock to save it here</p>
+        </div>
+        <div class="wl-sidebar-body" id="watchlistBody">
+          <div class="watchlist-empty-state">
+            <svg viewBox="0 0 24 24" fill="none"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>Click ★ on any stock to add it here</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+  </div><!-- end .content-layout -->
+
+  <!-- MEMBERS AREA — visible only when logged in -->
+  <div id="membersArea" style="display:none">
+    <section class="members-section">
+      <div class="members-inner">
+        <div class="members-header">
+          <div class="members-tag">MEMBERS ONLY</div>
+          <h2 class="members-title">Welcome back, <span id="membersName"></span></h2>
+          <p class="members-sub">Save stocks to your watchlist using the button in the top bar.</p>
+        </div>
+        <div class="members-grid members-grid--2">
+          <div class="members-card members-card--coming">
+            <div class="members-card-icon">🔔</div>
+            <h3>Price Alerts</h3>
+            <p>Get notified when a stock hits your target price.</p>
+            <span class="coming-badge">Coming soon</span>
+          </div>
+          <div class="members-card members-card--coming">
+            <div class="members-card-icon">📊</div>
+            <h3>Advanced Analytics</h3>
+            <p>Deep-dive analysis and historical consensus trends.</p>
+            <span class="coming-badge">Coming soon</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- INFO COLUMNS: How To Use + Data Sources side by side -->
+  <div class="info-columns">
+
+  <!-- HOW TO USE SECTION -->
+  <section class="howto-section">
+    <div class="howto-inner">
+
+      <div class="howto-header">
+        <div class="howto-tag">DASHBOARD GUIDE</div>
+        <h2 class="howto-title">How to use this dashboard</h2>
+        <p class="howto-sub">Every signal on this page is built from verified institutional data. Here is what each piece means and how professional investors act on it.</p>
+      </div>
+
+      <div class="howto-grid">
+
+        <div class="howto-card">
+          <div class="howto-icon buy-text">▲</div>
+          <h3>Where do the analyst ratings come from?</h3>
+          <p>All Buy, Hold, and Sell ratings are sourced from <strong>MarketBeat</strong>, aggregating official recommendations from licensed analysts at major investment banks. Each rating is a formal, published call from a credentialed professional — not an algorithm.</p>
+        </div>
+
+        <div class="howto-card">
+          <div class="howto-icon accent-text">◈</div>
+          <h3>What does a strong Buy consensus mean?</h3>
+          <p>When 10 or more independent analysts converge on a Buy, it signals institutional conviction across multiple research desks. A strong consensus is one of the most reliable forward-looking signals available to retail investors.</p>
+        </div>
+
+        <div class="howto-card">
+          <div class="howto-icon" style="color:#a78bfa;">◉</div>
+          <h3>Stocks with strong ratings have growth potential</h3>
+          <p>Stocks passing our filter represent names where Wall Street has the highest collective conviction. Research shows strong analyst consensus tends to outperform the broader market in the near to mid-term.</p>
+        </div>
+
+        <div class="howto-card">
+          <div class="howto-icon hold-text">⏸</div>
+          <h3>Why are Hold and Sell stocks filtered out?</h3>
+          <p>High Hold counts signal analyst uncertainty — ambiguity that often precedes stagnation. Sell ratings carry explicit warnings. We filter both so every stock you see has a clean, directional signal behind it.</p>
+        </div>
+
+        <div class="howto-card">
+          <div class="howto-icon accent-text">◎</div>
+          <h3>Reading the Earnings Surprise column</h3>
+          <p>The <strong>surprise %</strong> shows how much a company beat or missed analyst EPS estimates each quarter. Consistently positive surprises signal a company repeatedly outperforming Wall Street's best forecasts — a powerful quality indicator.</p>
+        </div>
+
+        <div class="howto-card">
+          <div class="howto-icon hold-text">◆</div>
+          <h3>Using the Fed Rate panel</h3>
+          <p>The Federal Reserve rate is the most powerful lever in global markets. High rates compress valuations — especially tech. When the Fed cuts, equities expand. Use the left panel to track the current rate and next decision before positioning.</p>
+        </div>
+
+        <div class="howto-card">
+          <div class="howto-icon sell-text">▣</div>
+          <h3>Trading around the Economic Calendar</h3>
+          <p>The largest S&P 500 moves are triggered by scheduled releases — CPI, NFP, GDP, FOMC. Professional traders adjust positions <em>before</em> these events. The right panel shows what is coming, consensus forecasts, and which sectors are most exposed.</p>
+        </div>
+
+        <div class="howto-card">
+          <div class="howto-icon sell-text">⚠</div>
+          <h3>Important — Not financial advice</h3>
+          <p>This dashboard is a research and screening tool only. It does not constitute personal financial advice. Always conduct your own due diligence and consult a qualified financial advisor before making any investment decision.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- DATA SOURCES SECTION -->
+  <section class="sources-section">
+    <div class="sources-inner">
+
+      <div class="sources-header">
+        <div class="sources-tag">INTELLIGENCE SOURCES</div>
+        <h2 class="sources-title">Where the data comes from</h2>
+        <p class="sources-sub">Every number on this dashboard is sourced from verified, institutional-grade data providers. No estimates, no fabrication — only authoritative data from the organisations that Wall Street itself relies on.</p>
+      </div>
+
+      <div class="sources-grid">
+
+        <div class="source-card" style="--sc:#16a34a;--sc-glow:rgba(22,163,74,0.18);">
+          <div class="source-card-bg"></div>
+          <div class="source-tag-badge">ANALYST RATINGS</div>
+          <div class="source-name-row">
+            <span class="source-name" style="--sn-from:#00c032;--sn-to:#e4eaf6;">MarketBeat</span>
+            <a class="source-link-btn" href="https://www.marketbeat.com" target="_blank" rel="noopener">Visit ↗</a>
+          </div>
+          <p class="source-desc">One of the most trusted financial intelligence platforms in the industry, used by both retail and institutional investors. MarketBeat aggregates official Buy, Hold, and Sell recommendations from licensed analysts at Goldman Sachs, Morgan Stanley, JP Morgan, and 200+ other major investment houses — updated daily.</p>
+          <ul class="source-facts">
+            <li>Official recommendations from licensed Wall Street analysts</li>
+            <li>Covers every stock in the S&P 500</li>
+            <li>Updated daily as new ratings are published</li>
+            <li>Tracks analyst consensus going back years</li>
+          </ul>
+        </div>
+
+        <div class="source-card" style="--sc:#06b6d4;--sc-glow:rgba(6,182,212,0.18);">
+          <div class="source-card-bg"></div>
+          <div class="source-tag-badge" style="color:var(--accent);background:var(--accent-dark);border-color:rgba(6,182,212,0.3);">PRICE &amp; EARNINGS</div>
+          <div class="source-name-row">
+            <span class="source-name" style="--sn-from:#06b6d4;--sn-to:#67e8f9;">Yahoo Finance</span>
+            <a class="source-link-btn" href="https://finance.yahoo.com" target="_blank" rel="noopener" style="color:var(--accent);border-color:rgba(6,182,212,0.3);">Visit ↗</a>
+          </div>
+          <p class="source-desc">Yahoo Finance is the world's most widely used financial data platform, serving over 75 million users. We use it to retrieve real-time stock prices and quarterly earnings history — specifically the EPS surprise percentage that reveals whether companies are consistently beating or missing Wall Street expectations.</p>
+          <ul class="source-facts">
+            <li>Real-time and delayed stock price data</li>
+            <li>EPS actual vs estimate for last 4 quarters</li>
+            <li>Earnings surprise % calculated per quarter</li>
+            <li>No API key required — publicly accessible</li>
+          </ul>
+        </div>
+
+        <div class="source-card" style="--sc:#f59e0b;--sc-glow:rgba(245,158,11,0.18);">
+          <div class="source-card-bg"></div>
+          <div class="source-tag-badge" style="color:var(--hold);background:var(--hold-dark);border-color:rgba(245,158,11,0.3);">FEDERAL RESERVE DATA</div>
+          <div class="source-name-row">
+            <span class="source-name" style="--sn-from:#f59e0b;--sn-to:#fcd34d;">FRED — St. Louis Fed</span>
+            <a class="source-link-btn" href="https://fred.stlouisfed.org" target="_blank" rel="noopener" style="color:var(--hold);border-color:rgba(245,158,11,0.3);">Visit ↗</a>
+          </div>
+          <p class="source-desc">The Federal Reserve Bank of St. Louis publishes FRED — Federal Reserve Economic Data — one of the most authoritative economic databases in the world. We use it to retrieve the official Federal Funds Target Rate, giving you the most accurate and up-to-date picture of current US monetary policy directly from the source.</p>
+          <ul class="source-facts">
+            <li>Published by a US Government institution — the Federal Reserve</li>
+            <li>Public domain data, free with no restrictions</li>
+            <li>Official rate history from 1954 to present</li>
+            <li>Updated on the day of each FOMC decision</li>
+          </ul>
+        </div>
+
+        <div class="source-card" style="--sc:#8b5cf6;--sc-glow:rgba(139,92,246,0.18);">
+          <div class="source-card-bg"></div>
+          <div class="source-tag-badge" style="color:#a78bfa;background:rgba(139,92,246,0.1);border-color:rgba(139,92,246,0.3);">ECONOMIC CALENDAR</div>
+          <div class="source-name-row">
+            <span class="source-name" style="--sn-from:#8b5cf6;--sn-to:#c4b5fd;">Finnhub</span>
+            <a class="source-link-btn" href="https://finnhub.io" target="_blank" rel="noopener" style="color:#a78bfa;border-color:rgba(139,92,246,0.3);">Visit ↗</a>
+          </div>
+          <p class="source-desc">Finnhub is an institutional-grade financial data provider trusted by hedge funds, fintech companies, and professional trading desks worldwide. We use their economic calendar API to surface upcoming high-impact US economic releases — the same events that move billions of dollars in the markets every month — complete with consensus forecasts and prior readings.</p>
+          <ul class="source-facts">
+            <li>Institutional-grade data used by professional traders</li>
+            <li>Covers all major US economic releases (CPI, NFP, GDP, FOMC)</li>
+            <li>Consensus estimates from the analyst community</li>
+            <li>Real-time updates as events release</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  </div><!-- end .info-columns -->
+
+  <!-- EMPTY STATE -->
+  <div class="empty-state" id="emptyState" style="display:none">
+    <div class="empty-icon">📡</div>
+    <h3>No data loaded yet</h3>
+    <p>Run <code>scraper.py</code> first, then open this page.<br/>
+       Make sure <code>../data/filtered_stocks.json</code> exists.</p>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>Brick Street — Real-time analyst intelligence. Data sourced from MarketBeat, Yahoo Finance, FRED, and Finnhub. Not financial advice.</p>
+  </footer>
+
+  <!-- LOGIN MODAL -->
+  <div class="modal-overlay" id="loginModal">
+    <div class="modal-card">
+      <button class="modal-close" id="closeLoginBtn">✕</button>
+      <div class="modal-header">
+        <div class="modal-icon">⚡</div>
+        <h2 class="modal-title">Log in</h2>
+        <p class="modal-sub">Welcome back to Brick Street</p>
+      </div>
+      <form class="modal-form" id="loginForm">
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="loginEmail" placeholder="your@email.com" required autocomplete="email" />
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="loginPassword" placeholder="••••••••" required autocomplete="current-password" />
+        </div>
+        <p class="form-error" id="loginError"></p>
+        <button type="submit" class="form-submit" id="loginSubmit">Log in</button>
+      </form>
+      <p class="modal-switch">No account? <span class="modal-switch-link" id="switchToRegister">Register here</span></p>
+    </div>
+  </div>
+
+  <!-- REGISTER MODAL -->
+  <div class="modal-overlay" id="registerModal">
+    <div class="modal-card">
+      <button class="modal-close" id="closeRegisterBtn">✕</button>
+      <div class="modal-header">
+        <div class="modal-icon">⚡</div>
+        <h2 class="modal-title">Create account</h2>
+        <p class="modal-sub">Join Brick Street for free</p>
+      </div>
+      <form class="modal-form" id="registerForm">
+        <div class="form-group">
+          <label>Full name</label>
+          <input type="text" id="regName" placeholder="John Smith" required autocomplete="name" />
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="regEmail" placeholder="your@email.com" required autocomplete="email" />
+        </div>
+        <div class="form-group">
+          <label>Password <span class="form-hint">(min. 6 characters)</span></label>
+          <input type="password" id="regPassword" placeholder="••••••••" required autocomplete="new-password" minlength="6" />
+        </div>
+        <p class="form-error" id="regError"></p>
+        <button type="submit" class="form-submit" id="registerSubmit">Create account</button>
+      </form>
+      <p class="modal-switch">Already have an account? <span class="modal-switch-link" id="switchToLogin">Log in</span></p>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

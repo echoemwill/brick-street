@@ -1,0 +1,32 @@
+# Environment / secrets
+.env
+*.env
+
+# Database (contains real user data)
+data/users.db
+
+# Scraper state (resume file, not needed in repo)
+data/progress.json
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo

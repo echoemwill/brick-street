@@ -1,0 +1,98 @@
+{
+  "current_lower": 3.5,
+  "current_upper": 3.75,
+  "last_updated": "2026-06-03",
+  "next_meeting": {
+    "date": "2026-06-10",
+    "label": "Jun 10, 2026",
+    "days_until": 6,
+    "expected": "hold"
+  },
+  "market_impact": {
+    "hold": "Rates on hold provide stability and predictability. Markets have priced in current conditions \u2014 S&P 500 performance will hinge on earnings rather than rate expectations. Growth and tech stocks remain supported.",
+    "cut": "A rate cut lowers borrowing costs across the economy \u2014 bullish for equities. Growth and tech stocks benefit most as future earnings are discounted at a lower rate. REITs, utilities, and dividend stocks also rally on cheaper money.",
+    "hike": "Higher rates raise borrowing costs for companies and consumers \u2014 a headwind for equities. Growth and high-PE tech stocks face the most pressure. Financials may benefit from wider margins, but the broader market typically reprices lower."
+  },
+  "history": [
+    {
+      "date": "2023-02-02",
+      "label": "Feb 2023",
+      "lower": 4.5,
+      "upper": 4.75,
+      "change": 0.25,
+      "direction": "hike"
+    },
+    {
+      "date": "2023-03-23",
+      "label": "Mar 2023",
+      "lower": 4.75,
+      "upper": 5.0,
+      "change": 0.25,
+      "direction": "hike"
+    },
+    {
+      "date": "2023-05-04",
+      "label": "May 2023",
+      "lower": 5.0,
+      "upper": 5.25,
+      "change": 0.25,
+      "direction": "hike"
+    },
+    {
+      "date": "2023-07-27",
+      "label": "Jul 2023",
+      "lower": 5.25,
+      "upper": 5.5,
+      "change": 0.25,
+      "direction": "hike"
+    },
+    {
+      "date": "2024-09-19",
+      "label": "Sep 2024",
+      "lower": 4.75,
+      "upper": 5.0,
+      "change": -0.5,
+      "direction": "cut"
+    },
+    {
+      "date": "2024-11-08",
+      "label": "Nov 2024",
+      "lower": 4.5,
+      "upper": 4.75,
+      "change": -0.25,
+      "direction": "cut"
+    },
+    {
+      "date": "2024-12-19",
+      "label": "Dec 2024",
+      "lower": 4.25,
+      "upper": 4.5,
+      "change": -0.25,
+      "direction": "cut"
+    },
+    {
+      "date": "2025-09-18",
+      "label": "Sep 2025",
+      "lower": 4.0,
+      "upper": 4.25,
+      "change": -0.25,
+      "direction": "cut"
+    },
+    {
+      "date": "2025-10-30",
+      "label": "Oct 2025",
+      "lower": 3.75,
+      "upper": 4.0,
+      "change": -0.25,
+      "direction": "cut"
+    },
+    {
+      "date": "2025-12-11",
+      "label": "Dec 2025",
+      "lower": 3.5,
+      "upper": 3.75,
+      "change": -0.25,
+      "direction": "cut"
+    }
+  ]
+}
