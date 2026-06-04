@@ -6,6 +6,7 @@ Then open: http://localhost:5000
 """
 
 import os, sqlite3, datetime
+import requests as req
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -187,6 +188,67 @@ def remove_from_watchlist(symbol):
     conn.commit()
     conn.close()
     return jsonify({'ok': True, 'symbol': symbol})
+
+# ── Quote proxy (bypasses CORS for Yahoo Finance) ───────────
+_YF_HEADERS = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
+                  '(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+    'Accept': 'application/json',
+}
+
+@app.route('/api/quote/<symbol>', methods=['GET'])
+def quote(symbol):
+    symbol = symbol.strip().upper()[:10]
+    try:
+        # 1. Price history — 3 months daily
+        chart = req.get(
+            f'https://query1.finance.yahoo.com/v8/finance/chart/{symbol}?range=3mo&interval=1d',
+            headers=_YF_HEADERS, timeout=10
+        ).json()
+        cr = (chart.get('chart', {}).get('result') or [None])[0]
+        if not cr:
+            return jsonify({'error': f'Unknown symbol: {symbol}'}), 404
+
+        raw_closes  = (cr.get('indicators', {}).get('quote', [{}])[0].get('close') or [])
+        closes      = [c for c in raw_closes if c is not None]
+        meta        = cr.get('meta', {})
+        current     = meta.get('regularMarketPrice') or (closes[-1] if closes else None)
+        prev_close  = meta.get('chartPreviousClose')
+        company     = meta.get('longName') or meta.get('shortName') or symbol
+
+        # 2. Analyst targets + recommendation
+        summary = req.get(
+            f'https://query2.finance.yahoo.com/v10/finance/quoteSummary/{symbol}'
+            f'?modules=financialData,price',
+            headers=_YF_HEADERS, timeout=10
+        ).json()
+        results = summary.get('quoteSummary', {}).get('result') or []
+        fd = results[0].get('financialData', {}) if results else {}
+        pr = results[0].get('price', {})         if results else {}
+
+        targets = None
+        if (fd.get('targetMeanPrice') or {}).get('raw'):
+            targets = {
+                'low':  (fd.get('targetLowPrice')  or {}).get('raw'),
+                'mean': (fd.get('targetMeanPrice') or {}).get('raw'),
+                'high': (fd.get('targetHighPrice') or {}).get('raw'),
+            }
+
+        if pr.get('longName'):
+            company = pr['longName']
+
+        return jsonify({
+            'symbol':              symbol,
+            'company_name':        company,
+            'current_price':       current,
+            'prev_close':          prev_close,
+            'closes':              closes,
+            'analyst_targets':     targets,
+            'recommendation_mean': (fd.get('recommendationMean') or {}).get('raw'),
+            'num_analysts':        (fd.get('numberOfAnalystOpinions') or {}).get('raw', 0),
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 # ── Run ─────────────────────────────────────────────────────
 if __name__ == '__main__':

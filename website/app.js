@@ -1387,6 +1387,291 @@ function renderWatchlist() {
   });
 }
 
+/* ─── Predictions tab ──────────────────────────────────── */
+(function initPredictions() {
+
+  /* -- tab switching -- */
+  document.querySelectorAll('.view-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const view = tab.dataset.view;
+      document.querySelectorAll('.view-tab').forEach(t =>
+        t.classList.toggle('active', t.dataset.view === view)
+      );
+      const feedEl     = document.getElementById('contentLayout');
+      const predictEl  = document.getElementById('predictPanel');
+      if (view === 'predict') {
+        feedEl.style.display    = 'none';
+        predictEl.style.display = 'block';
+        document.getElementById('predictSearch').focus();
+      } else {
+        feedEl.style.display    = '';
+        predictEl.style.display = 'none';
+      }
+    });
+  });
+
+  /* -- submit handlers -- */
+  document.getElementById('predictSearch').addEventListener('keydown', e => {
+    if (e.key === 'Enter') runPrediction();
+  });
+  document.getElementById('predictBtn').addEventListener('click', runPrediction);
+
+  async function runPrediction() {
+    const input  = document.getElementById('predictSearch');
+    const symbol = input.value.trim().toUpperCase().replace(/[^A-Z.\-]/g, '');
+    if (!symbol) { input.focus(); return; }
+
+    const resultEl = document.getElementById('predictResult');
+    resultEl.innerHTML = `
+      <div class="predict-loading">
+        <span class="predict-spinner"></span> Fetching data for ${symbol}…
+      </div>`;
+
+    try {
+      const data     = await gatherData(symbol);
+      if (data.currentPrice == null) {
+        resultEl.innerHTML = `
+          <div class="predict-error">
+            No price data available for <strong>${symbol}</strong> — a forecast can't be generated.
+          </div>`;
+        return;
+      }
+      const analysis = computeScore(data);
+      resultEl.innerHTML = renderCard(data, analysis);
+      /* animate confidence bar after render */
+      const fill = resultEl.querySelector('.pred-conf-fill');
+      if (fill) { fill.style.width = '0%'; requestAnimationFrame(() => { fill.style.width = analysis.score + '%'; }); }
+    } catch (err) {
+      resultEl.innerHTML = `
+        <div class="predict-error">
+          Could not load data for <strong>${symbol}</strong> — check the ticker and try again.
+        </div>`;
+    }
+  }
+
+  /* ── data fetching ── */
+  async function gatherData(symbol) {
+    /* single call to our backend proxy — no CORS issues */
+    const res = await fetch(`/api/quote/${symbol}`);
+    if (!res.ok) throw new Error('quote fetch failed');
+    const q = await res.json();
+    if (q.error) throw new Error(q.error);
+
+    const closes       = q.closes ?? [];
+    const currentPrice = q.current_price;
+    /* yesterday's close = second-to-last daily close (not the 3mo-ago value) */
+    const prevClose    = closes.length >= 2 ? closes.at(-2) : q.prev_close;
+    const todayChange  = prevClose ? ((currentPrice - prevClose) / prevClose) * 100 : 0;
+    const ma50         = closes.length >= 10
+      ? closes.slice(-50).reduce((s, v) => s + v, 0) / Math.min(closes.length, 50)
+      : null;
+    const last21     = closes.slice(-21);
+    const momentum1m = last21.length >= 2
+      ? ((closes.at(-1) - last21[0]) / last21[0]) * 100
+      : 0;
+
+    /* local enrichment */
+    const localStock    = allStocks.find(s => s.symbol === symbol) ?? null;
+    const localEarnings = earningsData ? (earningsData[symbol] ?? []) : [];
+
+    /* Fed direction */
+    let fedDirection = 'hold';
+    try {
+      const fedRes = await fetch('/data/fed_rate.json');
+      if (fedRes.ok) { const fj = await fedRes.json(); fedDirection = fj?.next_meeting?.expected ?? 'hold'; }
+    } catch (_) {}
+
+    return {
+      symbol,
+      companyName:    q.company_name ?? symbol,
+      currentPrice,
+      prevClose,
+      todayChange,
+      ma50,
+      momentum1m,
+      analystTargets: q.analyst_targets ?? null,
+      recMean:        q.recommendation_mean ?? null,
+      numAnalysts:    q.num_analysts ?? 0,
+      localStock,
+      localEarnings,
+      fedDirection,
+    };
+  }
+
+  /* ── scoring engine ── */
+  function computeScore(d) {
+    let score = 50;
+    const signals = [], risks = [];
+
+    /* analyst consensus ±25 */
+    if (d.recMean !== null && d.numAnalysts >= 3) {
+      score += Math.round(((3 - d.recMean) / 2) * 25);
+      if (d.recMean <= 2.0)      signals.push(`Strong Buy consensus from ${d.numAnalysts} analysts`);
+      else if (d.recMean <= 2.5) signals.push(`Buy consensus from ${d.numAnalysts} analysts`);
+      else if (d.recMean >= 3.5) risks.push(`Weak analyst consensus (mean rating ${d.recMean.toFixed(1)}/5)`);
+      else                       signals.push(`Neutral/Hold consensus from ${d.numAnalysts} analysts`);
+    } else if (d.localStock) {
+      const tot = d.localStock.buy + d.localStock.hold + d.localStock.sell;
+      const bp  = tot > 0 ? (d.localStock.buy / tot) * 100 : 0;
+      score += Math.round((bp - 50) * 0.4);
+      if (bp >= 70)      signals.push(`${Math.round(bp)}% of ${tot} analysts rate Buy`);
+      else if (bp >= 55) signals.push(`Buy-leaning consensus — ${Math.round(bp)}% Buy`);
+      else               risks.push(`Mixed consensus — only ${Math.round(bp)}% Buy`);
+    }
+
+    /* analyst price target upside ±20 */
+    if (d.analystTargets?.mean && d.currentPrice) {
+      const upside = ((d.analystTargets.mean - d.currentPrice) / d.currentPrice) * 100;
+      score += Math.max(-20, Math.min(20, upside * 0.8));
+      if (upside >= 15)     signals.push(`Analysts see ${upside.toFixed(1)}% upside to mean target $${d.analystTargets.mean.toFixed(2)}`);
+      else if (upside >= 5) signals.push(`${upside.toFixed(1)}% upside to analyst mean target $${d.analystTargets.mean.toFixed(2)}`);
+      else if (upside < -2) risks.push(`Stock trades ${Math.abs(upside).toFixed(1)}% above analyst mean target — limited upside`);
+    }
+
+    /* price vs 50-day MA ±15 */
+    if (d.ma50 && d.currentPrice) {
+      const pct = ((d.currentPrice - d.ma50) / d.ma50) * 100;
+      if (pct > 5)       { score += 15; signals.push(`Price ${pct.toFixed(1)}% above 50-day moving average — strong momentum`); }
+      else if (pct > 0)  { score += 7;  signals.push(`Price ${pct.toFixed(1)}% above 50-day moving average`); }
+      else if (pct < -5) { score -= 15; risks.push(`Price ${Math.abs(pct).toFixed(1)}% below 50-day moving average — weak trend`); }
+      else               { score -= 6;  risks.push(`Price just below 50-day moving average`); }
+    }
+
+    /* 1-month momentum ±10 */
+    if (d.momentum1m != null) {
+      if (d.momentum1m > 10)      { score += 10; signals.push(`Strong 1-month momentum (+${d.momentum1m.toFixed(1)}%)`); }
+      else if (d.momentum1m > 3)  { score += 5;  signals.push(`Positive 1-month trend (+${d.momentum1m.toFixed(1)}%)`); }
+      else if (d.momentum1m < -10){ score -= 10; risks.push(`Weak 1-month performance (${d.momentum1m.toFixed(1)}%)`); }
+      else if (d.momentum1m < -3) { score -= 5;  risks.push(`Negative 1-month trend (${d.momentum1m.toFixed(1)}%)`); }
+    }
+
+    /* earnings quality ±15 */
+    const surprises = d.localEarnings.map(q => q.surprise).filter(v => v != null);
+    if (surprises.length >= 2) {
+      const avg   = surprises.reduce((s, v) => s + v, 0) / surprises.length;
+      const beats = surprises.filter(v => v > 0).length;
+      score += Math.max(-15, Math.min(15, avg * 0.5));
+      if (beats >= 3 && avg > 5)  signals.push(`Beat earnings ${beats}/${surprises.length} quarters, avg surprise +${avg.toFixed(1)}%`);
+      else if (beats >= 2)        signals.push(`Beat earnings estimates ${beats}/${surprises.length} recent quarters`);
+      else                        risks.push(`Missed earnings ${surprises.length - beats}/${surprises.length} recent quarters`);
+    }
+
+    /* Fed direction ±5 */
+    if (d.fedDirection === 'cut')  { score += 5; signals.push('Fed rate cut expected — positive tailwind for equities'); }
+    else if (d.fedDirection === 'hike') { score -= 5; risks.push('Fed rate hike expected — headwind for valuations'); }
+    else                           signals.push('Fed rate hold expected — neutral macro environment');
+
+    score = Math.max(5, Math.min(95, Math.round(score)));
+
+    /* price targets */
+    let bear, base, bull;
+    if (d.analystTargets?.mean && d.analystTargets?.low && d.analystTargets?.high) {
+      const mod = (score - 50) / 500;
+      base = d.analystTargets.mean * (1 + mod);
+      bear = Math.min(d.analystTargets.low,  base * 0.92);
+      bull = Math.max(d.analystTargets.high, base * 1.08);
+    } else {
+      const p   = d.currentPrice;
+      const sn  = (score - 50) / 50;
+      base = p * (1 + sn * 0.14);
+      bear = base * (1 - 0.09 + Math.min(0, sn) * 0.06);
+      bull = base * (1 + 0.09 + Math.max(0, sn) * 0.06);
+    }
+
+    const label = score >= 75 ? 'High' : score >= 58 ? 'Moderate' : score >= 42 ? 'Low' : 'Very Low';
+    return { score, signals, risks, bear, base, bull, confidenceLabel: label };
+  }
+
+  /* ── render ── */
+  function renderCard(d, a) {
+    const $ = v => v != null
+      ? '$' + (+v).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      : '—';
+    const esc = s => String(s).replace(/[&<>"]/g, c =>
+      ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    const pctFrom = v => d.currentPrice
+      ? ((v - d.currentPrice) / d.currentPrice) * 100
+      : null;
+
+    function targetBox(cls, label, price, colorClass) {
+      const p = pctFrom(price);
+      const sign = p >= 0 ? '+' : '';
+      return `
+        <div class="pred-target pred-target--${cls}">
+          <div class="pred-target-label">${label}</div>
+          <div class="pred-target-price">${$(price)}</div>
+          ${p != null ? `<div class="pred-target-pct ${colorClass}">${sign}${p.toFixed(1)}%</div>` : ''}
+        </div>`;
+    }
+
+    const confColor = a.score >= 70 ? 'var(--buy)' : a.score >= 50 ? 'var(--hold)' : 'var(--sell)';
+    const signalsHtml = a.signals.map(s =>
+      `<div class="pred-signal pred-signal--pos"><span class="pred-signal-icon">▲</span><span>${s}</span></div>`
+    ).join('');
+    const risksHtml = a.risks.map(r =>
+      `<div class="pred-signal pred-signal--neg"><span class="pred-signal-icon">▼</span><span>${r}</span></div>`
+    ).join('');
+    const atHtml = d.analystTargets?.mean ? `
+      <div class="pred-section">
+        <div class="pred-section-label">Analyst Price Targets · ${d.numAnalysts} analysts</div>
+        <div class="pred-at-row">
+          <div class="pred-at-item"><span class="pred-at-label">Low</span><span class="pred-at-val sell-text">${$(d.analystTargets.low)}</span></div>
+          <div class="pred-at-item"><span class="pred-at-label">Mean</span><span class="pred-at-val accent-text">${$(d.analystTargets.mean)}</span></div>
+          <div class="pred-at-item"><span class="pred-at-label">High</span><span class="pred-at-val buy-text">${$(d.analystTargets.high)}</span></div>
+        </div>
+      </div>` : '';
+    const todaySign  = d.todayChange >= 0 ? '+' : '';
+    const todayClass = d.todayChange >= 0 ? 'buy-text' : 'sell-text';
+
+    return `
+      <div class="pred-card">
+        <div class="pred-header">
+          <div class="pred-symbol-row">
+            <span class="pred-symbol">${d.symbol}</span>
+            <span class="pred-company">${esc(d.companyName)}</span>
+          </div>
+          <div class="pred-price-row">
+            <span class="pred-price">${$(d.currentPrice)}</span>
+            <span class="pred-change ${todayClass}">${todaySign}${d.todayChange.toFixed(2)}% today</span>
+          </div>
+        </div>
+
+        <div class="pred-section">
+          <div class="pred-section-label">3-Month Price Forecast</div>
+          <div class="pred-targets">
+            ${targetBox('bear', 'BEAR', a.bear, 'sell-text')}
+            ${targetBox('base', 'BASE', a.base, 'accent-text')}
+            ${targetBox('bull', 'BULL', a.bull, 'buy-text')}
+          </div>
+        </div>
+
+        <div class="pred-section">
+          <div class="pred-section-label">Confidence Score</div>
+          <div class="pred-conf-row">
+            <div class="pred-conf-bar">
+              <div class="pred-conf-fill" style="width:0%;background:${confColor}"></div>
+            </div>
+            <span class="pred-conf-num" style="color:${confColor}">${a.score}/100</span>
+            <span class="pred-conf-label">${a.confidenceLabel}</span>
+          </div>
+        </div>
+
+        ${signalsHtml || risksHtml ? `
+        <div class="pred-section">
+          <div class="pred-section-label">Key Signals</div>
+          <div class="pred-signals">${signalsHtml}${risksHtml}</div>
+        </div>` : ''}
+
+        ${atHtml}
+
+        <div class="pred-footer">
+          Rule-based forecast · Data: Yahoo Finance · Not financial advice
+        </div>
+      </div>`;
+  }
+
+})();
+
 /* ─── Init ─────────────────────────────────────────────── */
 window.addEventListener('DOMContentLoaded', () => {
   animateHero();

@@ -6,7 +6,7 @@
   <title>Brick Street — Analyst Intelligence</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css?v=3" />
 </head>
 <body>
 
@@ -117,6 +117,35 @@
       <span class="stat-value accent-text stat-value--symbol" id="topPick">—</span>
       <span class="stat-label">Top Pick</span>
     </div>
+  </div>
+
+  <!-- VIEW TABS -->
+  <div class="view-tabs" id="viewTabs">
+    <button class="view-tab active" data-view="feed">
+      <svg viewBox="0 0 24 24" fill="none" width="14" height="14"><rect x="3" y="3" width="7" height="4" rx="1" stroke="currentColor" stroke-width="2"/><rect x="3" y="10" width="18" height="4" rx="1" stroke="currentColor" stroke-width="2"/><rect x="3" y="17" width="13" height="4" rx="1" stroke="currentColor" stroke-width="2"/></svg>
+      Analyst Feed
+    </button>
+    <button class="view-tab" data-view="predict">
+      <svg viewBox="0 0 24 24" fill="none" width="14" height="14"><polyline points="2,20 7,12 12,15 17,7 22,10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="22" cy="10" r="2" fill="currentColor"/></svg>
+      Price Prediction
+    </button>
+  </div>
+
+  <!-- PREDICTION PANEL -->
+  <div class="predict-panel" id="predictPanel" style="display:none">
+    <div class="predict-search-wrap">
+      <input class="predict-search" id="predictSearch" type="text"
+             placeholder="Enter a stock symbol — e.g. ORCL, NVDA, TSLA…"
+             autocomplete="off" spellcheck="false" maxlength="10" />
+      <button class="predict-btn" id="predictBtn">
+        <svg viewBox="0 0 24 24" fill="none" width="16" height="16"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        Analyse
+      </button>
+    </div>
+    <p class="predict-disclaimer">
+      Rule-based forecast using analyst consensus, earnings history, and price momentum. Not financial advice.
+    </p>
+    <div class="predict-result" id="predictResult"></div>
   </div>
 
   <!-- CONTENT LAYOUT: main table + watchlist sidebar -->
@@ -433,6 +462,6 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  <script src="app.js"></script>
+  <script src="app.js?v=3"></script>
 </body>
 </html>
