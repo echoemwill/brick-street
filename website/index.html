@@ -240,6 +240,16 @@
             <span class="coming-badge">Coming soon</span>
           </div>
         </div>
+
+        <div class="privacy-controls">
+          <h3>Your data &amp; privacy</h3>
+          <p>You control your data. Download everything we store about you, or permanently delete your account.</p>
+          <div class="privacy-actions">
+            <button class="auth-btn auth-btn--ghost" id="exportDataBtn">⬇ Download my data</button>
+            <button class="auth-btn privacy-delete-btn" id="deleteAccountBtn">Delete my account</button>
+          </div>
+          <p class="privacy-note" id="privacyNote"></p>
+        </div>
       </div>
     </section>
   </div>
@@ -397,13 +407,20 @@
   <div class="empty-state" id="emptyState" style="display:none">
     <div class="empty-icon">📡</div>
     <h3>No data loaded yet</h3>
-    <p>Run <code>scraper.py</code> first, then open this page.<br/>
+    <p>Run <code>python3 fetch_stocks.py</code> first, then open this page.<br/>
        Make sure <code>../data/filtered_stocks.json</code> exists.</p>
   </div>
 
   <!-- FOOTER -->
   <footer class="footer">
-    <p>Brick Street — Real-time analyst intelligence. Data sourced from MarketBeat, Yahoo Finance, FRED, and Finnhub. Not financial advice.</p>
+    <p><strong>Not financial advice.</strong> Brick Street is an informational and educational tool, not a recommendation to buy or sell any security. Analyst ratings are the opinions of third parties. Always do your own research.</p>
+    <p>Market data provided by <a href="https://finnhub.io" target="_blank" rel="noopener">Finnhub</a> and the U.S. Federal Reserve (<a href="https://fred.stlouisfed.org" target="_blank" rel="noopener">FRED</a>). Data may be delayed or inaccurate and is provided “as is”.</p>
+    <p class="footer-links">
+      <a href="legal.html#disclaimer">Disclaimer</a> ·
+      <a href="legal.html#terms">Terms of Service</a> ·
+      <a href="legal.html#privacy">Privacy Policy</a>
+    </p>
+    <p class="footer-copy">© 2026 Brick Street</p>
   </footer>
 
   <!-- LOGIN MODAL -->
@@ -453,6 +470,10 @@
           <label>Password <span class="form-hint">(min. 6 characters)</span></label>
           <input type="password" id="regPassword" placeholder="••••••••" required autocomplete="new-password" minlength="6" />
         </div>
+        <label class="form-consent">
+          <input type="checkbox" id="regConsent" required />
+          <span>I agree to the <a href="legal.html#terms" target="_blank" rel="noopener">Terms</a> and <a href="legal.html#privacy" target="_blank" rel="noopener">Privacy Policy</a>, and understand this is not financial advice.</span>
+        </label>
         <p class="form-error" id="regError"></p>
         <button type="submit" class="form-submit" id="registerSubmit">Create account</button>
       </form>

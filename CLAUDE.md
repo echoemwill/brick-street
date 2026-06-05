@@ -22,25 +22,41 @@ A real-time financial intelligence dashboard that:
 ```
 StockPulse/
 ├── CLAUDE.md
+├── LICENSING.md              ← Go-legit checklist (data licence, payments, legal)
 ├── requirements.txt          ← Python dependencies
-├── .env                      ← API keys (never commit this)
-├── scraper.py                ← Main scraper — analyst ratings (Playwright)
-├── fetch_prices.py           ← Stock price fetcher (Yahoo Finance via yfinance)
-├── fetch_earnings.py         ← EPS earnings surprise fetcher (Yahoo Finance via yfinance)
-├── fetch_fed_rate.py         ← Federal Reserve rate history (FRED API)
+├── .env                      ← API keys + BS_SECRET (never commit this)
+│
+│   ── LICENSED DATA PATH (use these) ──
+├── data_sources.py           ← Finnhub client (analyst ratings, prices, earnings)
+├── fetch_stocks.py           ← Orchestrator: ratings → filter → prices → earnings
+├── fetch_fed_rate.py         ← Federal Reserve rate history (FRED API, public domain)
 ├── fetch_calendar.py         ← Economic events calendar (Finnhub API)
+├── auth_server.py            ← Flask server: serves site + login/watchlist API
+│
+│   ── DEPRECATED scrapers (non-commercial only; need ALLOW_SCRAPING=1) ──
+├── scraper.py                ← OLD MarketBeat scraper (Playwright) — do not use
+├── fetch_prices.py           ← OLD Yahoo price fetcher — do not use
+├── fetch_earnings.py         ← OLD yfinance earnings fetcher — do not use
+│
 ├── data/
-│   ├── progress.json         ← Scraper progress (auto-created, resume-safe)
-│   ├── all_results.json      ← Every stock scraped (auto-created)
+│   ├── sp500_symbols.json    ← Bundled S&P 500 list (fallback for fetch_stocks)
+│   ├── stock_progress.json   ← fetch_stocks resume state (auto-created)
+│   ├── all_results.json      ← Every stock scored (auto-created)
 │   ├── filtered_stocks.json  ← Stocks passing the filter + prices (read by website)
 │   ├── earnings.json         ← EPS surprise data per stock (read by website)
 │   ├── fed_rate.json         ← Fed rate history + next meeting (read by website)
-│   └── calendar.json         ← Upcoming economic events (read by website)
+│   ├── calendar.json         ← Upcoming economic events (read by website)
+│   └── users.db              ← User accounts + watchlists (gitignored)
 └── website/
     ├── index.html
     ├── style.css
-    └── app.js
+    ├── app.js
+    └── legal.html            ← Terms, Privacy, Disclaimer (draft — lawyer review)
 ```
+
+> **Going commercial?** All stock data now comes from **Finnhub** (licensed) via
+> `data_sources.py` + `fetch_stocks.py`, replacing the deprecated scrapers. A public,
+> paid site requires a Finnhub commercial/redistribution plan — see `LICENSING.md`.
 
 ---
 
@@ -51,65 +67,63 @@ StockPulse/
 ```bash
 cd StockPulse
 pip3 install -r requirements.txt
-python3 -m playwright install chromium
 ```
+(Playwright is only needed for the deprecated scrapers — not the licensed path.)
 
-### API keys required
+### API keys / secrets required
 
 Add to a `.env` file in the StockPulse folder:
 
 ```env
 FRED_API_KEY=your_key_here        # free at fred.stlouisfed.org
-FINNHUB_API_KEY=your_key_here     # free at finnhub.io
+FINNHUB_API_KEY=your_key_here     # finnhub.io — commercial plan for a public paid site
+BS_SECRET=your_random_32+_chars   # JWT signing secret (auth_server). Generate with:
+                                  #   python3 -c "import secrets;print(secrets.token_hex(32))"
 ```
 
 ### Run order
 
-**Step 1 — must run first (1.5–3 hours):**
+**Step 1 — analyst ratings + prices + earnings (licensed, ~15–20 min):**
 ```bash
-python3 scraper.py
+python3 fetch_stocks.py
 ```
-Scrapes MarketBeat for analyst ratings on all ~503 S&P 500 stocks.
-Resume-safe — if interrupted, re-running picks up where it left off.
-Output: `data/filtered_stocks.json`
+Pulls analyst consensus for all ~500 S&P 500 stocks from Finnhub, filters them
+(buy ≥ 10, hold ≤ 10, sell < 5), then adds current price + last 4 quarters of EPS
+surprise for the survivors. Resume-safe via `data/stock_progress.json`.
+Outputs: `data/filtered_stocks.json`, `data/earnings.json`, `data/all_results.json`
 
-**Step 2 — run after Step 1, can run simultaneously:**
+**Step 2 — independent, run anytime:**
 ```bash
-# Terminal 1
-python3 fetch_prices.py
-
-# Terminal 2 (at the same time)
-python3 fetch_earnings.py
+python3 fetch_fed_rate.py   # → data/fed_rate.json  (FRED, public domain)
+python3 fetch_calendar.py   # → data/calendar.json  (Finnhub)
 ```
-- `fetch_prices.py` — adds current stock price to each entry in `filtered_stocks.json`
-- `fetch_earnings.py` — fetches last 4 quarters of EPS surprise % → `data/earnings.json`
-
-**Step 3 — independent, run anytime:**
-```bash
-python3 fetch_fed_rate.py    # → data/fed_rate.json
-python3 fetch_calendar.py   # → data/calendar.json
-```
-These do not depend on `scraper.py` and can be refreshed at any time.
 
 ### Serve the website
 
 ```bash
 cd StockPulse
-python3 -m http.server 8080
-# open http://localhost:8080/website/
+BS_SECRET=$(python3 -c "import secrets;print(secrets.token_hex(32))") python3 auth_server.py
+# open http://localhost:8080
 ```
+`auth_server.py` serves the website *and* the login/watchlist API on one port.
+(For a static-only preview without auth, `python3 -m http.server 8080` still works.)
 
 ---
 
 ## Data sources
 
-| Source | What we get | API key needed |
-|--------|-------------|---------------|
-| stockanalysis.com | S&P 500 ticker list | No |
-| MarketBeat | Buy / Hold / Sell analyst ratings | No (Playwright scraping) |
-| Yahoo Finance (yfinance) | Live stock prices + EPS earnings history | No |
-| FRED (Federal Reserve) | Fed funds rate history + target range | Yes — free |
-| Finnhub | Upcoming economic calendar events | Yes — free |
+| Source | What we get | Licensing |
+|--------|-------------|-----------|
+| Finnhub | Analyst Buy/Hold/Sell, prices, EPS earnings, economic calendar | API key — **commercial plan required for the public paid site** (see LICENSING.md) |
+| FRED (Federal Reserve) | Fed funds rate history + target range | Free, public domain |
+
+Bundled `data/sp500_symbols.json` provides the S&P 500 membership list (public
+factual data) as a fallback when Finnhub's constituents endpoint isn't on your plan.
+
+**Deprecated / non-commercial only:** MarketBeat (scraping), Yahoo Finance &
+yfinance (unofficial endpoints), stockanalysis.com. The old `scraper.py`,
+`fetch_prices.py`, and `fetch_earnings.py` now refuse to run without
+`ALLOW_SCRAPING=1` and must not be used commercially.
 
 ---
 
@@ -149,7 +163,8 @@ python3 -m http.server 8080
 
 ## Notes
 
-- `earnings.json` — if all stocks show N/A, delete the file and re-run `fetch_earnings.py`
-- `fetch_earnings.py` — resumes from where it left off; nulls are retried on each run
-- `scraper.py` — tries both NASDAQ and NYSE exchange URLs per symbol
-- All scripts are resume-safe — safe to interrupt and re-run
+- `fetch_stocks.py` is resume-safe via `data/stock_progress.json` — safe to interrupt and re-run. Delete that file to force a full re-fetch.
+- `earnings.json` — if stocks show N/A, delete the file and re-run `fetch_stocks.py` (nulls are retried).
+- Finnhub free tier is fine for development/testing but is **non-commercial**; a public paid site needs a commercial/redistribution plan (see `LICENSING.md`).
+- `data_sources.py` is the single provider abstraction — swapping Finnhub for another licensed provider means editing only that one file.
+- Before going live: set `BS_ENV=production`, a strong `BS_SECRET`, `BS_ALLOWED_ORIGINS`, and serve over HTTPS.

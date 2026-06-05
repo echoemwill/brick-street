@@ -2,24 +2,69 @@
 Brick Street — Auth Server
 Serves the website AND handles login/register API.
 Run: python3 auth_server.py
-Then open: http://localhost:5000
+Then open: http://localhost:8080  (override with PORT env var)
 """
 
-import os, sqlite3, datetime
-import requests as req
+import os, sys, sqlite3, datetime, secrets, time, threading
+from pathlib import Path
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 from werkzeug.security import generate_password_hash, check_password_hash
 import jwt
 
+# ── Load .env (so BS_SECRET / API keys don't have to be exported) ──
+def _load_env():
+    env_file = Path(__file__).parent / '.env'
+    if env_file.exists():
+        for line in env_file.read_text().splitlines():
+            line = line.strip()
+            if line and not line.startswith('#') and '=' in line:
+                k, v = line.split('=', 1)
+                os.environ.setdefault(k.strip(), v.strip().strip('"').strip("'"))
+_load_env()
+
 # ── Config ─────────────────────────────────────────────────
-SECRET   = os.environ.get('BS_SECRET', 'brick-street-secret-2024-xK9p')
 DB_PATH  = os.path.join(os.path.dirname(__file__), 'data', 'users.db')
 WEB_DIR  = os.path.join(os.path.dirname(__file__), 'website')
 DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
+PORT     = int(os.environ.get('PORT', '8080'))
+IS_PROD  = os.environ.get('BS_ENV', 'development').lower() == 'production'
+
+# JWT signing secret. NEVER hardcode this — a leaked secret lets anyone
+# forge a login token for any account. Must be set via env/.env in prod.
+SECRET = os.environ.get('BS_SECRET')
+if not SECRET:
+    if IS_PROD:
+        sys.exit('FATAL: BS_SECRET is not set. Refusing to start in production '
+                 'with no signing secret. Add BS_SECRET=<random 32+ chars> to .env')
+    SECRET = secrets.token_hex(32)
+    print('⚠️  BS_SECRET not set — using a random dev secret. '
+          'All sessions will be invalidated on restart.\n'
+          '   Set BS_SECRET in .env to make sessions persistent.')
 
 app = Flask(__name__, static_folder=WEB_DIR, static_url_path='')
-CORS(app)
+# Lock CORS down in production; allow all only in dev for local testing.
+CORS(app, origins='*' if not IS_PROD else os.environ.get('BS_ALLOWED_ORIGINS', '').split(','))
+
+# ── Simple in-memory rate limiter (brute-force protection) ──
+_rl_lock = threading.Lock()
+_rl_hits = {}  # key -> list[timestamp]
+
+def rate_limit(key: str, max_hits: int, window_s: int) -> bool:
+    """Return True if the call is allowed, False if the limit is exceeded."""
+    now = time.time()
+    with _rl_lock:
+        hits = [t for t in _rl_hits.get(key, []) if now - t < window_s]
+        if len(hits) >= max_hits:
+            _rl_hits[key] = hits
+            return False
+        hits.append(now)
+        _rl_hits[key] = hits
+        return True
+
+def client_ip() -> str:
+    fwd = request.headers.get('X-Forwarded-For', '')
+    return fwd.split(',')[0].strip() if fwd else (request.remote_addr or 'unknown')
 
 # ── Database ────────────────────────────────────────────────
 def get_db():
@@ -87,6 +132,8 @@ def data_files(filename):
 # ── Auth API ────────────────────────────────────────────────
 @app.route('/api/auth/register', methods=['POST'])
 def register():
+    if not rate_limit(f'register:{client_ip()}', max_hits=5, window_s=3600):
+        return jsonify({'error': 'Too many sign-up attempts. Try again later.'}), 429
     d        = request.get_json() or {}
     name     = (d.get('name') or '').strip()
     email    = (d.get('email') or '').strip().lower()
@@ -117,6 +164,8 @@ def register():
 
 @app.route('/api/auth/login', methods=['POST'])
 def login():
+    if not rate_limit(f'login:{client_ip()}', max_hits=10, window_s=900):
+        return jsonify({'error': 'Too many login attempts. Please wait and try again.'}), 429
     d        = request.get_json() or {}
     email    = (d.get('email') or '').strip().lower()
     password = (d.get('password') or '')
@@ -189,70 +238,115 @@ def remove_from_watchlist(symbol):
     conn.close()
     return jsonify({'ok': True, 'symbol': symbol})
 
-# ── Quote proxy (bypasses CORS for Yahoo Finance) ───────────
-_YF_HEADERS = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
-                  '(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-    'Accept': 'application/json',
-}
+# ── GDPR / privacy: data export + account deletion ──────────
+@app.route('/api/auth/export', methods=['GET'])
+def export_data():
+    """Right of access/portability: return everything we hold on this user."""
+    payload = require_auth()
+    if not payload:
+        return jsonify({'error': 'Unauthorized'}), 401
+    conn = get_db()
+    user = conn.execute('SELECT id, name, email, created_at FROM users WHERE id = ?',
+                        (payload['user_id'],)).fetchone()
+    rows = conn.execute('SELECT symbol, added_at FROM watchlist WHERE user_id = ?',
+                        (payload['user_id'],)).fetchall()
+    conn.close()
+    if not user:
+        return jsonify({'error': 'Account not found'}), 404
+    return jsonify({
+        'account':   dict(user),
+        'watchlist': [dict(r) for r in rows],
+        'note': 'This is all personal data Brick Street stores about you. '
+                'Card/billing data, if any, is held by our payment processor.'
+    })
+
+@app.route('/api/auth/account', methods=['DELETE'])
+def delete_account():
+    """Right to erasure: permanently delete the user and all their data."""
+    payload = require_auth()
+    if not payload:
+        return jsonify({'error': 'Unauthorized'}), 401
+    conn = get_db()
+    conn.execute('DELETE FROM watchlist WHERE user_id = ?', (payload['user_id'],))
+    conn.execute('DELETE FROM users WHERE id = ?', (payload['user_id'],))
+    conn.commit()
+    conn.close()
+    return jsonify({'ok': True, 'deleted': True})
+
+# ── Quote endpoint (licensed — Finnhub, NOT Yahoo) ──────────
+# Powers the per-stock detail panel. Premium fields (price history sparkline,
+# exact analyst targets) populate only on a paid Finnhub plan; they degrade to
+# empty/None on the free tier and the frontend handles that gracefully.
+from data_sources import Finnhub, FinnhubError
+
+_finnhub = None
+def get_finnhub():
+    global _finnhub
+    if _finnhub is None:
+        _finnhub = Finnhub()  # raises FinnhubError if key missing
+    return _finnhub
 
 @app.route('/api/quote/<symbol>', methods=['GET'])
 def quote(symbol):
     symbol = symbol.strip().upper()[:10]
     try:
-        # 1. Price history — 3 months daily
-        chart = req.get(
-            f'https://query1.finance.yahoo.com/v8/finance/chart/{symbol}?range=3mo&interval=1d',
-            headers=_YF_HEADERS, timeout=10
-        ).json()
-        cr = (chart.get('chart', {}).get('result') or [None])[0]
-        if not cr:
+        fh = get_finnhub()
+    except FinnhubError as e:
+        return jsonify({'error': f'Data source not configured: {e}'}), 503
+    try:
+        q = fh.quote_raw(symbol)
+        current = q.get('c') or None
+        prev_close = q.get('pc') or None
+        if not current:
             return jsonify({'error': f'Unknown symbol: {symbol}'}), 404
 
-        raw_closes  = (cr.get('indicators', {}).get('quote', [{}])[0].get('close') or [])
-        closes      = [c for c in raw_closes if c is not None]
-        meta        = cr.get('meta', {})
-        current     = meta.get('regularMarketPrice') or (closes[-1] if closes else None)
-        prev_close  = meta.get('chartPreviousClose')
-        company     = meta.get('longName') or meta.get('shortName') or symbol
-
-        # 2. Analyst targets + recommendation
-        summary = req.get(
-            f'https://query2.finance.yahoo.com/v10/finance/quoteSummary/{symbol}'
-            f'?modules=financialData,price',
-            headers=_YF_HEADERS, timeout=10
-        ).json()
-        results = summary.get('quoteSummary', {}).get('result') or []
-        fd = results[0].get('financialData', {}) if results else {}
-        pr = results[0].get('price', {})         if results else {}
-
-        targets = None
-        if (fd.get('targetMeanPrice') or {}).get('raw'):
-            targets = {
-                'low':  (fd.get('targetLowPrice')  or {}).get('raw'),
-                'mean': (fd.get('targetMeanPrice') or {}).get('raw'),
-                'high': (fd.get('targetHighPrice') or {}).get('raw'),
-            }
-
-        if pr.get('longName'):
-            company = pr['longName']
+        rec_mean, num_analysts = fh.recommendation_mean(symbol)
 
         return jsonify({
             'symbol':              symbol,
-            'company_name':        company,
+            'company_name':        fh.company_name(symbol) or symbol,
             'current_price':       current,
             'prev_close':          prev_close,
-            'closes':              closes,
-            'analyst_targets':     targets,
-            'recommendation_mean': (fd.get('recommendationMean') or {}).get('raw'),
-            'num_analysts':        (fd.get('numberOfAnalystOpinions') or {}).get('raw', 0),
+            'closes':              fh.daily_closes(symbol),      # [] on free tier
+            'analyst_targets':     fh.price_target(symbol),      # None on free tier
+            'recommendation_mean': rec_mean,
+            'num_analysts':        num_analysts,
         })
+    except FinnhubError as e:
+        return jsonify({'error': str(e)}), 502
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+# ── Compliance preflight (only enforced in production) ──────
+def preflight_production_checks():
+    """Refuse to go public with unfinished legal docs or a configured-but-unusable
+    data source. Dev mode only warns. See LICENSING.md."""
+    import re
+    problems = []
+    legal = Path(WEB_DIR) / 'legal.html'
+    if legal.exists():
+        # bracketed placeholders like [YOUR LEGAL NAME] must be filled before launch
+        leftover = re.findall(r'\[[A-Z][^\]]{3,}\]', legal.read_text())
+        if leftover:
+            problems.append(f'legal.html still has {len(leftover)} unfilled placeholder(s) '
+                            f'(e.g. {leftover[0]}). Fill them before going public.')
+    else:
+        problems.append('website/legal.html is missing (Terms/Privacy/Disclaimer).')
+    if not os.environ.get('FINNHUB_API_KEY'):
+        problems.append('FINNHUB_API_KEY is not set — no licensed data source configured.')
+
+    if problems:
+        msg = '\n   • '.join(problems)
+        if IS_PROD:
+            sys.exit('⛔ Refusing to start in production — compliance checks failed:\n   • '
+                     + msg + '\n   (See LICENSING.md.)')
+        print('⚠️  Compliance checks (warnings only in development):\n   • ' + msg + '\n')
+
 
 # ── Run ─────────────────────────────────────────────────────
 if __name__ == '__main__':
     init_db()
+    preflight_production_checks()
     print('\n  Brick Street server running')
-    print('  Open: http://localhost:5000\n')
-    app.run(port=8080, debug=False)
+    print(f'  Open: http://localhost:{PORT}\n')
+    app.run(host='0.0.0.0' if IS_PROD else '127.0.0.1', port=PORT, debug=not IS_PROD)

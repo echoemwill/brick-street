@@ -1,5 +1,12 @@
 """
-StockPulse Scraper
+StockPulse Scraper  —  ⚠️ DEPRECATED / NON-COMMERCIAL ONLY
+
+Superseded by fetch_stocks.py, which pulls the same analyst consensus from
+Finnhub under a commercial licence. This file scrapes MarketBeat, whose terms
+generally prohibit scraping and commercial redistribution — do NOT use it for
+the public, paid site. It is kept for reference only and refuses to run unless
+ALLOW_SCRAPING=1 is set in the environment.
+
 Fetches S&P500 symbols from stockanalysis.com, then pulls analyst
 sell/hold/buy counts from MarketBeat for each symbol.
 
@@ -224,4 +231,10 @@ async def main():
 
 
 if __name__ == "__main__":
+    import os
+    if os.environ.get("ALLOW_SCRAPING") != "1":
+        print("⚠️  scraper.py is DEPRECATED and not licensed for commercial use.\n"
+              "   Use:  python3 fetch_stocks.py   (licensed Finnhub source)\n"
+              "   To run this legacy scraper anyway (non-commercial), set ALLOW_SCRAPING=1.")
+        raise SystemExit(1)
     asyncio.run(main())

@@ -1,11 +1,22 @@
 """
-Brick Street — Price Fetcher
+Brick Street — Price Fetcher  —  ⚠️ DEPRECATED / NON-COMMERCIAL ONLY
+
+Superseded by fetch_stocks.py. This file hits Yahoo Finance's unofficial,
+unlicensed endpoints, which is fine for personal use but not for a commercial
+product. Prices for the paid site now come from Finnhub (licensed) inside
+fetch_stocks.py. Kept for reference; refuses to run unless ALLOW_SCRAPING=1.
+
 Reads filtered_stocks.json, adds current price for each stock
 from Yahoo Finance (no API key needed), saves back to the file.
-
-Run after scraper.py finishes:
-    python3 fetch_prices.py
 """
+
+import os as _os
+if __name__ == "__main__" and _os.environ.get("ALLOW_SCRAPING") != "1":
+    raise SystemExit(
+        "⚠️  fetch_prices.py is DEPRECATED (unlicensed Yahoo endpoint).\n"
+        "   Use:  python3 fetch_stocks.py   (licensed Finnhub prices)\n"
+        "   To run anyway (non-commercial), set ALLOW_SCRAPING=1."
+    )
 
 import json
 import time

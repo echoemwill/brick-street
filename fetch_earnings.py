@@ -1,15 +1,26 @@
 """
-StockPulse Earnings Fetcher
+StockPulse Earnings Fetcher  —  ⚠️ DEPRECATED / NON-COMMERCIAL ONLY
+
+Superseded by fetch_stocks.py. This file uses yfinance (Yahoo's unofficial,
+unlicensed data) which is not suitable for a commercial product. EPS surprise
+data for the paid site now comes from Finnhub (licensed) inside fetch_stocks.py.
+Kept for reference; refuses to run unless ALLOW_SCRAPING=1.
+
 Fetches the last 4 quarters of EPS surprise % for every stock in
 data/filtered_stocks.json using yfinance (no browser needed).
 
 Output: data/earnings.json  ← read directly by the website
 
-Usage:
-    python3 fetch_earnings.py
-
 Resume-safe: already-processed symbols are skipped on re-run.
 """
+
+import os as _os
+if __name__ == "__main__" and _os.environ.get("ALLOW_SCRAPING") != "1":
+    raise SystemExit(
+        "⚠️  fetch_earnings.py is DEPRECATED (unlicensed yfinance/Yahoo data).\n"
+        "   Use:  python3 fetch_stocks.py   (licensed Finnhub earnings)\n"
+        "   To run anyway (non-commercial), set ALLOW_SCRAPING=1."
+    )
 
 import json
 import time

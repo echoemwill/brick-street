@@ -5,8 +5,9 @@
 # Database (contains real user data)
 data/users.db
 
-# Scraper state (resume file, not needed in repo)
+# Resume / progress files (not needed in repo)
 data/progress.json
+data/stock_progress.json
 
 # Python
 __pycache__/

@@ -2143,11 +2143,59 @@ body {
   position: relative;
   z-index: 1;
   text-align: center;
-  padding: 24px;
+  padding: 28px 24px;
   font-size: 12px;
   color: var(--text-dim);
   border-top: 1px solid var(--border);
 }
+.footer p { max-width: 760px; margin: 0 auto 8px; line-height: 1.6; }
+.footer p strong { color: var(--text-muted); }
+.footer a { color: var(--text-muted); text-decoration: none; }
+.footer a:hover { color: var(--accent); }
+.footer .footer-links { margin-top: 12px; font-family: var(--mono); letter-spacing: .3px; }
+.footer .footer-links a { color: var(--accent); }
+.footer .footer-copy { margin-top: 6px; color: var(--text-dim); }
+
+/* Registration consent checkbox */
+.form-consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  margin: 4px 0 14px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+.form-consent input[type="checkbox"] {
+  margin-top: 2px;
+  width: 15px;
+  height: 15px;
+  accent-color: var(--accent);
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.form-consent a { color: var(--accent); text-decoration: none; }
+.form-consent a:hover { text-decoration: underline; }
+
+/* Members → Your data & privacy controls */
+.privacy-controls {
+  margin-top: 22px;
+  padding: 22px 24px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+.privacy-controls h3 { font-size: 16px; margin-bottom: 6px; color: var(--text); }
+.privacy-controls > p { font-size: 13.5px; color: var(--text-muted); margin-bottom: 16px; max-width: 560px; }
+.privacy-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.privacy-delete-btn {
+  border: 1px solid rgba(220,80,80,0.4);
+  background: rgba(220,80,80,0.08);
+  color: #e07070;
+}
+.privacy-delete-btn:hover { background: rgba(220,80,80,0.16); border-color: rgba(220,80,80,0.6); }
+.privacy-note { margin-top: 12px; font-size: 12.5px; color: var(--text-muted); min-height: 16px; }
 
 /* ─── Fed Rate Panel ────────────────────────────────────────── */
 .fed-panel {

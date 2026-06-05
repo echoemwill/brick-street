@@ -1774,8 +1774,10 @@ window.addEventListener('DOMContentLoaded', () => {
     const name     = document.getElementById('regName').value;
     const email    = document.getElementById('regEmail').value;
     const password = document.getElementById('regPassword').value;
-    btn.disabled = true; btn.textContent = 'Creating account…';
+    const consent  = document.getElementById('regConsent').checked;
     errEl.textContent = '';
+    if (!consent) { errEl.textContent = 'Please accept the Terms and Privacy Policy to continue.'; return; }
+    btn.disabled = true; btn.textContent = 'Creating account…';
     try {
       const res  = await fetch('/api/auth/register', {
         method: 'POST',
@@ -1800,6 +1802,43 @@ window.addEventListener('DOMContentLoaded', () => {
   document.getElementById('logoutBtn').addEventListener('click', () => {
     clearToken();
     setAuthState(null);
+  });
+
+  // GDPR: download my data
+  const exportBtn = document.getElementById('exportDataBtn');
+  if (exportBtn) exportBtn.addEventListener('click', async () => {
+    const note = document.getElementById('privacyNote');
+    try {
+      const res = await fetch('/api/auth/export', {
+        headers: { Authorization: 'Bearer ' + getToken(), 'ngrok-skip-browser-warning': 'true' }
+      });
+      if (!res.ok) { note.textContent = 'Could not export data — please try again.'; return; }
+      const data = await res.json();
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url  = URL.createObjectURL(blob);
+      const a    = document.createElement('a');
+      a.href = url; a.download = 'brick-street-my-data.json';
+      document.body.appendChild(a); a.click(); a.remove();
+      URL.revokeObjectURL(url);
+      note.textContent = 'Your data has been downloaded.';
+    } catch { note.textContent = 'Connection error — is the server running?'; }
+  });
+
+  // GDPR: delete my account
+  const deleteBtn = document.getElementById('deleteAccountBtn');
+  if (deleteBtn) deleteBtn.addEventListener('click', async () => {
+    const note = document.getElementById('privacyNote');
+    if (!confirm('Permanently delete your account, watchlist, and all your data? This cannot be undone.')) return;
+    try {
+      const res = await fetch('/api/auth/account', {
+        method: 'DELETE',
+        headers: { Authorization: 'Bearer ' + getToken(), 'ngrok-skip-browser-warning': 'true' }
+      });
+      if (!res.ok) { note.textContent = 'Could not delete account — please try again.'; return; }
+      clearToken();
+      setAuthState(null);
+      alert('Your account and all associated data have been permanently deleted.');
+    } catch { note.textContent = 'Connection error — is the server running?'; }
   });
 
   // Check existing session on load
