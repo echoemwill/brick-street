@@ -1,1370 +1,1634 @@
 {
   "NVDA": {
-    "buy": 48,
-    "hold": 3,
-    "sell": 0,
-    "price": 216.37
+    "buy": 63,
+    "hold": 4,
+    "sell": 1,
+    "price": 207.8
   },
   "GOOGL": {
-    "buy": 47,
+    "buy": 61,
     "hold": 9,
     "sell": 0,
-    "price": 359.76
+    "price": 369.78
   },
   "GOOG": {
-    "buy": 29,
-    "hold": 5,
-    "sell": 3,
-    "price": 355.92
+    "buy": 61,
+    "hold": 9,
+    "sell": 0,
+    "price": 367.38
   },
   "MSFT": {
-    "buy": 40,
-    "hold": 7,
+    "buy": 61,
+    "hold": 5,
     "sell": 0,
-    "price": 425.91
+    "price": 419.56
   },
   "AMZN": {
-    "buy": 57,
-    "hold": 4,
+    "buy": 71,
+    "hold": 5,
     "sell": 0,
-    "price": 250.36
+    "price": 253.32
   },
   "AVGO": {
-    "buy": 30,
+    "buy": 52,
     "hold": 4,
     "sell": 0,
-    "price": 488.17
+    "price": 396.17
   },
   "META": {
-    "buy": 39,
+    "buy": 63,
     "hold": 9,
-    "sell": 1,
-    "price": 618.86
+    "sell": 0,
+    "price": 608.49
   },
   "MU": {
-    "buy": 30,
-    "hold": 4,
-    "sell": 2,
-    "price": 1068.6
+    "buy": 51,
+    "hold": 3,
+    "sell": 1,
+    "price": 901.95
   },
   "LLY": {
+    "buy": 31,
+    "hold": 7,
+    "sell": 1,
+    "price": 1148.57
+  },
+  "WMT": {
+    "buy": 43,
+    "hold": 5,
+    "sell": 0,
+    "price": 120.24
+  },
+  "ORCL": {
+    "buy": 40,
+    "hold": 8,
+    "sell": 1,
+    "price": 214.64
+  },
+  "V": {
+    "buy": 44,
+    "hold": 4,
+    "sell": 0,
+    "price": 323.39
+  },
+  "JNJ": {
+    "buy": 21,
+    "hold": 10,
+    "sell": 0,
+    "price": 234.26
+  },
+  "CSCO": {
+    "buy": 23,
+    "hold": 10,
+    "sell": 0,
+    "price": 123.92
+  },
+  "MA": {
+    "buy": 46,
+    "hold": 5,
+    "sell": 0,
+    "price": 490.08
+  },
+  "LRCX": {
+    "buy": 34,
+    "hold": 8,
+    "sell": 0,
+    "price": 311.62
+  },
+  "AMAT": {
+    "buy": 39,
+    "hold": 7,
+    "sell": 0,
+    "price": 466.35
+  },
+  "ABBV": {
+    "buy": 31,
+    "hold": 9,
+    "sell": 0,
+    "price": 229.44
+  },
+  "BAC": {
+    "buy": 24,
+    "hold": 5,
+    "sell": 0,
+    "price": 53.62
+  },
+  "CVX": {
+    "buy": 23,
+    "hold": 7,
+    "sell": 1,
+    "price": 187.96
+  },
+  "PLTR": {
+    "buy": 26,
+    "hold": 10,
+    "sell": 2,
+    "price": 136.58
+  },
+  "UNH": {
+    "buy": 26,
+    "hold": 7,
+    "sell": 1,
+    "price": 402.25
+  },
+  "KO": {
+    "buy": 28,
+    "hold": 6,
+    "sell": 0,
+    "price": 80.01
+  },
+  "GE": {
+    "buy": 28,
+    "hold": 3,
+    "sell": 1,
+    "price": 329.18
+  },
+  "IBM": {
+    "buy": 17,
+    "hold": 10,
+    "sell": 1,
+    "price": 283.45
+  },
+  "DELL": {
+    "buy": 25,
+    "hold": 8,
+    "sell": 1,
+    "price": 396.17
+  },
+  "PM": {
+    "buy": 19,
+    "hold": 7,
+    "sell": 0,
+    "price": 178.96
+  },
+  "GEV": {
+    "buy": 34,
+    "hold": 7,
+    "sell": 0,
+    "price": 940.46
+  },
+  "SNDK": {
+    "buy": 25,
+    "hold": 4,
+    "sell": 0,
+    "price": 1567.48
+  },
+  "WFC": {
+    "buy": 21,
+    "hold": 8,
+    "sell": 0,
+    "price": 81.84
+  },
+  "RTX": {
+    "buy": 19,
+    "hold": 9,
+    "sell": 2,
+    "price": 181.69
+  },
+  "LIN": {
     "buy": 23,
     "hold": 5,
     "sell": 1,
-    "price": 1085.72
-  },
-  "WMT": {
-    "buy": 31,
-    "hold": 4,
-    "sell": 0,
-    "price": 116.02
-  },
-  "V": {
-    "buy": 21,
-    "hold": 6,
-    "sell": 0,
-    "price": 310.17
-  },
-  "JNJ": {
-    "buy": 20,
-    "hold": 9,
-    "sell": 0,
-    "price": 223.34
-  },
-  "CSCO": {
-    "buy": 16,
-    "hold": 8,
-    "sell": 0,
-    "price": 128.29
-  },
-  "MA": {
-    "buy": 24,
-    "hold": 5,
-    "sell": 1,
-    "price": 467.03
-  },
-  "CAT": {
-    "buy": 16,
-    "hold": 9,
-    "sell": 1,
-    "price": 933.98
-  },
-  "LRCX": {
-    "buy": 28,
-    "hold": 8,
-    "sell": 0,
-    "price": 344.55
-  },
-  "AMAT": {
-    "buy": 27,
-    "hold": 8,
-    "sell": 1,
-    "price": 507.06
-  },
-  "ABBV": {
-    "buy": 16,
-    "hold": 9,
-    "sell": 0,
-    "price": 217.67
-  },
-  "BAC": {
-    "buy": 22,
-    "hold": 5,
-    "sell": 0,
-    "price": 51.23
-  },
-  "UNH": {
-    "buy": 20,
-    "hold": 8,
-    "sell": 2,
-    "price": 381.7
-  },
-  "KO": {
-    "buy": 16,
-    "hold": 0,
-    "sell": 0,
-    "price": 78.46
-  },
-  "GE": {
-    "buy": 16,
-    "hold": 3,
-    "sell": 1,
-    "price": 316.17
-  },
-  "PG": {
-    "buy": 15,
-    "hold": 9,
-    "sell": 0,
-    "price": 141.46
-  },
-  "IBM": {
-    "buy": 12,
-    "hold": 8,
-    "sell": 1,
-    "price": 307.68
-  },
-  "DELL": {
-    "buy": 21,
-    "hold": 10,
-    "sell": 1,
-    "price": 421.69
-  },
-  "PM": {
-    "buy": 11,
-    "hold": 2,
-    "sell": 0,
-    "price": 176.37
-  },
-  "KLAC": {
-    "buy": 20,
-    "hold": 10,
-    "sell": 0,
-    "price": 2100.99
-  },
-  "GEV": {
-    "buy": 22,
-    "hold": 6,
-    "sell": 1,
-    "price": 978.01
-  },
-  "SNDK": {
-    "buy": 19,
-    "hold": 6,
-    "sell": 1,
-    "price": 1804.58
-  },
-  "WFC": {
-    "buy": 14,
-    "hold": 10,
-    "sell": 0,
-    "price": 77.43
-  },
-  "RTX": {
-    "buy": 14,
-    "hold": 7,
-    "sell": 1,
-    "price": 175.96
-  },
-  "LIN": {
-    "buy": 10,
-    "hold": 3,
-    "sell": 0,
-    "price": 509.24
+    "price": 510.5
   },
   "C": {
-    "buy": 14,
+    "buy": 23,
     "hold": 5,
     "sell": 0,
-    "price": 128.93
+    "price": 132.13
   },
   "ANET": {
-    "buy": 19,
-    "hold": 5,
+    "buy": 31,
+    "hold": 3,
     "sell": 0,
-    "price": 175.59
+    "price": 154.32
   },
   "STX": {
-    "buy": 20,
-    "hold": 6,
-    "sell": 1,
-    "price": 955.93
+    "buy": 25,
+    "hold": 4,
+    "sell": 0,
+    "price": 864.52
   },
   "ADI": {
-    "buy": 26,
-    "hold": 5,
+    "buy": 33,
+    "hold": 6,
     "sell": 0,
-    "price": 432.64
+    "price": 409.86
   },
   "TMUS": {
-    "buy": 22,
-    "hold": 10,
+    "buy": 31,
+    "hold": 6,
     "sell": 0,
-    "price": 182.44
+    "price": 178.28
   },
   "APP": {
-    "buy": 21,
-    "hold": 5,
-    "sell": 1,
-    "price": 575.48
+    "buy": 32,
+    "hold": 4,
+    "sell": 0,
+    "price": 556.69
   },
   "WDC": {
+    "buy": 25,
+    "hold": 4,
+    "sell": 0,
+    "price": 525.93
+  },
+  "APH": {
     "buy": 20,
     "hold": 4,
     "sell": 0,
-    "price": 598.5
-  },
-  "APH": {
-    "buy": 14,
-    "hold": 5,
-    "sell": 0,
-    "price": 151.15
+    "price": 140.68
   },
   "TMO": {
-    "buy": 19,
-    "hold": 4,
+    "buy": 29,
+    "hold": 5,
     "sell": 0,
-    "price": 473.15
+    "price": 474.29
   },
   "NEE": {
-    "buy": 16,
-    "hold": 8,
-    "sell": 0,
-    "price": 85.49
+    "buy": 18,
+    "hold": 9,
+    "sell": 1,
+    "price": 85.54
   },
   "DIS": {
-    "buy": 17,
-    "hold": 6,
+    "buy": 32,
+    "hold": 3,
     "sell": 1,
-    "price": 100.16
+    "price": 99.31
   },
   "GLW": {
-    "buy": 11,
-    "hold": 6,
+    "buy": 14,
+    "hold": 7,
     "sell": 0,
-    "price": 202.87
+    "price": 179.28
   },
   "BA": {
-    "buy": 17,
-    "hold": 5,
-    "sell": 3,
-    "price": 214.25
-  },
-  "T": {
-    "buy": 17,
-    "hold": 8,
-    "sell": 1,
-    "price": 23.59
+    "buy": 31,
+    "hold": 6,
+    "sell": 0,
+    "price": 216.23
   },
   "TJX": {
     "buy": 22,
-    "hold": 1,
-    "sell": 0,
-    "price": 157.0
+    "hold": 3,
+    "sell": 1,
+    "price": 161.39
   },
   "BLK": {
-    "buy": 16,
+    "buy": 19,
     "hold": 4,
     "sell": 0,
-    "price": 988.4
+    "price": 995.37
   },
   "ETN": {
-    "buy": 15,
-    "hold": 5,
+    "buy": 27,
+    "hold": 8,
     "sell": 0,
-    "price": 426.56
+    "price": 399.74
   },
   "GILD": {
-    "buy": 26,
-    "hold": 9,
+    "buy": 32,
+    "hold": 7,
     "sell": 0,
-    "price": 128.85
+    "price": 130.31
   },
   "UNP": {
-    "buy": 15,
+    "buy": 19,
     "hold": 10,
-    "sell": 1,
-    "price": 266.17
-  },
-  "DE": {
-    "buy": 16,
-    "hold": 9,
-    "sell": 1,
-    "price": 591.4
+    "sell": 0,
+    "price": 271.89
   },
   "SCHW": {
-    "buy": 17,
-    "hold": 5,
-    "sell": 2,
-    "price": 86.22
+    "buy": 24,
+    "hold": 3,
+    "sell": 1,
+    "price": 87.74
   },
   "ABT": {
-    "buy": 19,
-    "hold": 5,
+    "buy": 24,
+    "hold": 10,
     "sell": 0,
-    "price": 87.03
-  },
-  "HON": {
-    "buy": 13,
-    "hold": 8,
-    "sell": 1,
-    "price": 236.65
+    "price": 91.34
   },
   "UBER": {
-    "buy": 33,
+    "buy": 52,
     "hold": 8,
-    "sell": 3,
-    "price": 70.95
-  },
-  "ISRG": {
-    "buy": 19,
-    "hold": 7,
     "sell": 1,
-    "price": 399.9
-  },
-  "COP": {
-    "buy": 17,
-    "hold": 10,
-    "sell": 2,
-    "price": 118.58
+    "price": 70.61
   },
   "WELL": {
-    "buy": 11,
-    "hold": 3,
-    "sell": 1,
-    "price": 199.46
+    "buy": 22,
+    "hold": 4,
+    "sell": 0,
+    "price": 209.45
   },
   "PLD": {
-    "buy": 16,
-    "hold": 7,
-    "sell": 1,
-    "price": 142.21
-  },
-  "NOW": {
-    "buy": 35,
-    "hold": 6,
-    "sell": 2,
-    "price": 120.5
-  },
-  "BKNG": {
-    "buy": 29,
+    "buy": 19,
     "hold": 10,
     "sell": 0,
-    "price": 165.71
+    "price": 145.69
   },
-  "VRT": {
-    "buy": 22,
-    "hold": 4,
-    "sell": 1,
-    "price": 339.73
-  },
-  "DHR": {
-    "buy": 20,
-    "hold": 4,
-    "sell": 0,
-    "price": 176.75
-  },
-  "SPGI": {
-    "buy": 17,
-    "hold": 1,
-    "sell": 0,
-    "price": 408.23
-  },
-  "NEM": {
-    "buy": 17,
+  "NOW": {
+    "buy": 48,
     "hold": 5,
     "sell": 1,
-    "price": 108.01
+    "price": 113.8
   },
-  "CDNS": {
-    "buy": 15,
-    "hold": 3,
-    "sell": 1,
-    "price": 405.37
-  },
-  "COF": {
-    "buy": 18,
-    "hold": 6,
+  "BKNG": {
+    "buy": 38,
+    "hold": 8,
     "sell": 0,
-    "price": 178.41
+    "price": 166.36
   },
-  "CVS": {
-    "buy": 22,
+  "VRT": {
+    "buy": 29,
+    "hold": 4,
+    "sell": 1,
+    "price": 301.88
+  },
+  "DHR": {
+    "buy": 27,
+    "hold": 3,
+    "sell": 0,
+    "price": 185.1
+  },
+  "SPGI": {
+    "buy": 30,
     "hold": 4,
     "sell": 0,
-    "price": 91.17
+    "price": 424.16
   },
-  "SYK": {
-    "buy": 16,
+  "NEM": {
+    "buy": 25,
+    "hold": 5,
+    "sell": 0,
+    "price": 102.0
+  },
+  "MO": {
+    "buy": 12,
+    "hold": 8,
+    "sell": 3,
+    "price": 72.56
+  },
+  "CDNS": {
+    "buy": 29,
+    "hold": 3,
+    "sell": 0,
+    "price": 387.46
+  },
+  "COF": {
+    "buy": 22,
     "hold": 6,
     "sell": 0,
-    "price": 292.25
+    "price": 180.19
+  },
+  "ACN": {
+    "buy": 23,
+    "hold": 10,
+    "sell": 0,
+    "price": 177.65
+  },
+  "CVS": {
+    "buy": 27,
+    "hold": 6,
+    "sell": 0,
+    "price": 96.63
+  },
+  "SYK": {
+    "buy": 27,
+    "hold": 8,
+    "sell": 0,
+    "price": 306.55
+  },
+  "VRTX": {
+    "buy": 33,
+    "hold": 6,
+    "sell": 1,
+    "price": 452.21
   },
   "PWR": {
+    "buy": 27,
+    "hold": 9,
+    "sell": 0,
+    "price": 701.0
+  },
+  "EQIX": {
+    "buy": 31,
+    "hold": 8,
+    "sell": 0,
+    "price": 1087.3
+  },
+  "PH": {
+    "buy": 28,
+    "hold": 7,
+    "sell": 0,
+    "price": 888.96
+  },
+  "FCX": {
+    "buy": 24,
+    "hold": 5,
+    "sell": 1,
+    "price": 63.69
+  },
+  "HWM": {
+    "buy": 23,
+    "hold": 5,
+    "sell": 0,
+    "price": 253.6
+  },
+  "CEG": {
+    "buy": 23,
+    "hold": 4,
+    "sell": 0,
+    "price": 256.42
+  },
+  "SNPS": {
+    "buy": 22,
+    "hold": 8,
+    "sell": 1,
+    "price": 469.46
+  },
+  "BNY": {
+    "buy": 14,
+    "hold": 6,
+    "sell": 0,
+    "price": 142.94
+  },
+  "DDOG": {
+    "buy": 52,
+    "hold": 3,
+    "sell": 1,
+    "price": 233.16
+  },
+  "CME": {
+    "buy": 10,
+    "hold": 8,
+    "sell": 3,
+    "price": 257.34
+  },
+  "PNC": {
     "buy": 19,
     "hold": 7,
     "sell": 0,
-    "price": 723.94
-  },
-  "EQIX": {
-    "buy": 20,
-    "hold": 6,
-    "sell": 0,
-    "price": 1102.85
-  },
-  "PH": {
-    "buy": 17,
-    "hold": 5,
-    "sell": 0,
-    "price": 852.66
-  },
-  "FCX": {
-    "buy": 18,
-    "hold": 5,
-    "sell": 0,
-    "price": 70.45
-  },
-  "TT": {
-    "buy": 10,
-    "hold": 6,
-    "sell": 1,
-    "price": 471.75
-  },
-  "HWM": {
-    "buy": 18,
-    "hold": 4,
-    "sell": 0,
-    "price": 252.0
-  },
-  "CEG": {
-    "buy": 16,
-    "hold": 4,
-    "sell": 0,
-    "price": 269.15
-  },
-  "SNPS": {
-    "buy": 12,
-    "hold": 8,
-    "sell": 1,
-    "price": 498.57
-  },
-  "DDOG": {
-    "buy": 40,
-    "hold": 7,
-    "sell": 2,
-    "price": 247.68
-  },
-  "DUK": {
-    "buy": 10,
-    "hold": 9,
-    "sell": 1,
-    "price": 122.44
-  },
-  "CMI": {
-    "buy": 11,
-    "hold": 7,
-    "sell": 1,
-    "price": 693.49
-  },
-  "ADP": {
-    "buy": 10,
-    "hold": 10,
-    "sell": 2,
-    "price": 226.28
-  },
-  "PNC": {
-    "buy": 15,
-    "hold": 6,
-    "sell": 2,
-    "price": 217.66
+    "price": 228.59
   },
   "CIEN": {
-    "buy": 13,
+    "buy": 18,
     "hold": 8,
     "sell": 0,
-    "price": 631.35
+    "price": 505.66
   },
   "MCK": {
-    "buy": 14,
-    "hold": 4,
+    "buy": 20,
+    "hold": 3,
     "sell": 0,
-    "price": 734.93
+    "price": 777.82
   },
   "INTU": {
-    "buy": 24,
-    "hold": 7,
-    "sell": 1,
-    "price": 313.01
+    "buy": 31,
+    "hold": 10,
+    "sell": 0,
+    "price": 294.74
   },
   "WMB": {
-    "buy": 14,
+    "buy": 23,
     "hold": 5,
-    "sell": 0,
-    "price": 72.44
-  },
-  "JCI": {
-    "buy": 12,
-    "hold": 10,
     "sell": 1,
-    "price": 147.88
+    "price": 72.51
   },
   "AMT": {
-    "buy": 14,
+    "buy": 22,
     "hold": 7,
     "sell": 0,
-    "price": 187.18
-  },
-  "MNST": {
-    "buy": 14,
-    "hold": 8,
-    "sell": 2,
-    "price": 88.76
+    "price": 193.85
   },
   "CSX": {
     "buy": 19,
-    "hold": 9,
-    "sell": 0,
-    "price": 46.83
-  },
-  "WM": {
-    "buy": 16,
     "hold": 8,
-    "sell": 0,
-    "price": 216.47
+    "sell": 1,
+    "price": 47.15
   },
   "USB": {
-    "buy": 15,
-    "hold": 8,
-    "sell": 1,
-    "price": 53.35
+    "buy": 14,
+    "hold": 10,
+    "sell": 2,
+    "price": 55.56
   },
   "KKR": {
-    "buy": 14,
+    "buy": 23,
     "hold": 3,
-    "sell": 1,
-    "price": 90.5
+    "sell": 0,
+    "price": 93.15
   },
   "SLB": {
-    "buy": 16,
+    "buy": 27,
     "hold": 4,
-    "sell": 1,
-    "price": 56.69
-  },
-  "ELV": {
-    "buy": 14,
-    "hold": 10,
-    "sell": 1,
-    "price": 392.55
+    "sell": 2,
+    "price": 55.35
   },
   "COHR": {
-    "buy": 15,
-    "hold": 6,
+    "buy": 22,
+    "hold": 7,
     "sell": 0,
-    "price": 423.52
+    "price": 391.64
   },
   "NXPI": {
-    "buy": 18,
+    "buy": 30,
     "hold": 7,
-    "sell": 1,
-    "price": 323.39
+    "sell": 2,
+    "price": 300.18
   },
   "HCA": {
-    "buy": 16,
-    "hold": 8,
+    "buy": 19,
+    "hold": 10,
     "sell": 1,
-    "price": 363.63
+    "price": 371.91
   },
   "ICE": {
-    "buy": 11,
-    "hold": 2,
+    "buy": 18,
+    "hold": 3,
     "sell": 0,
-    "price": 139.33
+    "price": 139.95
   },
   "LITE": {
-    "buy": 14,
-    "hold": 7,
-    "sell": 1,
-    "price": 968.46
+    "buy": 25,
+    "hold": 6,
+    "sell": 0,
+    "price": 878.67
   },
   "MPWR": {
-    "buy": 12,
+    "buy": 22,
     "hold": 3,
     "sell": 0,
-    "price": 1674.66
+    "price": 1521.42
   },
-  "EMR": {
-    "buy": 12,
-    "hold": 10,
-    "sell": 2,
-    "price": 142.86
+  "MMM": {
+    "buy": 13,
+    "hold": 9,
+    "sell": 1,
+    "price": 153.1
   },
   "HOOD": {
-    "buy": 19,
-    "hold": 6,
-    "sell": 2,
-    "price": 83.99
+    "buy": 26,
+    "hold": 5,
+    "sell": 1,
+    "price": 81.02
   },
   "MCO": {
-    "buy": 12,
-    "hold": 6,
-    "sell": 1,
-    "price": 444.87
+    "buy": 21,
+    "hold": 9,
+    "sell": 0,
+    "price": 451.24
   },
   "FDX": {
-    "buy": 18,
+    "buy": 21,
     "hold": 10,
-    "sell": 3,
-    "price": 328.87
-  },
-  "MDLZ": {
-    "buy": 13,
-    "hold": 9,
-    "sell": 1,
-    "price": 62.08
+    "sell": 2,
+    "price": 332.33
   },
   "RCL": {
-    "buy": 18,
-    "hold": 5,
-    "sell": 1,
-    "price": 294.18
-  },
-  "SPG": {
-    "buy": 10,
-    "hold": 10,
-    "sell": 0,
-    "price": 204.47
-  },
-  "MPC": {
-    "buy": 11,
-    "hold": 8,
-    "sell": 0,
-    "price": 269.83
-  },
-  "VLO": {
-    "buy": 13,
-    "hold": 10,
-    "sell": 1,
-    "price": 263.24
-  },
-  "NOC": {
-    "buy": 11,
+    "buy": 24,
     "hold": 9,
     "sell": 0,
-    "price": 535.97
+    "price": 284.27
   },
-  "HLT": {
+  "MPC": {
+    "buy": 15,
+    "hold": 9,
+    "sell": 1,
+    "price": 265.27
+  },
+  "VLO": {
     "buy": 14,
     "hold": 10,
+    "sell": 2,
+    "price": 256.99
+  },
+  "NOC": {
+    "buy": 18,
+    "hold": 10,
     "sell": 0,
-    "price": 334.81
+    "price": 545.27
   },
   "APO": {
-    "buy": 15,
-    "hold": 3,
+    "buy": 17,
+    "hold": 6,
     "sell": 0,
-    "price": 125.12
+    "price": 126.67
   },
   "GM": {
-    "buy": 17,
+    "buy": 29,
     "hold": 8,
-    "sell": 3,
-    "price": 83.41
+    "sell": 2,
+    "price": 82.24
   },
   "CVNA": {
-    "buy": 19,
-    "hold": 7,
-    "sell": 0,
-    "price": 62.32
+    "buy": 22,
+    "hold": 9,
+    "sell": 1,
+    "price": 65.75
   },
   "CI": {
-    "buy": 16,
-    "hold": 6,
-    "sell": 0,
-    "price": 271.54
-  },
-  "ECL": {
-    "buy": 17,
-    "hold": 7,
-    "sell": 0,
-    "price": 258.45
-  },
-  "ROST": {
-    "buy": 17,
+    "buy": 28,
     "hold": 5,
     "sell": 0,
-    "price": 229.49
+    "price": 289.3
   },
-  "SHW": {
-    "buy": 11,
+  "ECL": {
+    "buy": 23,
+    "hold": 9,
+    "sell": 0,
+    "price": 259.02
+  },
+  "ROST": {
+    "buy": 20,
     "hold": 6,
-    "sell": 1,
-    "price": 298.24
+    "sell": 0,
+    "price": 231.27
   },
   "ORLY": {
-    "buy": 18,
+    "buy": 29,
+    "hold": 7,
+    "sell": 0,
+    "price": 90.08
+  },
+  "CRH": {
+    "buy": 26,
+    "hold": 3,
+    "sell": 0,
+    "price": 105.42
+  },
+  "BSX": {
+    "buy": 32,
+    "hold": 8,
+    "sell": 0,
+    "price": 49.24
+  },
+  "CL": {
+    "buy": 20,
+    "hold": 9,
+    "sell": 1,
+    "price": 88.65
+  },
+  "TDG": {
+    "buy": 16,
+    "hold": 10,
+    "sell": 1,
+    "price": 1227.76
+  },
+  "MSI": {
+    "buy": 17,
+    "hold": 3,
+    "sell": 0,
+    "price": 409.65
+  },
+  "AON": {
+    "buy": 19,
+    "hold": 8,
+    "sell": 2,
+    "price": 328.71
+  },
+  "DLR": {
+    "buy": 27,
+    "hold": 10,
+    "sell": 0,
+    "price": 188.06
+  },
+  "FIX": {
+    "buy": 12,
     "hold": 2,
+    "sell": 0,
+    "price": 1868.6
+  },
+  "BKR": {
+    "buy": 22,
+    "hold": 3,
+    "sell": 1,
+    "price": 63.93
+  },
+  "TEL": {
+    "buy": 18,
+    "hold": 8,
+    "sell": 0,
+    "price": 213.48
+  },
+  "URI": {
+    "buy": 20,
+    "hold": 6,
+    "sell": 1,
+    "price": 1069.19
+  },
+  "APD": {
+    "buy": 18,
+    "hold": 9,
+    "sell": 0,
+    "price": 283.71
+  },
+  "TER": {
+    "buy": 16,
+    "hold": 6,
+    "sell": 1,
+    "price": 370.38
+  },
+  "TFC": {
+    "buy": 13,
+    "hold": 10,
+    "sell": 2,
+    "price": 49.24
+  },
+  "KEYS": {
+    "buy": 16,
+    "hold": 4,
+    "sell": 0,
+    "price": 333.4
+  },
+  "NUE": {
+    "buy": 17,
+    "hold": 5,
+    "sell": 2,
+    "price": 256.96
+  },
+  "SRE": {
+    "buy": 18,
+    "hold": 6,
+    "sell": 0,
+    "price": 91.6
+  },
+  "LHX": {
+    "buy": 18,
+    "hold": 6,
+    "sell": 0,
+    "price": 309.05
+  },
+  "FANG": {
+    "buy": 33,
+    "hold": 4,
+    "sell": 0,
+    "price": 197.23
+  },
+  "TRGP": {
+    "buy": 25,
+    "hold": 5,
+    "sell": 0,
+    "price": 266.47
+  },
+  "DVN": {
+    "buy": 26,
+    "hold": 5,
+    "sell": 1,
+    "price": 44.73
+  },
+  "MET": {
+    "buy": 16,
+    "hold": 7,
+    "sell": 0,
+    "price": 84.63
+  },
+  "VST": {
+    "buy": 21,
+    "hold": 2,
+    "sell": 0,
+    "price": 148.98
+  },
+  "AJG": {
+    "buy": 21,
+    "hold": 8,
+    "sell": 0,
+    "price": 214.88
+  },
+  "MCHP": {
+    "buy": 26,
+    "hold": 7,
+    "sell": 0,
+    "price": 90.68
+  },
+  "DAL": {
+    "buy": 29,
+    "hold": 2,
+    "sell": 1,
+    "price": 78.98
+  },
+  "AME": {
+    "buy": 18,
+    "hold": 7,
+    "sell": 0,
+    "price": 227.54
+  },
+  "CTVA": {
+    "buy": 21,
+    "hold": 9,
+    "sell": 0,
+    "price": 76.93
+  },
+  "COR": {
+    "buy": 16,
+    "hold": 4,
+    "sell": 0,
+    "price": 276.56
+  },
+  "ADSK": {
+    "buy": 36,
+    "hold": 4,
+    "sell": 0,
+    "price": 231.51
+  },
+  "NDAQ": {
+    "buy": 21,
+    "hold": 3,
     "sell": 0,
     "price": 86.8
   },
-  "CRH": {
-    "buy": 14,
-    "hold": 3,
-    "sell": 0,
-    "price": 105.79
-  },
-  "BSX": {
-    "buy": 22,
-    "hold": 5,
-    "sell": 0,
-    "price": 47.4
-  },
-  "CL": {
-    "buy": 12,
-    "hold": 8,
-    "sell": 1,
-    "price": 85.8
-  },
-  "KMI": {
-    "buy": 10,
-    "hold": 10,
-    "sell": 0,
-    "price": 31.76
-  },
-  "TDG": {
-    "buy": 11,
-    "hold": 9,
-    "sell": 0,
-    "price": 1229.52
-  },
-  "AEP": {
-    "buy": 13,
-    "hold": 9,
-    "sell": 1,
-    "price": 128.56
-  },
-  "MSI": {
-    "buy": 10,
-    "hold": 1,
-    "sell": 0,
-    "price": 415.6
-  },
-  "DASH": {
-    "buy": 26,
-    "hold": 9,
-    "sell": 1,
-    "price": 153.12
-  },
-  "AON": {
-    "buy": 14,
-    "hold": 6,
-    "sell": 1,
-    "price": 311.9
-  },
-  "DLR": {
-    "buy": 20,
-    "hold": 8,
-    "sell": 1,
-    "price": 187.2
-  },
-  "BKR": {
-    "buy": 20,
-    "hold": 3,
-    "sell": 1,
-    "price": 64.44
-  },
-  "TEL": {
-    "buy": 12,
-    "hold": 5,
-    "sell": 0,
-    "price": 222.0
-  },
-  "URI": {
-    "buy": 13,
-    "hold": 3,
-    "sell": 1,
-    "price": 1028.91
-  },
-  "APD": {
-    "buy": 10,
-    "hold": 7,
-    "sell": 1,
-    "price": 284.14
-  },
-  "TER": {
-    "buy": 12,
-    "hold": 6,
-    "sell": 2,
-    "price": 412.85
-  },
-  "REGN": {
-    "buy": 16,
-    "hold": 10,
-    "sell": 1,
-    "price": 615.99
-  },
-  "NUE": {
-    "buy": 10,
-    "hold": 4,
-    "sell": 0,
-    "price": 260.64
-  },
-  "LHX": {
-    "buy": 15,
-    "hold": 5,
-    "sell": 0,
-    "price": 307.07
-  },
-  "FANG": {
-    "buy": 19,
-    "hold": 5,
-    "sell": 0,
-    "price": 205.94
-  },
-  "TRGP": {
-    "buy": 15,
-    "hold": 3,
-    "sell": 0,
-    "price": 267.53
-  },
-  "CARR": {
-    "buy": 13,
-    "hold": 10,
-    "sell": 1,
-    "price": 68.47
-  },
-  "OKE": {
-    "buy": 10,
-    "hold": 10,
-    "sell": 0,
-    "price": 88.39
-  },
-  "ALL": {
-    "buy": 13,
-    "hold": 9,
-    "sell": 1,
-    "price": 210.78
-  },
-  "DVN": {
-    "buy": 23,
-    "hold": 8,
-    "sell": 0,
-    "price": 46.53
-  },
-  "MET": {
-    "buy": 11,
-    "hold": 2,
-    "sell": 0,
-    "price": 80.94
-  },
-  "VST": {
-    "buy": 13,
-    "hold": 2,
-    "sell": 0,
-    "price": 157.2
-  },
-  "MCHP": {
-    "buy": 15,
-    "hold": 8,
-    "sell": 0,
-    "price": 96.18
-  },
-  "DAL": {
-    "buy": 23,
-    "hold": 2,
-    "sell": 0,
-    "price": 79.41
-  },
-  "CTVA": {
-    "buy": 14,
-    "hold": 9,
-    "sell": 1,
-    "price": 79.11
-  },
-  "COR": {
-    "buy": 12,
-    "hold": 3,
-    "sell": 0,
-    "price": 263.46
-  },
-  "ADSK": {
-    "buy": 23,
-    "hold": 7,
-    "sell": 0,
-    "price": 231.43
-  },
-  "NDAQ": {
-    "buy": 15,
-    "hold": 3,
-    "sell": 1,
-    "price": 87.18
-  },
   "AZO": {
-    "buy": 21,
+    "buy": 25,
     "hold": 7,
     "sell": 0,
-    "price": 3026.07
+    "price": 3111.72
   },
   "ETR": {
-    "buy": 15,
-    "hold": 4,
-    "sell": 1,
-    "price": 110.97
+    "buy": 16,
+    "hold": 8,
+    "sell": 0,
+    "price": 110.94
   },
   "XEL": {
-    "buy": 13,
-    "hold": 3,
-    "sell": 1,
-    "price": 78.54
+    "buy": 22,
+    "hold": 2,
+    "sell": 0,
+    "price": 79.17
   },
   "MSCI": {
-    "buy": 10,
+    "buy": 21,
     "hold": 3,
-    "sell": 0,
-    "price": 621.89
+    "sell": 1,
+    "price": 614.69
   },
   "CAH": {
-    "buy": 15,
+    "buy": 20,
     "hold": 3,
     "sell": 0,
-    "price": 196.25
+    "price": 206.75
   },
   "FITB": {
+    "buy": 20,
+    "hold": 7,
+    "sell": 0,
+    "price": 52.02
+  },
+  "WAB": {
+    "buy": 12,
+    "hold": 5,
+    "sell": 0,
+    "price": 261.73
+  },
+  "STT": {
+    "buy": 14,
+    "hold": 7,
+    "sell": 0,
+    "price": 161.33
+  },
+  "XYZ": {
+    "buy": 40,
+    "hold": 7,
+    "sell": 1,
+    "price": 68.11
+  },
+  "IDXX": {
+    "buy": 14,
+    "hold": 8,
+    "sell": 0,
+    "price": 561.05
+  },
+  "ARES": {
     "buy": 17,
     "hold": 6,
     "sell": 0,
-    "price": 49.52
-  },
-  "WAB": {
-    "buy": 10,
-    "hold": 3,
-    "sell": 0,
-    "price": 266.74
-  },
-  "XYZ": {
-    "buy": 27,
-    "hold": 8,
-    "sell": 1,
-    "price": 70.09
-  },
-  "ARES": {
-    "buy": 13,
-    "hold": 5,
-    "sell": 1,
-    "price": 122.89
-  },
-  "DHI": {
-    "buy": 10,
-    "hold": 10,
-    "sell": 4,
-    "price": 145.65
+    "price": 125.04
   },
   "KDP": {
-    "buy": 11,
+    "buy": 12,
     "hold": 10,
-    "sell": 1,
-    "price": 30.86
+    "sell": 0,
+    "price": 30.63
   },
   "TTWO": {
-    "buy": 20,
-    "hold": 1,
+    "buy": 34,
+    "hold": 3,
+    "sell": 0,
+    "price": 214.42
+  },
+  "AMP": {
+    "buy": 10,
+    "hold": 9,
     "sell": 1,
-    "price": 215.78
+    "price": 456.02
+  },
+  "IBKR": {
+    "buy": 15,
+    "hold": 2,
+    "sell": 0,
+    "price": 83.82
   },
   "AXON": {
-    "buy": 16,
+    "buy": 25,
     "hold": 3,
+    "sell": 0,
+    "price": 487.69
+  },
+  "JBL": {
+    "buy": 13,
+    "hold": 4,
+    "sell": 0,
+    "price": 357.62
+  },
+  "CCI": {
+    "buy": 14,
+    "hold": 10,
     "sell": 1,
-    "price": 480.48
+    "price": 93.92
   },
   "VTR": {
-    "buy": 14,
-    "hold": 3,
+    "buy": 21,
+    "hold": 4,
     "sell": 0,
-    "price": 80.43
+    "price": 82.28
+  },
+  "STLD": {
+    "buy": 13,
+    "hold": 6,
+    "sell": 2,
+    "price": 269.42
   },
   "TKO": {
-    "buy": 13,
+    "buy": 20,
     "hold": 7,
     "sell": 0,
-    "price": 199.49
-  },
-  "PEG": {
-    "buy": 10,
-    "hold": 7,
-    "sell": 0,
-    "price": 79.06
+    "price": 204.07
   },
   "LYV": {
-    "buy": 20,
-    "hold": 3,
-    "sell": 2,
-    "price": 165.56
+    "buy": 25,
+    "hold": 5,
+    "sell": 1,
+    "price": 160.22
   },
   "CCL": {
-    "buy": 21,
-    "hold": 8,
+    "buy": 24,
+    "hold": 6,
+    "sell": 0,
+    "price": 27.24
+  },
+  "IRM": {
+    "buy": 14,
+    "hold": 1,
     "sell": 1,
-    "price": 27.66
+    "price": 126.41
   },
   "A": {
-    "buy": 12,
-    "hold": 7,
+    "buy": 22,
+    "hold": 6,
     "sell": 0,
-    "price": 138.25
+    "price": 136.14
+  },
+  "CBRE": {
+    "buy": 18,
+    "hold": 2,
+    "sell": 0,
+    "price": 131.22
   },
   "EME": {
     "buy": 10,
     "hold": 4,
-    "sell": 1,
-    "price": 848.45
+    "sell": 0,
+    "price": 826.25
   },
   "VMC": {
-    "buy": 11,
-    "hold": 8,
-    "sell": 0,
-    "price": 285.81
-  },
-  "WAT": {
-    "buy": 10,
+    "buy": 18,
     "hold": 9,
-    "sell": 0,
-    "price": 374.0
+    "sell": 1,
+    "price": 281.08
   },
-  "SYY": {
-    "buy": 10,
-    "hold": 7,
-    "sell": 0,
-    "price": 74.85
+  "PCG": {
+    "buy": 17,
+    "hold": 4,
+    "sell": 1,
+    "price": 17.15
   },
   "UAL": {
-    "buy": 16,
-    "hold": 2,
-    "sell": 1,
-    "price": 107.05
-  },
-  "NTAP": {
-    "buy": 10,
-    "hold": 10,
-    "sell": 1,
-    "price": 180.82
-  },
-  "MLM": {
-    "buy": 11,
-    "hold": 9,
-    "sell": 1,
-    "price": 584.87
+    "buy": 26,
+    "hold": 4,
+    "sell": 0,
+    "price": 104.89
   },
   "EQT": {
-    "buy": 20,
-    "hold": 6,
-    "sell": 1,
-    "price": 54.66
+    "buy": 22,
+    "hold": 7,
+    "sell": 0,
+    "price": 54.17
   },
   "LVS": {
-    "buy": 12,
-    "hold": 7,
+    "buy": 19,
+    "hold": 6,
     "sell": 0,
-    "price": 50.56
+    "price": 50.57
   },
   "HAL": {
-    "buy": 18,
-    "hold": 8,
-    "sell": 1,
-    "price": 40.72
+    "buy": 25,
+    "hold": 6,
+    "sell": 2,
+    "price": 39.72
   },
   "HBAN": {
-    "buy": 15,
-    "hold": 4,
-    "sell": 1,
-    "price": 15.9
+    "buy": 21,
+    "hold": 3,
+    "sell": 0,
+    "price": 16.53
+  },
+  "Q": {
+    "buy": 13,
+    "hold": 1,
+    "sell": 0,
+    "price": 143.56
+  },
+  "ZTS": {
+    "buy": 14,
+    "hold": 10,
+    "sell": 0,
+    "price": 80.19
   },
   "ACGL": {
-    "buy": 11,
-    "hold": 8,
+    "buy": 17,
+    "hold": 10,
     "sell": 1,
-    "price": 87.53
+    "price": 90.96
   },
   "IQV": {
-    "buy": 16,
+    "buy": 24,
     "hold": 6,
     "sell": 0,
-    "price": 176.53
+    "price": 183.86
+  },
+  "VICI": {
+    "buy": 23,
+    "hold": 8,
+    "sell": 0,
+    "price": 27.86
   },
   "DTE": {
-    "buy": 10,
-    "hold": 4,
+    "buy": 15,
+    "hold": 9,
     "sell": 0,
-    "price": 144.04
+    "price": 145.75
+  },
+  "AEE": {
+    "buy": 13,
+    "hold": 9,
+    "sell": 0,
+    "price": 109.33
   },
   "FICO": {
-    "buy": 11,
+    "buy": 20,
+    "hold": 8,
+    "sell": 1,
+    "price": 1147.2
+  },
+  "TDY": {
+    "buy": 13,
     "hold": 5,
     "sell": 0,
-    "price": 1153.86
+    "price": 605.55
+  },
+  "CPRT": {
+    "buy": 12,
+    "hold": 7,
+    "sell": 1,
+    "price": 30.86
+  },
+  "DOV": {
+    "buy": 16,
+    "hold": 9,
+    "sell": 0,
+    "price": 214.92
   },
   "DXCM": {
-    "buy": 19,
+    "buy": 32,
     "hold": 5,
-    "sell": 1,
-    "price": 72.41
+    "sell": 0,
+    "price": 73.48
+  },
+  "GEHC": {
+    "buy": 18,
+    "hold": 9,
+    "sell": 0,
+    "price": 64.14
   },
   "NRG": {
-    "buy": 11,
+    "buy": 17,
     "hold": 4,
-    "sell": 1,
-    "price": 135.46
+    "sell": 0,
+    "price": 129.02
   },
-  "ATO": {
-    "buy": 10,
+  "IR": {
+    "buy": 15,
     "hold": 10,
-    "sell": 1,
-    "price": 169.67
+    "sell": 0,
+    "price": 72.08
   },
   "TPR": {
-    "buy": 15,
-    "hold": 5,
+    "buy": 20,
+    "hold": 8,
     "sell": 0,
-    "price": 138.12
+    "price": 140.35
+  },
+  "CASY": {
+    "buy": 17,
+    "hold": 9,
+    "sell": 0,
+    "price": 765.21
+  },
+  "CNP": {
+    "buy": 13,
+    "hold": 10,
+    "sell": 0,
+    "price": 42.74
+  },
+  "EIX": {
+    "buy": 10,
+    "hold": 8,
+    "sell": 4,
+    "price": 73.25
+  },
+  "RMD": {
+    "buy": 15,
+    "hold": 8,
+    "sell": 2,
+    "price": 195.45
   },
   "CFG": {
-    "buy": 19,
+    "buy": 20,
+    "hold": 2,
+    "sell": 0,
+    "price": 64.21
+  },
+  "XYL": {
+    "buy": 18,
+    "hold": 10,
+    "sell": 0,
+    "price": 109.79
+  },
+  "FE": {
+    "buy": 16,
+    "hold": 9,
+    "sell": 0,
+    "price": 46.37
+  },
+  "PPL": {
+    "buy": 16,
+    "hold": 5,
+    "sell": 0,
+    "price": 35.71
+  },
+  "ES": {
+    "buy": 14,
+    "hold": 8,
+    "sell": 3,
+    "price": 71.09
+  },
+  "HUBB": {
+    "buy": 13,
+    "hold": 9,
+    "sell": 0,
+    "price": 476.92
+  },
+  "BG": {
+    "buy": 18,
+    "hold": 2,
+    "sell": 0,
+    "price": 127.07
+  },
+  "DOW": {
+    "buy": 12,
+    "hold": 10,
+    "sell": 2,
+    "price": 33.82
+  },
+  "CINF": {
+    "buy": 10,
     "hold": 6,
     "sell": 0,
-    "price": 61.24
+    "price": 164.57
   },
   "WTW": {
-    "buy": 10,
-    "hold": 6,
-    "sell": 1,
-    "price": 250.85
-  },
-  "RF": {
-    "buy": 11,
-    "hold": 9,
-    "sell": 3,
-    "price": 27.37
+    "buy": 20,
+    "hold": 8,
+    "sell": 0,
+    "price": 263.0
   },
   "SYF": {
-    "buy": 13,
-    "hold": 8,
+    "buy": 18,
+    "hold": 9,
     "sell": 0,
-    "price": 69.37
+    "price": 70.63
+  },
+  "MTD": {
+    "buy": 10,
+    "hold": 10,
+    "sell": 0,
+    "price": 1155.03
   },
   "STZ": {
-    "buy": 13,
-    "hold": 10,
+    "buy": 17,
+    "hold": 9,
     "sell": 2,
-    "price": 135.83
+    "price": 140.41
   },
   "CPAY": {
-    "buy": 13,
-    "hold": 5,
+    "buy": 18,
+    "hold": 4,
     "sell": 0,
-    "price": 340.95
+    "price": 350.3
   },
-  "AKAM": {
-    "buy": 12,
+  "VRSK": {
+    "buy": 15,
     "hold": 10,
-    "sell": 3,
-    "price": 163.92
+    "sell": 1,
+    "price": 181.88
   },
-  "KEY": {
-    "buy": 13,
+  "FFIV": {
+    "buy": 11,
     "hold": 8,
     "sell": 1,
-    "price": 20.82
-  },
-  "CHD": {
-    "buy": 10,
-    "hold": 8,
-    "sell": 2,
-    "price": 95.0
-  },
-  "DRI": {
-    "buy": 20,
-    "hold": 9,
-    "sell": 1,
-    "price": 200.13
+    "price": 397.66
   },
   "PHM": {
-    "buy": 10,
-    "hold": 7,
-    "sell": 1,
-    "price": 117.03
+    "buy": 13,
+    "hold": 8,
+    "sell": 2,
+    "price": 117.99
+  },
+  "CMS": {
+    "buy": 13,
+    "hold": 9,
+    "sell": 0,
+    "price": 72.18
   },
   "SW": {
-    "buy": 11,
+    "buy": 23,
     "hold": 2,
-    "sell": 1,
-    "price": 42.16
+    "sell": 0,
+    "price": 41.45
+  },
+  "WST": {
+    "buy": 18,
+    "hold": 4,
+    "sell": 0,
+    "price": 317.05
   },
   "NI": {
-    "buy": 10,
-    "hold": 3,
+    "buy": 20,
+    "hold": 4,
     "sell": 0,
-    "price": 46.3
+    "price": 46.67
   },
   "FIS": {
-    "buy": 13,
-    "hold": 8,
-    "sell": 2,
-    "price": 40.44
+    "buy": 20,
+    "hold": 10,
+    "sell": 1,
+    "price": 40.89
   },
   "EXE": {
-    "buy": 16,
-    "hold": 5,
-    "sell": 1,
-    "price": 91.69
+    "buy": 26,
+    "hold": 4,
+    "sell": 0,
+    "price": 92.8
   },
-  "ROL": {
+  "LYB": {
     "buy": 11,
-    "hold": 7,
-    "sell": 0,
-    "price": 44.76
-  },
-  "RL": {
-    "buy": 16,
-    "hold": 3,
-    "sell": 1,
-    "price": 362.06
-  },
-  "CHRW": {
-    "buy": 17,
-    "hold": 8,
-    "sell": 1,
-    "price": 181.15
-  },
-  "EFX": {
-    "buy": 13,
-    "hold": 6,
-    "sell": 0,
-    "price": 166.37
-  },
-  "DD": {
-    "buy": 12,
-    "hold": 3,
-    "sell": 1,
-    "price": 48.55
-  },
-  "IFF": {
-    "buy": 13,
-    "hold": 5,
-    "sell": 1,
-    "price": 74.86
-  },
-  "LII": {
-    "buy": 10,
     "hold": 10,
     "sell": 4,
-    "price": 525.97
+    "price": 64.38
   },
-  "GNRC": {
+  "ROL": {
+    "buy": 15,
+    "hold": 8,
+    "sell": 0,
+    "price": 47.55
+  },
+  "RL": {
+    "buy": 24,
+    "hold": 4,
+    "sell": 0,
+    "price": 367.19
+  },
+  "ULTA": {
+    "buy": 25,
+    "hold": 8,
+    "sell": 1,
+    "price": 466.92
+  },
+  "OMC": {
+    "buy": 10,
+    "hold": 7,
+    "sell": 1,
+    "price": 75.45
+  },
+  "LH": {
+    "buy": 22,
+    "hold": 6,
+    "sell": 0,
+    "price": 265.28
+  },
+  "CHRW": {
+    "buy": 22,
+    "hold": 8,
+    "sell": 1,
+    "price": 184.89
+  },
+  "EFX": {
+    "buy": 20,
+    "hold": 10,
+    "sell": 0,
+    "price": 170.0
+  },
+  "STE": {
+    "buy": 10,
+    "hold": 5,
+    "sell": 0,
+    "price": 212.28
+  },
+  "VLTO": {
+    "buy": 17,
+    "hold": 9,
+    "sell": 0,
+    "price": 86.41
+  },
+  "PKG": {
+    "buy": 11,
+    "hold": 5,
+    "sell": 0,
+    "price": 222.94
+  },
+  "DD": {
+    "buy": 21,
+    "hold": 4,
+    "sell": 0,
+    "price": 47.29
+  },
+  "EVRG": {
     "buy": 13,
     "hold": 7,
     "sell": 0,
-    "price": 288.62
+    "price": 83.14
+  },
+  "IFF": {
+    "buy": 15,
+    "hold": 6,
+    "sell": 0,
+    "price": 72.92
+  },
+  "LNT": {
+    "buy": 12,
+    "hold": 6,
+    "sell": 0,
+    "price": 72.84
+  },
+  "VTRS": {
+    "buy": 12,
+    "hold": 5,
+    "sell": 1,
+    "price": 16.02
+  },
+  "IP": {
+    "buy": 15,
+    "hold": 5,
+    "sell": 1,
+    "price": 33.63
+  },
+  "BR": {
+    "buy": 13,
+    "hold": 5,
+    "sell": 0,
+    "price": 151.99
+  },
+  "CDW": {
+    "buy": 11,
+    "hold": 6,
+    "sell": 0,
+    "price": 133.69
+  },
+  "AMCR": {
+    "buy": 14,
+    "hold": 4,
+    "sell": 0,
+    "price": 37.71
+  },
+  "WY": {
+    "buy": 16,
+    "hold": 5,
+    "sell": 1,
+    "price": 24.64
+  },
+  "GNRC": {
+    "buy": 19,
+    "hold": 8,
+    "sell": 0,
+    "price": 259.71
+  },
+  "GEN": {
+    "buy": 10,
+    "hold": 6,
+    "sell": 0,
+    "price": 26.68
   },
   "PTC": {
+    "buy": 15,
+    "hold": 9,
+    "sell": 1,
+    "price": 137.19
+  },
+  "HST": {
+    "buy": 15,
+    "hold": 10,
+    "sell": 0,
+    "price": 24.73
+  },
+  "NDSN": {
     "buy": 11,
     "hold": 5,
-    "sell": 1,
-    "price": 138.19
+    "sell": 0,
+    "price": 283.4
+  },
+  "IEX": {
+    "buy": 12,
+    "hold": 8,
+    "sell": 0,
+    "price": 216.61
   },
   "APTV": {
-    "buy": 21,
-    "hold": 6,
-    "sell": 2,
-    "price": 76.26
-  },
-  "BALL": {
-    "buy": 10,
-    "hold": 6,
-    "sell": 1,
-    "price": 53.3
-  },
-  "CSGP": {
-    "buy": 12,
-    "hold": 5,
-    "sell": 3,
-    "price": 32.61
-  },
-  "TRMB": {
-    "buy": 10,
+    "buy": 28,
     "hold": 2,
     "sell": 0,
-    "price": 55.68
+    "price": 69.65
+  },
+  "NWS": {
+    "buy": 14,
+    "hold": 1,
+    "sell": 0,
+    "price": 31.09
+  },
+  "NWSA": {
+    "buy": 14,
+    "hold": 1,
+    "sell": 0,
+    "price": 27.13
+  },
+  "J": {
+    "buy": 18,
+    "hold": 7,
+    "sell": 0,
+    "price": 123.47
+  },
+  "BALL": {
+    "buy": 18,
+    "hold": 4,
+    "sell": 0,
+    "price": 52.91
+  },
+  "CSGP": {
+    "buy": 20,
+    "hold": 5,
+    "sell": 1,
+    "price": 33.49
+  },
+  "TRMB": {
+    "buy": 20,
+    "hold": 1,
+    "sell": 0,
+    "price": 54.08
+  },
+  "SOLV": {
+    "buy": 12,
+    "hold": 8,
+    "sell": 2,
+    "price": 80.89
   },
   "TYL": {
-    "buy": 12,
-    "hold": 4,
-    "sell": 1,
-    "price": 301.5
+    "buy": 22,
+    "hold": 5,
+    "sell": 0,
+    "price": 309.27
   },
-  "MGM": {
-    "buy": 16,
-    "hold": 8,
-    "sell": 4,
-    "price": 48.14
-  },
-  "HAS": {
-    "buy": 11,
-    "hold": 3,
-    "sell": 1,
-    "price": 84.98
-  },
-  "PNR": {
-    "buy": 12,
-    "hold": 3,
-    "sell": 3,
-    "price": 71.08
-  },
-  "RVTY": {
+  "MKC": {
     "buy": 10,
     "hold": 9,
     "sell": 1,
-    "price": 101.33
+    "price": 47.09
   },
-  "SJM": {
+  "AIZ": {
     "buy": 11,
-    "hold": 9,
+    "hold": 2,
+    "sell": 0,
+    "price": 257.42
+  },
+  "ZBRA": {
+    "buy": 19,
+    "hold": 7,
+    "sell": 0,
+    "price": 231.63
+  },
+  "AVY": {
+    "buy": 12,
+    "hold": 5,
+    "sell": 0,
+    "price": 154.18
+  },
+  "ALGN": {
+    "buy": 17,
+    "hold": 6,
     "sell": 1,
-    "price": 102.06
+    "price": 167.24
+  },
+  "HAS": {
+    "buy": 17,
+    "hold": 4,
+    "sell": 0,
+    "price": 84.58
+  },
+  "GL": {
+    "buy": 18,
+    "hold": 5,
+    "sell": 0,
+    "price": 158.22
+  },
+  "GDDY": {
+    "buy": 14,
+    "hold": 10,
+    "sell": 0,
+    "price": 84.04
+  },
+  "COO": {
+    "buy": 13,
+    "hold": 10,
+    "sell": 1,
+    "price": 66.85
+  },
+  "PNR": {
+    "buy": 16,
+    "hold": 5,
+    "sell": 3,
+    "price": 73.14
+  },
+  "ALLE": {
+    "buy": 10,
+    "hold": 10,
+    "sell": 0,
+    "price": 129.84
   },
   "WYNN": {
-    "buy": 15,
-    "hold": 3,
+    "buy": 26,
+    "hold": 1,
     "sell": 0,
-    "price": 103.68
+    "price": 105.45
+  },
+  "FRT": {
+    "buy": 16,
+    "hold": 8,
+    "sell": 0,
+    "price": 123.09
   },
   "PODD": {
-    "buy": 21,
+    "buy": 30,
+    "hold": 4,
+    "sell": 0,
+    "price": 152.92
+  },
+  "JKHY": {
+    "buy": 16,
+    "hold": 6,
+    "sell": 0,
+    "price": 129.81
+  },
+  "HSIC": {
+    "buy": 14,
+    "hold": 9,
+    "sell": 1,
+    "price": 76.95
+  },
+  "CRL": {
+    "buy": 16,
+    "hold": 8,
+    "sell": 0,
+    "price": 183.56
+  },
+  "TECH": {
+    "buy": 16,
     "hold": 5,
     "sell": 1,
-    "price": 141.6
+    "price": 51.5
   },
   "EPAM": {
-    "buy": 11,
-    "hold": 7,
-    "sell": 2,
-    "price": 97.39
+    "buy": 16,
+    "hold": 10,
+    "sell": 0,
+    "price": 96.99
   }
 }

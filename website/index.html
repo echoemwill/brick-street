@@ -6,9 +6,13 @@
   <title>Brick Street — Analyst Intelligence</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=3" />
+  <link rel="stylesheet" href="style.css?v=21" />
+  <link rel="stylesheet" href="journal.css?v=1" />
 </head>
 <body>
+
+  <!-- Watchlist overlay backdrop -->
+  <div class="wl-backdrop" id="wlBackdrop"></div>
 
   <!-- Background layers -->
   <div class="bg-layer noise"></div>
@@ -22,15 +26,25 @@
   <!-- Particle canvas -->
   <canvas id="particleCanvas"></canvas>
 
-  <!-- FED RATE PANEL -->
-  <div class="fed-panel" id="fedPanel">
-    <div class="fed-tab" id="fedTab">
-      <span class="fed-tab-text">INTEREST RATE</span>
+  <!-- MACRO POPOVERS (anchored to the stats-bar tiles, positioned via JS) -->
+  <div class="fed-popover" id="fedPopover" aria-hidden="true">
+    <div id="fedDrawerInner">
+      <div class="fed-loading">Loading rate data…</div>
     </div>
-    <div class="fed-drawer" id="fedDrawer">
-      <div class="fed-drawer-inner" id="fedDrawerInner">
-        <div class="fed-loading">Loading rate data…</div>
-      </div>
+  </div>
+  <div class="fed-popover pop--amber" id="unempPopover" aria-hidden="true">
+    <div id="unempPopInner">
+      <div class="fed-loading">Loading unemployment data…</div>
+    </div>
+  </div>
+  <div class="fed-popover pop--red" id="cpiPopover" aria-hidden="true">
+    <div id="cpiPopInner">
+      <div class="fed-loading">Loading inflation data…</div>
+    </div>
+  </div>
+  <div class="fed-popover pop--cyan" id="gdpPopover" aria-hidden="true">
+    <div id="gdpPopInner">
+      <div class="fed-loading">Loading GDP data…</div>
     </div>
   </div>
 
@@ -50,8 +64,13 @@
   <header class="header">
     <div class="header-inner">
       <div class="logo">
-        <span class="logo-icon">⚡</span>
-        <span class="logo-text">I N<span class="logo-accent">$$</span>D MONEY</span>
+        <span class="logo-icon">
+          <svg viewBox="0 0 20 20" fill="none" width="22" height="22">
+            <path d="M3 15 L7 9 L11 12 L16 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="16" cy="5" r="2" fill="currentColor"/>
+          </svg>
+        </span>
+        <span class="logo-text">BRICK<span class="logo-accent">STREET</span></span>
       </div>
       <div class="header-meta">
         <div class="live-indicator">
@@ -87,35 +106,66 @@
         <span class="word">Brick</span>
         <span class="word accent">Street</span>
       </h1>
-      <p class="hero-sub">Below you see the stocks with best ratings. According to "Brick Street" analysts.</p>
+      <p class="hero-sub">Every S&amp;P 500 stock with its live analyst Buy / Hold / Sell consensus. Click any column to sort and explore the full list.</p>
       <div class="hero-criteria">
-        <div class="criteria-pill buy-pill">BUY ≥ 10</div>
-        <div class="criteria-pill hold-pill">HOLD ≤ 10</div>
-        <div class="criteria-pill sell-pill">SELL &lt; 5</div>
+        <div class="criteria-pill buy-pill"><span class="pill-key">BUY</span> bullish analysts</div>
+        <div class="criteria-pill hold-pill"><span class="pill-key">HOLD</span> neutral / wait</div>
+        <div class="criteria-pill sell-pill"><span class="pill-key">SELL</span> bearish analysts</div>
       </div>
     </div>
   </section>
 
   <!-- STATS BAR -->
   <div class="stats-bar" id="statsBar">
-    <div class="stat-item">
-      <span class="stat-value accent-text" id="totalCount">0</span>
-      <span class="stat-label">Stocks Passed</span>
+    <!-- Row 1 — index overview -->
+    <div class="stats-row stats-row--primary">
+      <div class="stat-item" title="The S&P 500 index — the 500 largest publicly traded U.S. companies, the benchmark for the American stock market.">
+        <span class="stat-value accent-text" id="totalCount">0</span>
+        <span class="stat-label">S&amp;P 500 Companies</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-value buy-text" id="totalAnalysts">0</span>
+        <span class="stat-label">Total Analysts</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item stat-item--rotating" id="rotatingStat" title="Rotating market highlights — updates every few seconds. Hover to pause.">
+        <span class="stat-value accent-text stat-value--symbol" id="rotateValue">—</span>
+        <span class="stat-label" id="rotateLabel">Top Pick</span>
+        <span class="stat-rotate-detail" id="rotateDetail"></span>
+      </div>
     </div>
-    <div class="stat-divider"></div>
-    <div class="stat-item">
-      <span class="stat-value buy-text" id="totalAnalysts">0</span>
-      <span class="stat-label">Total Analysts</span>
-    </div>
-    <div class="stat-divider"></div>
-    <div class="stat-item">
-      <span class="stat-value hold-text" id="strongBuyPct">0%</span>
-      <span class="stat-label">Strong Consensus</span>
-    </div>
-    <div class="stat-divider"></div>
-    <div class="stat-item">
-      <span class="stat-value accent-text stat-value--symbol" id="topPick">—</span>
-      <span class="stat-label">Top Pick</span>
+
+    <!-- Row 2 — macro / economic indicators -->
+    <div class="stats-row stats-row--macro">
+      <div class="stat-item stat-item--macro">
+        <button class="fed-chip" id="fedChip" aria-expanded="false" aria-controls="fedPopover">
+          <span class="fed-chip-value" id="fedChipValue">—</span>
+          <span class="fed-chip-caret">▾</span>
+        </button>
+        <span class="stat-label">Fed Rate</span>
+      </div>
+      <div class="stat-item stat-item--macro">
+        <button class="fed-chip chip--amber" id="unempChip" aria-expanded="false" aria-controls="unempPopover">
+          <span class="fed-chip-value" id="unempChipValue">—</span>
+          <span class="fed-chip-caret">▾</span>
+        </button>
+        <span class="stat-label">Unemployment</span>
+      </div>
+      <div class="stat-item stat-item--macro">
+        <button class="fed-chip chip--red" id="cpiChip" aria-expanded="false" aria-controls="cpiPopover">
+          <span class="fed-chip-value" id="cpiChipValue">—</span>
+          <span class="fed-chip-caret">▾</span>
+        </button>
+        <span class="stat-label">CPI Inflation</span>
+      </div>
+      <div class="stat-item stat-item--macro">
+        <button class="fed-chip chip--cyan" id="gdpChip" aria-expanded="false" aria-controls="gdpPopover">
+          <span class="fed-chip-value" id="gdpChipValue">—</span>
+          <span class="fed-chip-caret">▾</span>
+        </button>
+        <span class="stat-label">GDP Growth</span>
+      </div>
     </div>
   </div>
 
@@ -129,7 +179,15 @@
       <svg viewBox="0 0 24 24" fill="none" width="14" height="14"><polyline points="2,20 7,12 12,15 17,7 22,10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="22" cy="10" r="2" fill="currentColor"/></svg>
       Price Prediction
     </button>
+    <button class="view-tab" data-view="journal">
+      <svg viewBox="0 0 24 24" fill="none" width="14" height="14"><path d="M4 4h13a2 2 0 0 1 2 2v14l-3-2-3 2-3-2-3 2V6a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M8 8h7M8 12h7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      Journal
+    </button>
   </div>
+
+  <!-- CONTENT SHELL: the active view + the watchlist side-by-side -->
+  <div class="content-shell" id="contentShell">
+  <div class="main-views">
 
   <!-- PREDICTION PANEL -->
   <div class="predict-panel" id="predictPanel" style="display:none">
@@ -148,6 +206,47 @@
     <div class="predict-result" id="predictResult"></div>
   </div>
 
+  <!-- JOURNAL PANEL (populated by journal.js) -->
+  <div class="journal-panel" id="journalPanel" style="display:none">
+    <div class="jr-head">
+      <div class="jr-type-toggle" id="jrTypeToggle">
+        <button class="jr-type-btn active" data-jtype="trade">
+          <svg class="jr-type-icon" viewBox="0 0 18 18" fill="none">
+            <rect x="2" y="9" width="3.5" height="7" rx="0.6" fill="currentColor" opacity="0.35"/>
+            <rect x="3.5" y="5" width="0.9" height="4" fill="currentColor"/>
+            <rect x="3.5" y="16" width="0.9" height="2" fill="currentColor"/>
+            <rect x="7.2" y="5" width="3.5" height="11" rx="0.6" fill="currentColor" opacity="0.35"/>
+            <rect x="8.7" y="2" width="0.9" height="3" fill="currentColor"/>
+            <rect x="8.7" y="16" width="0.9" height="2" fill="currentColor"/>
+            <rect x="12.5" y="7" width="3.5" height="9" rx="0.6" fill="currentColor" opacity="0.35"/>
+            <rect x="14" y="4" width="0.9" height="3" fill="currentColor"/>
+            <rect x="14" y="16" width="0.9" height="2" fill="currentColor"/>
+          </svg>
+          Trading
+        </button>
+        <button class="jr-type-btn" data-jtype="investment">
+          <svg class="jr-type-icon" viewBox="0 0 18 18" fill="none">
+            <rect x="1.5" y="10" width="3.5" height="7" rx="0.5" fill="currentColor" opacity="0.35"/>
+            <rect x="6.5" y="6" width="3.5" height="11" rx="0.5" fill="currentColor" opacity="0.35"/>
+            <rect x="11.5" y="2" width="3.5" height="15" rx="0.5" fill="currentColor" opacity="0.35"/>
+            <rect x="5" y="13" width="8" height="0.8" fill="currentColor" opacity="0.6"/>
+            <path d="M2.5 9 L7 5.5 L10 7.5 L15.5 2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Investing
+        </button>
+      </div>
+      <div class="jr-head-actions">
+        <button class="jr-add-btn" id="jrAddBtn">+ New entry</button>
+        <button class="jr-export-btn" id="jrExportBtn" title="Export to CSV">⭳ Export</button>
+      </div>
+    </div>
+
+    <div class="jr-tier-banner" id="jrTierBanner"></div>
+    <div class="jr-form-wrap" id="jrFormWrap"></div>
+    <div class="jr-analytics" id="jrAnalytics"></div>
+    <div class="jr-list" id="jrList"></div>
+  </div>
+
   <!-- CONTENT LAYOUT: main table + watchlist sidebar -->
   <div class="content-layout" id="contentLayout">
 
@@ -155,9 +254,10 @@
       <!-- SORT CONTROLS -->
       <div class="controls-bar">
         <span class="controls-label">Sort by</span>
-        <button class="sort-btn active" data-sort="buy">⬆ Buy</button>
+        <button class="sort-btn active" data-sort="buy">Buy</button>
         <button class="sort-btn" data-sort="hold">Hold</button>
         <button class="sort-btn" data-sort="sell">Sell</button>
+        <button class="sort-btn" data-sort="price">Price</button>
         <button class="sort-btn" data-sort="symbol">Symbol</button>
         <div class="search-wrap">
           <input class="search-input" type="text" placeholder="Search symbol…" id="searchInput" />
@@ -168,18 +268,25 @@
       <div class="table-container">
         <div class="table-header">
           <div class="col col-rank">#</div>
-          <div class="col col-symbol">Symbol</div>
-          <div class="col col-buy">
-            <span class="col-icon buy-icon">▲</span> Buy
+          <div class="col col-symbol col--sortable" data-sort="symbol" title="Sort alphabetically by symbol">
+            Symbol <span class="sort-caret"></span>
           </div>
-          <div class="col col-hold">
-            <span class="col-icon hold-icon">⏸</span> Hold
+          <div class="col col-buy col--sortable" data-sort="buy" title="Sort by Buy ratings">
+            Buy <span class="sort-caret"></span>
           </div>
-          <div class="col col-sell">
-            <span class="col-icon sell-icon">🔥</span> Sell
+          <div class="col col-hold col--sortable" data-sort="hold" title="Sort by Hold ratings">
+            Hold <span class="sort-caret"></span>
+          </div>
+          <div class="col col-sell col--sortable" data-sort="sell" title="Sort by Sell ratings">
+            Sell <span class="sort-caret"></span>
           </div>
           <div class="col col-signal">Signal</div>
-          <div class="col col-earnings">Earnings · Last 4Q</div>
+          <div class="col col-earnings">
+            <div class="earn-head">
+              <span class="earn-head-title">Earnings — EPS surprise %</span>
+              <span class="earn-head-sub">last 4 reported quarters · oldest → latest</span>
+            </div>
+          </div>
         </div>
         <div class="table-body" id="tableBody"></div>
       </div>
@@ -194,28 +301,32 @@
       </div>
     </div><!-- end .content-main -->
 
-    <!-- WATCHLIST SIDEBAR -->
-    <aside class="watchlist-sidebar" id="watchlistSidebar">
-      <div class="wl-sidebar-inner">
-        <div class="wl-sidebar-header">
-          <div class="wl-sidebar-title-row">
-            <svg class="wl-sidebar-star" viewBox="0 0 24 24" fill="currentColor"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
-            <span class="wl-sidebar-title">Watchlist</span>
-            <span class="watchlist-count" id="watchlistCount">0 stocks</span>
-            <button class="wl-sidebar-close" id="wlSidebarClose">✕</button>
-          </div>
-          <p class="wl-sidebar-hint">Click ★ on any stock to save it here</p>
+  </div><!-- end .content-layout -->
+
+  </div><!-- end .main-views -->
+
+  <!-- WATCHLIST SIDEBAR (sits beside the active view, on every tab) -->
+  <aside class="watchlist-sidebar" id="watchlistSidebar">
+    <div class="wl-sidebar-inner">
+      <div class="wl-sidebar-header">
+        <div class="wl-sidebar-title-row">
+          <svg class="wl-sidebar-star" viewBox="0 0 24 24" fill="currentColor"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <span class="wl-sidebar-title">Watchlist</span>
+          <span class="watchlist-count" id="watchlistCount">0 stocks</span>
+          <button class="wl-sidebar-close" id="wlSidebarClose">✕</button>
         </div>
-        <div class="wl-sidebar-body" id="watchlistBody">
-          <div class="watchlist-empty-state">
-            <svg viewBox="0 0 24 24" fill="none"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <span>Click ★ on any stock to add it here</span>
-          </div>
+        <p class="wl-sidebar-hint">Click ★ on any stock to save it here</p>
+      </div>
+      <div class="wl-sidebar-body" id="watchlistBody">
+        <div class="watchlist-empty-state">
+          <svg viewBox="0 0 24 24" fill="none"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>Click ★ on any stock to add it here</span>
         </div>
       </div>
-    </aside>
+    </div>
+  </aside>
 
-  </div><!-- end .content-layout -->
+  </div><!-- end .content-shell -->
 
   <!-- MEMBERS AREA — visible only when logged in -->
   <div id="membersArea" style="display:none">
@@ -270,9 +381,9 @@
       <div class="howto-grid">
 
         <div class="howto-card">
-          <div class="howto-icon buy-text">▲</div>
+          <div class="howto-icon buy-text">❖</div>
           <h3>Where do the analyst ratings come from?</h3>
-          <p>All Buy, Hold, and Sell ratings are sourced from <strong>MarketBeat</strong>, aggregating official recommendations from licensed analysts at major investment banks. Each rating is a formal, published call from a credentialed professional — not an algorithm.</p>
+          <p>All Buy, Hold, and Sell ratings are sourced from <strong>Finnhub</strong>, a licensed financial-data provider that aggregates official recommendations from analysts at major investment banks. Each rating is a formal, published call from a credentialed professional — not an algorithm.</p>
         </div>
 
         <div class="howto-card">
@@ -288,7 +399,7 @@
         </div>
 
         <div class="howto-card">
-          <div class="howto-icon hold-text">⏸</div>
+          <div class="howto-icon hold-text">◐</div>
           <h3>Why are Hold and Sell stocks filtered out?</h3>
           <p>High Hold counts signal analyst uncertainty — ambiguity that often precedes stagnation. Sell ratings carry explicit warnings. We filter both so every stock you see has a clean, directional signal behind it.</p>
         </div>
@@ -301,8 +412,8 @@
 
         <div class="howto-card">
           <div class="howto-icon hold-text">◆</div>
-          <h3>Using the Fed Rate panel</h3>
-          <p>The Federal Reserve rate is the most powerful lever in global markets. High rates compress valuations — especially tech. When the Fed cuts, equities expand. Use the left panel to track the current rate and next decision before positioning.</p>
+          <h3>Using the Fed Rate tile</h3>
+          <p>The Federal Reserve rate is the most powerful lever in global markets. High rates compress valuations — especially tech. When the Fed cuts, equities expand. Click the <strong>Fed Rate</strong> tile in the stats bar to track the current rate, next decision and recent history before positioning.</p>
         </div>
 
         <div class="howto-card">
@@ -333,67 +444,35 @@
 
       <div class="sources-grid">
 
-        <div class="source-card" style="--sc:#16a34a;--sc-glow:rgba(22,163,74,0.18);">
-          <div class="source-card-bg"></div>
-          <div class="source-tag-badge">ANALYST RATINGS</div>
-          <div class="source-name-row">
-            <span class="source-name" style="--sn-from:#00c032;--sn-to:#e4eaf6;">MarketBeat</span>
-            <a class="source-link-btn" href="https://www.marketbeat.com" target="_blank" rel="noopener">Visit ↗</a>
-          </div>
-          <p class="source-desc">One of the most trusted financial intelligence platforms in the industry, used by both retail and institutional investors. MarketBeat aggregates official Buy, Hold, and Sell recommendations from licensed analysts at Goldman Sachs, Morgan Stanley, JP Morgan, and 200+ other major investment houses — updated daily.</p>
-          <ul class="source-facts">
-            <li>Official recommendations from licensed Wall Street analysts</li>
-            <li>Covers every stock in the S&P 500</li>
-            <li>Updated daily as new ratings are published</li>
-            <li>Tracks analyst consensus going back years</li>
-          </ul>
-        </div>
-
         <div class="source-card" style="--sc:#06b6d4;--sc-glow:rgba(6,182,212,0.18);">
           <div class="source-card-bg"></div>
-          <div class="source-tag-badge" style="color:var(--accent);background:var(--accent-dark);border-color:rgba(6,182,212,0.3);">PRICE &amp; EARNINGS</div>
+          <div class="source-tag-badge" style="color:var(--accent);background:var(--accent-dark);border-color:rgba(6,182,212,0.3);">MARKET DATA</div>
           <div class="source-name-row">
-            <span class="source-name" style="--sn-from:#06b6d4;--sn-to:#67e8f9;">Yahoo Finance</span>
-            <a class="source-link-btn" href="https://finance.yahoo.com" target="_blank" rel="noopener" style="color:var(--accent);border-color:rgba(6,182,212,0.3);">Visit ↗</a>
+            <span class="source-name" style="--sn-from:#06b6d4;--sn-to:#67e8f9;">Finnhub</span>
+            <a class="source-link-btn" href="https://finnhub.io" target="_blank" rel="noopener" style="color:var(--accent);border-color:rgba(6,182,212,0.3);">Visit ↗</a>
           </div>
-          <p class="source-desc">Yahoo Finance is the world's most widely used financial data platform, serving over 75 million users. We use it to retrieve real-time stock prices and quarterly earnings history — specifically the EPS surprise percentage that reveals whether companies are consistently beating or missing Wall Street expectations.</p>
+          <p class="source-desc">A licensed, institutional-grade financial-data provider trusted by hedge funds, fintechs, and professional trading desks. Finnhub supplies almost everything on this dashboard — analyst consensus, live prices, earnings, and the global economic calendar — all through a properly licensed API.</p>
           <ul class="source-facts">
-            <li>Real-time and delayed stock price data</li>
-            <li>EPS actual vs estimate for last 4 quarters</li>
-            <li>Earnings surprise % calculated per quarter</li>
-            <li>No API key required — publicly accessible</li>
+            <li>Analyst Buy / Hold / Sell consensus for every S&P 500 stock</li>
+            <li>Live prices + last 4 quarters of EPS earnings surprise</li>
+            <li>Economic calendar across the world's 10 largest economies</li>
+            <li>Licensed API — no scraping, no unofficial endpoints</li>
           </ul>
         </div>
 
         <div class="source-card" style="--sc:#f59e0b;--sc-glow:rgba(245,158,11,0.18);">
           <div class="source-card-bg"></div>
-          <div class="source-tag-badge" style="color:var(--hold);background:var(--hold-dark);border-color:rgba(245,158,11,0.3);">FEDERAL RESERVE DATA</div>
+          <div class="source-tag-badge" style="color:var(--hold);background:var(--hold-dark);border-color:rgba(245,158,11,0.3);">U.S. GOVERNMENT DATA</div>
           <div class="source-name-row">
             <span class="source-name" style="--sn-from:#f59e0b;--sn-to:#fcd34d;">FRED — St. Louis Fed</span>
             <a class="source-link-btn" href="https://fred.stlouisfed.org" target="_blank" rel="noopener" style="color:var(--hold);border-color:rgba(245,158,11,0.3);">Visit ↗</a>
           </div>
-          <p class="source-desc">The Federal Reserve Bank of St. Louis publishes FRED — Federal Reserve Economic Data — one of the most authoritative economic databases in the world. We use it to retrieve the official Federal Funds Target Rate, giving you the most accurate and up-to-date picture of current US monetary policy directly from the source.</p>
+          <p class="source-desc">FRED — Federal Reserve Economic Data, published by the Federal Reserve Bank of St. Louis — is one of the most authoritative economic databases in the world. We use it for the headline U.S. macro indicators, straight from the source as public-domain data.</p>
           <ul class="source-facts">
-            <li>Published by a US Government institution — the Federal Reserve</li>
-            <li>Public domain data, free with no restrictions</li>
-            <li>Official rate history from 1954 to present</li>
-            <li>Updated on the day of each FOMC decision</li>
-          </ul>
-        </div>
-
-        <div class="source-card" style="--sc:#8b5cf6;--sc-glow:rgba(139,92,246,0.18);">
-          <div class="source-card-bg"></div>
-          <div class="source-tag-badge" style="color:#a78bfa;background:rgba(139,92,246,0.1);border-color:rgba(139,92,246,0.3);">ECONOMIC CALENDAR</div>
-          <div class="source-name-row">
-            <span class="source-name" style="--sn-from:#8b5cf6;--sn-to:#c4b5fd;">Finnhub</span>
-            <a class="source-link-btn" href="https://finnhub.io" target="_blank" rel="noopener" style="color:#a78bfa;border-color:rgba(139,92,246,0.3);">Visit ↗</a>
-          </div>
-          <p class="source-desc">Finnhub is an institutional-grade financial data provider trusted by hedge funds, fintech companies, and professional trading desks worldwide. We use their economic calendar API to surface upcoming high-impact US economic releases — the same events that move billions of dollars in the markets every month — complete with consensus forecasts and prior readings.</p>
-          <ul class="source-facts">
-            <li>Institutional-grade data used by professional traders</li>
-            <li>Covers all major US economic releases (CPI, NFP, GDP, FOMC)</li>
-            <li>Consensus estimates from the analyst community</li>
-            <li>Real-time updates as events release</li>
+            <li>Federal Funds target rate + full history since 1954</li>
+            <li>Unemployment rate</li>
+            <li>CPI inflation (year-over-year)</li>
+            <li>GDP growth — public domain, free with no restrictions</li>
           </ul>
         </div>
 
@@ -483,6 +562,7 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  <script src="app.js?v=3"></script>
+  <script src="app.js?v=21"></script>
+  <script src="journal.js?v=1"></script>
 </body>
 </html>

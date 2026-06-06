@@ -1,6 +1,7 @@
 """
 StockPulse Economic Calendar Fetcher
-Fetches upcoming high-impact US economic events from Finnhub API.
+Fetches upcoming high-impact economic events for the world's 10 largest
+economies from the Finnhub API.
 
 Requires a free Finnhub API key:
   1. Go to https://finnhub.io  → click "Get free API key"
@@ -32,20 +33,34 @@ def load_env():
                 env[k.strip()] = v.strip().strip('"').strip("'")
     return env
 
+# Top 10 economies by nominal GDP → ISO-2 country code: (display name, flag)
+COUNTRIES = {
+    "US": ("United States",  "🇺🇸"),
+    "CN": ("China",          "🇨🇳"),
+    "DE": ("Germany",        "🇩🇪"),
+    "JP": ("Japan",          "🇯🇵"),
+    "IN": ("India",          "🇮🇳"),
+    "GB": ("United Kingdom", "🇬🇧"),
+    "FR": ("France",         "🇫🇷"),
+    "IT": ("Italy",          "🇮🇹"),
+    "CA": ("Canada",         "🇨🇦"),
+    "BR": ("Brazil",         "🇧🇷"),
+}
+
 HIGH_KEYWORDS = [
     "cpi", "consumer price index", "core cpi", "core pce", "pce deflator",
-    "nonfarm", "non-farm", "payroll", "unemployment rate",
-    "fomc", "fed interest", "interest rate decision",
-    "gdp", "gross domestic",
-    "inflation"
+    "nonfarm", "non-farm", "payroll", "unemployment rate", "employment change",
+    "fomc", "fed interest", "interest rate decision", "rate decision",
+    "loan prime rate", "gdp", "gross domestic", "inflation rate", "inflation",
 ]
 
 MEDIUM_KEYWORDS = [
     "ppi", "producer price", "retail sales", "ism manufacturing", "ism services",
-    "ism non-manufacturing", "housing starts", "building permits",
+    "ism non-manufacturing", "manufacturing pmi", "services pmi", "composite pmi",
+    "caixin", "tankan", "ifo business", "zew", "housing starts", "building permits",
     "consumer confidence", "durable goods", "trade balance",
     "jobless claims", "initial claims", "industrial production",
-    "consumer sentiment", "michigan"
+    "consumer sentiment", "michigan",
 ]
 
 EVENT_DISPLAY_NAMES = {
@@ -129,7 +144,8 @@ def main():
     seen   = set()
 
     for e in sorted(raw, key=lambda x: x.get("time", "")):
-        if e.get("country", "").upper() != "US":
+        country = e.get("country", "").upper()
+        if country not in COUNTRIES:
             continue
 
         name   = e.get("event", "")
@@ -145,30 +161,35 @@ def main():
         except:
             label, days_until = dt_raw[:10], None
 
-        key = (dt_raw[:10], name[:25])
+        key = (country, dt_raw[:10], name[:25])
         if key in seen:
             continue
         seen.add(key)
 
-        unit     = e.get("unit", "")
-        display  = EVENT_DISPLAY_NAMES.get(name, name)
+        unit          = e.get("unit", "")
+        display       = EVENT_DISPLAY_NAMES.get(name, name)
+        country_name, flag = COUNTRIES[country]
 
         events.append({
-            "name":       display,
-            "date":       dt_raw[:10],
-            "time":       dt_raw[11:16] if len(dt_raw) > 10 else "",
-            "label":      label,
-            "days_until": days_until,
-            "impact":     impact,
-            "actual":     fmt_value(e.get("actual"),   unit),
-            "estimate":   fmt_value(e.get("estimate"), unit),
-            "prev":       fmt_value(e.get("prev"),     unit),
-            "unit":       unit,
+            "name":         display,
+            "country":      country,
+            "country_name": country_name,
+            "flag":         flag,
+            "date":         dt_raw[:10],
+            "time":         dt_raw[11:16] if len(dt_raw) > 10 else "",
+            "label":        label,
+            "days_until":   days_until,
+            "impact":       impact,
+            "actual":       fmt_value(e.get("actual"),   unit),
+            "estimate":     fmt_value(e.get("estimate"), unit),
+            "prev":         fmt_value(e.get("prev"),     unit),
+            "unit":         unit,
         })
 
     output = {
         "last_updated": today.strftime("%Y-%m-%d"),
-        "events":       events[:35],
+        "countries":    [{"code": c, "name": n, "flag": f} for c, (n, f) in COUNTRIES.items()],
+        "events":       events[:60],
     }
 
     with open(OUTPUT_FILE, "w") as f:

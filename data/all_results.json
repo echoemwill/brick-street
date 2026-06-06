@@ -1,2504 +1,2502 @@
 {
   "NVDA": {
-    "buy": 48,
-    "hold": 3,
-    "sell": 0
+    "buy": 63,
+    "hold": 4,
+    "sell": 1
   },
   "AAPL": {
-    "buy": 22,
-    "hold": 12,
-    "sell": 4
+    "buy": 38,
+    "hold": 15,
+    "sell": 2
   },
   "GOOGL": {
-    "buy": 47,
+    "buy": 61,
     "hold": 9,
     "sell": 0
   },
   "GOOG": {
-    "buy": 29,
-    "hold": 5,
-    "sell": 3
+    "buy": 61,
+    "hold": 9,
+    "sell": 0
   },
   "MSFT": {
-    "buy": 40,
-    "hold": 7,
+    "buy": 61,
+    "hold": 5,
     "sell": 0
   },
   "AMZN": {
-    "buy": 57,
-    "hold": 4,
+    "buy": 71,
+    "hold": 5,
     "sell": 0
   },
   "AVGO": {
-    "buy": 30,
+    "buy": 52,
     "hold": 4,
     "sell": 0
   },
   "TSLA": {
-    "buy": 19,
-    "hold": 17,
-    "sell": 9
+    "buy": 29,
+    "hold": 23,
+    "sell": 8
   },
   "META": {
-    "buy": 39,
+    "buy": 63,
     "hold": 9,
-    "sell": 1
+    "sell": 0
   },
   "MU": {
-    "buy": 30,
-    "hold": 4,
-    "sell": 2
+    "buy": 51,
+    "hold": 3,
+    "sell": 1
   },
   "LLY": {
-    "buy": 23,
-    "hold": 5,
+    "buy": 31,
+    "hold": 7,
     "sell": 1
   },
   "WMT": {
-    "buy": 31,
-    "hold": 4,
+    "buy": 43,
+    "hold": 5,
     "sell": 0
   },
   "AMD": {
-    "buy": 31,
-    "hold": 12,
+    "buy": 46,
+    "hold": 11,
     "sell": 0
   },
   "JPM": {
-    "buy": 15,
-    "hold": 15,
+    "buy": 17,
+    "hold": 13,
     "sell": 0
   },
   "ORCL": {
-    "buy": 29,
-    "hold": 13,
+    "buy": 40,
+    "hold": 8,
     "sell": 1
   },
   "XOM": {
-    "buy": 11,
-    "hold": 11,
+    "buy": 16,
+    "hold": 14,
     "sell": 1
   },
   "V": {
-    "buy": 21,
-    "hold": 6,
+    "buy": 44,
+    "hold": 4,
     "sell": 0
   },
   "INTC": {
-    "buy": 26,
-    "hold": 26,
-    "sell": 6
+    "buy": 17,
+    "hold": 32,
+    "sell": 4
   },
   "JNJ": {
-    "buy": 20,
-    "hold": 9,
+    "buy": 21,
+    "hold": 10,
     "sell": 0
   },
   "CSCO": {
-    "buy": 16,
-    "hold": 8,
+    "buy": 23,
+    "hold": 10,
     "sell": 0
   },
   "COST": {
-    "buy": 22,
+    "buy": 30,
     "hold": 13,
     "sell": 1
   },
   "MA": {
-    "buy": 24,
+    "buy": 46,
     "hold": 5,
-    "sell": 1
+    "sell": 0
   },
   "CAT": {
-    "buy": 16,
-    "hold": 9,
+    "buy": 19,
+    "hold": 14,
     "sell": 1
   },
   "LRCX": {
-    "buy": 28,
+    "buy": 34,
     "hold": 8,
     "sell": 0
   },
   "AMAT": {
-    "buy": 27,
-    "hold": 8,
-    "sell": 1
+    "buy": 39,
+    "hold": 7,
+    "sell": 0
   },
   "ABBV": {
-    "buy": 16,
+    "buy": 31,
     "hold": 9,
     "sell": 0
   },
   "BAC": {
-    "buy": 22,
+    "buy": 24,
     "hold": 5,
     "sell": 0
   },
   "CVX": {
-    "buy": 0,
-    "hold": 0,
-    "sell": 0,
-    "error": true
+    "buy": 23,
+    "hold": 7,
+    "sell": 1
   },
   "PLTR": {
-    "buy": 17,
-    "hold": 12,
-    "sell": 5
+    "buy": 26,
+    "hold": 10,
+    "sell": 2
   },
   "NFLX": {
-    "buy": 34,
-    "hold": 16,
+    "buy": 45,
+    "hold": 13,
     "sell": 0
   },
   "UNH": {
-    "buy": 20,
-    "hold": 8,
-    "sell": 2
+    "buy": 26,
+    "hold": 7,
+    "sell": 1
   },
   "MS": {
-    "buy": 12,
-    "hold": 12,
+    "buy": 18,
+    "hold": 14,
     "sell": 0
   },
   "KO": {
-    "buy": 16,
-    "hold": 0,
+    "buy": 28,
+    "hold": 6,
     "sell": 0
   },
   "GE": {
-    "buy": 16,
+    "buy": 28,
     "hold": 3,
     "sell": 1
   },
   "PG": {
-    "buy": 15,
-    "hold": 9,
-    "sell": 0
+    "buy": 22,
+    "hold": 13,
+    "sell": 1
   },
   "GS": {
-    "buy": 14,
-    "hold": 14,
-    "sell": 0
+    "buy": 15,
+    "hold": 16,
+    "sell": 1
   },
   "HD": {
-    "buy": 21,
-    "hold": 12,
+    "buy": 29,
+    "hold": 16,
     "sell": 1
   },
   "IBM": {
-    "buy": 12,
-    "hold": 8,
+    "buy": 17,
+    "hold": 10,
     "sell": 1
   },
   "MRK": {
-    "buy": 0,
-    "hold": 0,
-    "sell": 0,
-    "error": true
+    "buy": 25,
+    "hold": 11,
+    "sell": 0
   },
   "DELL": {
-    "buy": 21,
-    "hold": 10,
+    "buy": 25,
+    "hold": 8,
     "sell": 1
   },
   "TXN": {
-    "buy": 12,
-    "hold": 14,
-    "sell": 5
+    "buy": 19,
+    "hold": 23,
+    "sell": 3
   },
   "PM": {
-    "buy": 11,
-    "hold": 2,
+    "buy": 19,
+    "hold": 7,
     "sell": 0
   },
   "KLAC": {
-    "buy": 20,
-    "hold": 10,
+    "buy": 25,
+    "hold": 11,
     "sell": 0
   },
   "GEV": {
-    "buy": 22,
-    "hold": 6,
-    "sell": 1
+    "buy": 34,
+    "hold": 7,
+    "sell": 0
   },
   "SNDK": {
-    "buy": 19,
-    "hold": 6,
-    "sell": 1
+    "buy": 25,
+    "hold": 4,
+    "sell": 0
   },
   "QCOM": {
-    "buy": 16,
-    "hold": 16,
+    "buy": 18,
+    "hold": 27,
     "sell": 4
   },
   "WFC": {
-    "buy": 14,
-    "hold": 10,
+    "buy": 21,
+    "hold": 8,
     "sell": 0
   },
   "PANW": {
-    "buy": 35,
+    "buy": 51,
     "hold": 12,
-    "sell": 2
-  },
-  "RTX": {
-    "buy": 14,
-    "hold": 7,
     "sell": 1
   },
+  "RTX": {
+    "buy": 19,
+    "hold": 9,
+    "sell": 2
+  },
   "LIN": {
-    "buy": 10,
-    "hold": 3,
-    "sell": 0
+    "buy": 23,
+    "hold": 5,
+    "sell": 1
   },
   "C": {
-    "buy": 14,
+    "buy": 23,
     "hold": 5,
     "sell": 0
   },
   "ANET": {
-    "buy": 19,
-    "hold": 5,
+    "buy": 31,
+    "hold": 3,
     "sell": 0
   },
   "AXP": {
-    "buy": 13,
-    "hold": 15,
-    "sell": 1
-  },
-  "STX": {
-    "buy": 20,
-    "hold": 6,
-    "sell": 1
-  },
-  "ADI": {
-    "buy": 26,
-    "hold": 5,
-    "sell": 0
-  },
-  "TMUS": {
-    "buy": 22,
-    "hold": 10,
-    "sell": 0
-  },
-  "APP": {
-    "buy": 21,
-    "hold": 5,
-    "sell": 1
-  },
-  "VZ": {
-    "buy": 11,
-    "hold": 11,
-    "sell": 0
-  },
-  "MCD": {
-    "buy": 16,
-    "hold": 15,
-    "sell": 2
-  },
-  "CRWD": {
-    "buy": 36,
-    "hold": 16,
-    "sell": 3
-  },
-  "WDC": {
-    "buy": 20,
-    "hold": 4,
-    "sell": 0
-  },
-  "PEP": {
-    "buy": 10,
-    "hold": 13,
-    "sell": 1
-  },
-  "APH": {
-    "buy": 14,
-    "hold": 5,
-    "sell": 0
-  },
-  "TMO": {
-    "buy": 19,
-    "hold": 4,
-    "sell": 0
-  },
-  "NEE": {
-    "buy": 16,
-    "hold": 8,
-    "sell": 0
-  },
-  "AMGN": {
-    "buy": 15,
-    "hold": 14,
-    "sell": 2
-  },
-  "DIS": {
-    "buy": 17,
-    "hold": 6,
-    "sell": 1
-  },
-  "GLW": {
-    "buy": 11,
-    "hold": 6,
-    "sell": 0
-  },
-  "BA": {
-    "buy": 17,
-    "hold": 5,
-    "sell": 3
-  },
-  "T": {
-    "buy": 17,
-    "hold": 8,
-    "sell": 1
-  },
-  "TJX": {
-    "buy": 22,
-    "hold": 1,
-    "sell": 0
-  },
-  "BLK": {
-    "buy": 16,
-    "hold": 4,
-    "sell": 0
-  },
-  "CRM": {
-    "buy": 28,
-    "hold": 11,
-    "sell": 3
-  },
-  "ETN": {
-    "buy": 15,
-    "hold": 5,
-    "sell": 0
-  },
-  "GILD": {
-    "buy": 26,
-    "hold": 9,
-    "sell": 0
-  },
-  "UNP": {
-    "buy": 15,
-    "hold": 10,
-    "sell": 1
-  },
-  "DE": {
-    "buy": 16,
-    "hold": 9,
-    "sell": 1
-  },
-  "SCHW": {
-    "buy": 17,
-    "hold": 5,
-    "sell": 2
-  },
-  "ABT": {
-    "buy": 19,
-    "hold": 5,
-    "sell": 0
-  },
-  "HON": {
-    "buy": 13,
-    "hold": 8,
-    "sell": 1
-  },
-  "UBER": {
-    "buy": 33,
-    "hold": 8,
-    "sell": 3
-  },
-  "PFE": {
-    "buy": 11,
-    "hold": 14,
-    "sell": 3
-  },
-  "ISRG": {
-    "buy": 19,
-    "hold": 7,
-    "sell": 1
-  },
-  "COP": {
-    "buy": 17,
-    "hold": 10,
-    "sell": 2
-  },
-  "BX": {
-    "buy": 12,
-    "hold": 11,
-    "sell": 1
-  },
-  "WELL": {
-    "buy": 11,
-    "hold": 3,
-    "sell": 1
-  },
-  "PLD": {
-    "buy": 16,
-    "hold": 7,
-    "sell": 1
-  },
-  "NOW": {
-    "buy": 35,
-    "hold": 6,
-    "sell": 2
-  },
-  "BKNG": {
-    "buy": 29,
-    "hold": 10,
-    "sell": 0
-  },
-  "VRT": {
-    "buy": 22,
-    "hold": 4,
-    "sell": 1
-  },
-  "DHR": {
-    "buy": 20,
-    "hold": 4,
-    "sell": 0
-  },
-  "SPGI": {
-    "buy": 17,
-    "hold": 1,
-    "sell": 0
-  },
-  "CB": {
-    "buy": 11,
-    "hold": 11,
-    "sell": 2
-  },
-  "LMT": {
-    "buy": 12,
-    "hold": 14,
-    "sell": 1
-  },
-  "NEM": {
-    "buy": 17,
-    "hold": 5,
-    "sell": 1
-  },
-  "LOW": {
-    "buy": 23,
-    "hold": 11,
-    "sell": 2
-  },
-  "MO": {
-    "buy": 5,
-    "hold": 5,
-    "sell": 2
-  },
-  "PGR": {
-    "buy": 14,
-    "hold": 14,
-    "sell": 2
-  },
-  "CDNS": {
-    "buy": 15,
-    "hold": 3,
-    "sell": 1
-  },
-  "COF": {
-    "buy": 18,
-    "hold": 6,
-    "sell": 0
-  },
-  "ACN": {
-    "buy": 17,
-    "hold": 11,
-    "sell": 0
-  },
-  "CVS": {
-    "buy": 22,
-    "hold": 4,
-    "sell": 0
-  },
-  "SYK": {
-    "buy": 16,
-    "hold": 6,
-    "sell": 0
-  },
-  "BMY": {
-    "buy": 10,
-    "hold": 13,
-    "sell": 2
-  },
-  "FTNT": {
-    "buy": 24,
-    "hold": 24,
-    "sell": 4
-  },
-  "SBUX": {
-    "buy": 20,
-    "hold": 13,
-    "sell": 2
-  },
-  "VRTX": {
-    "buy": 22,
-    "hold": 13,
-    "sell": 0
-  },
-  "PWR": {
-    "buy": 19,
-    "hold": 7,
-    "sell": 0
-  },
-  "ADBE": {
-    "buy": 17,
-    "hold": 17,
-    "sell": 5
-  },
-  "EQIX": {
-    "buy": 20,
-    "hold": 6,
-    "sell": 0
-  },
-  "PH": {
-    "buy": 17,
-    "hold": 5,
-    "sell": 0
-  },
-  "FCX": {
-    "buy": 18,
-    "hold": 5,
-    "sell": 0
-  },
-  "SO": {
-    "buy": 12,
-    "hold": 12,
-    "sell": 1
-  },
-  "TT": {
-    "buy": 10,
-    "hold": 6,
-    "sell": 1
-  },
-  "HWM": {
-    "buy": 18,
-    "hold": 4,
-    "sell": 0
-  },
-  "MAR": {
-    "buy": 8,
-    "hold": 13,
-    "sell": 0
-  },
-  "CEG": {
-    "buy": 16,
-    "hold": 4,
-    "sell": 0
-  },
-  "SNPS": {
-    "buy": 12,
-    "hold": 8,
-    "sell": 1
-  },
-  "BNY": {
-    "buy": 8,
-    "hold": 6,
-    "sell": 0
-  },
-  "DDOG": {
-    "buy": 40,
-    "hold": 7,
-    "sell": 2
-  },
-  "MDT": {
-    "buy": 15,
-    "hold": 11,
-    "sell": 0
-  },
-  "DUK": {
-    "buy": 10,
-    "hold": 9,
-    "sell": 1
-  },
-  "CMI": {
-    "buy": 11,
-    "hold": 7,
-    "sell": 1
-  },
-  "UPS": {
-    "buy": 12,
-    "hold": 14,
-    "sell": 4
-  },
-  "ADP": {
-    "buy": 10,
-    "hold": 10,
-    "sell": 2
-  },
-  "GD": {
-    "buy": 13,
-    "hold": 12,
-    "sell": 1
-  },
-  "CME": {
-    "buy": 8,
-    "hold": 8,
-    "sell": 3
-  },
-  "CMCSA": {
-    "buy": 15,
-    "hold": 16,
-    "sell": 4
-  },
-  "PNC": {
-    "buy": 15,
-    "hold": 6,
-    "sell": 2
-  },
-  "CIEN": {
-    "buy": 13,
-    "hold": 8,
-    "sell": 0
-  },
-  "MCK": {
-    "buy": 14,
-    "hold": 4,
-    "sell": 0
-  },
-  "INTU": {
-    "buy": 24,
-    "hold": 7,
-    "sell": 1
-  },
-  "WMB": {
-    "buy": 14,
-    "hold": 5,
-    "sell": 0
-  },
-  "JCI": {
-    "buy": 12,
-    "hold": 10,
-    "sell": 1
-  },
-  "AMT": {
-    "buy": 14,
-    "hold": 7,
-    "sell": 0
-  },
-  "MNST": {
-    "buy": 14,
-    "hold": 8,
-    "sell": 2
-  },
-  "CSX": {
-    "buy": 19,
-    "hold": 9,
-    "sell": 0
-  },
-  "WM": {
-    "buy": 16,
-    "hold": 8,
-    "sell": 0
-  },
-  "USB": {
-    "buy": 15,
-    "hold": 8,
-    "sell": 1
-  },
-  "KKR": {
-    "buy": 14,
-    "hold": 3,
-    "sell": 1
-  },
-  "SLB": {
-    "buy": 16,
-    "hold": 4,
-    "sell": 1
-  },
-  "ELV": {
-    "buy": 14,
-    "hold": 10,
-    "sell": 1
-  },
-  "COHR": {
-    "buy": 15,
-    "hold": 6,
-    "sell": 0
-  },
-  "NXPI": {
-    "buy": 18,
-    "hold": 7,
-    "sell": 1
-  },
-  "HCA": {
-    "buy": 16,
-    "hold": 8,
-    "sell": 1
-  },
-  "ICE": {
-    "buy": 11,
-    "hold": 2,
-    "sell": 0
-  },
-  "LITE": {
-    "buy": 14,
-    "hold": 7,
-    "sell": 1
-  },
-  "MPWR": {
-    "buy": 12,
-    "hold": 3,
-    "sell": 0
-  },
-  "MMM": {
-    "buy": 9,
-    "hold": 6,
-    "sell": 2
-  },
-  "ABNB": {
-    "buy": 21,
-    "hold": 16,
-    "sell": 5
-  },
-  "EMR": {
-    "buy": 12,
-    "hold": 10,
-    "sell": 2
-  },
-  "HOOD": {
-    "buy": 19,
-    "hold": 6,
-    "sell": 2
-  },
-  "MCO": {
-    "buy": 12,
-    "hold": 6,
-    "sell": 1
-  },
-  "FDX": {
-    "buy": 18,
-    "hold": 10,
-    "sell": 3
-  },
-  "MDLZ": {
-    "buy": 13,
-    "hold": 9,
-    "sell": 1
-  },
-  "RCL": {
-    "buy": 18,
-    "hold": 5,
-    "sell": 1
-  },
-  "MRSH": {
-    "buy": 10,
-    "hold": 11,
-    "sell": 2
-  },
-  "SPG": {
-    "buy": 10,
-    "hold": 10,
-    "sell": 0
-  },
-  "MPC": {
-    "buy": 11,
-    "hold": 8,
-    "sell": 0
-  },
-  "VLO": {
-    "buy": 13,
-    "hold": 10,
-    "sell": 1
-  },
-  "NOC": {
-    "buy": 11,
-    "hold": 9,
-    "sell": 0
-  },
-  "HLT": {
-    "buy": 14,
-    "hold": 10,
-    "sell": 0
-  },
-  "HPE": {
-    "buy": 11,
-    "hold": 12,
-    "sell": 0
-  },
-  "APO": {
-    "buy": 15,
-    "hold": 3,
-    "sell": 0
-  },
-  "EOG": {
-    "buy": 16,
-    "hold": 17,
-    "sell": 0
-  },
-  "GM": {
-    "buy": 17,
-    "hold": 8,
-    "sell": 3
-  },
-  "PSX": {
-    "buy": 13,
-    "hold": 12,
-    "sell": 0
-  },
-  "CVNA": {
-    "buy": 19,
-    "hold": 7,
-    "sell": 0
-  },
-  "CI": {
-    "buy": 16,
-    "hold": 6,
-    "sell": 0
-  },
-  "ECL": {
-    "buy": 17,
-    "hold": 7,
-    "sell": 0
-  },
-  "ROST": {
-    "buy": 17,
-    "hold": 5,
-    "sell": 0
-  },
-  "SHW": {
-    "buy": 11,
-    "hold": 6,
-    "sell": 1
-  },
-  "ITW": {
-    "buy": 7,
-    "hold": 7,
-    "sell": 5
-  },
-  "ORLY": {
-    "buy": 18,
-    "hold": 2,
-    "sell": 0
-  },
-  "CRH": {
-    "buy": 14,
-    "hold": 3,
-    "sell": 0
-  },
-  "BSX": {
-    "buy": 22,
-    "hold": 5,
-    "sell": 0
-  },
-  "CL": {
-    "buy": 12,
-    "hold": 8,
-    "sell": 1
-  },
-  "KMI": {
-    "buy": 10,
-    "hold": 10,
-    "sell": 0
-  },
-  "TDG": {
-    "buy": 11,
-    "hold": 9,
-    "sell": 0
-  },
-  "CTAS": {
-    "buy": 7,
-    "hold": 7,
-    "sell": 3
-  },
-  "AEP": {
-    "buy": 13,
-    "hold": 9,
-    "sell": 1
-  },
-  "NSC": {
     "buy": 16,
     "hold": 18,
     "sell": 1
   },
-  "MSI": {
-    "buy": 10,
-    "hold": 1,
+  "STX": {
+    "buy": 25,
+    "hold": 4,
     "sell": 0
   },
-  "DASH": {
-    "buy": 26,
+  "ADI": {
+    "buy": 33,
+    "hold": 6,
+    "sell": 0
+  },
+  "TMUS": {
+    "buy": 31,
+    "hold": 6,
+    "sell": 0
+  },
+  "APP": {
+    "buy": 32,
+    "hold": 4,
+    "sell": 0
+  },
+  "VZ": {
+    "buy": 18,
+    "hold": 17,
+    "sell": 0
+  },
+  "MCD": {
+    "buy": 24,
+    "hold": 15,
+    "sell": 1
+  },
+  "CRWD": {
+    "buy": 48,
+    "hold": 11,
+    "sell": 2
+  },
+  "WDC": {
+    "buy": 25,
+    "hold": 4,
+    "sell": 0
+  },
+  "PEP": {
+    "buy": 13,
+    "hold": 15,
+    "sell": 1
+  },
+  "APH": {
+    "buy": 20,
+    "hold": 4,
+    "sell": 0
+  },
+  "TMO": {
+    "buy": 29,
+    "hold": 5,
+    "sell": 0
+  },
+  "NEE": {
+    "buy": 18,
     "hold": 9,
     "sell": 1
   },
-  "WBD": {
-    "buy": 14,
-    "hold": 16,
+  "AMGN": {
+    "buy": 22,
+    "hold": 19,
     "sell": 3
   },
-  "AON": {
-    "buy": 14,
-    "hold": 6,
+  "DIS": {
+    "buy": 32,
+    "hold": 3,
     "sell": 1
   },
-  "DLR": {
+  "GLW": {
+    "buy": 14,
+    "hold": 7,
+    "sell": 0
+  },
+  "BA": {
+    "buy": 31,
+    "hold": 6,
+    "sell": 0
+  },
+  "T": {
     "buy": 20,
+    "hold": 14,
+    "sell": 0
+  },
+  "TJX": {
+    "buy": 22,
+    "hold": 3,
+    "sell": 1
+  },
+  "BLK": {
+    "buy": 19,
+    "hold": 4,
+    "sell": 0
+  },
+  "CRM": {
+    "buy": 43,
+    "hold": 13,
+    "sell": 2
+  },
+  "ETN": {
+    "buy": 27,
+    "hold": 8,
+    "sell": 0
+  },
+  "GILD": {
+    "buy": 32,
+    "hold": 7,
+    "sell": 0
+  },
+  "UNP": {
+    "buy": 19,
+    "hold": 10,
+    "sell": 0
+  },
+  "DE": {
+    "buy": 21,
+    "hold": 13,
+    "sell": 0
+  },
+  "SCHW": {
+    "buy": 24,
+    "hold": 3,
+    "sell": 1
+  },
+  "ABT": {
+    "buy": 24,
+    "hold": 10,
+    "sell": 0
+  },
+  "HON": {
+    "buy": 20,
+    "hold": 12,
+    "sell": 1
+  },
+  "UBER": {
+    "buy": 52,
     "hold": 8,
     "sell": 1
   },
-  "FIX": {
+  "PFE": {
+    "buy": 15,
+    "hold": 18,
+    "sell": 3
+  },
+  "ISRG": {
+    "buy": 28,
+    "hold": 11,
+    "sell": 1
+  },
+  "COP": {
+    "buy": 21,
+    "hold": 11,
+    "sell": 0
+  },
+  "BX": {
+    "buy": 22,
+    "hold": 11,
+    "sell": 0
+  },
+  "WELL": {
+    "buy": 22,
+    "hold": 4,
+    "sell": 0
+  },
+  "PLD": {
+    "buy": 19,
+    "hold": 10,
+    "sell": 0
+  },
+  "NOW": {
+    "buy": 48,
+    "hold": 5,
+    "sell": 1
+  },
+  "BKNG": {
+    "buy": 38,
+    "hold": 8,
+    "sell": 0
+  },
+  "VRT": {
+    "buy": 29,
+    "hold": 4,
+    "sell": 1
+  },
+  "DHR": {
+    "buy": 27,
+    "hold": 3,
+    "sell": 0
+  },
+  "SPGI": {
+    "buy": 30,
+    "hold": 4,
+    "sell": 0
+  },
+  "CB": {
+    "buy": 19,
+    "hold": 14,
+    "sell": 2
+  },
+  "LMT": {
+    "buy": 11,
+    "hold": 16,
+    "sell": 1
+  },
+  "NEM": {
+    "buy": 25,
+    "hold": 5,
+    "sell": 0
+  },
+  "LOW": {
+    "buy": 28,
+    "hold": 12,
+    "sell": 1
+  },
+  "MO": {
+    "buy": 12,
+    "hold": 8,
+    "sell": 3
+  },
+  "PGR": {
+    "buy": 13,
+    "hold": 17,
+    "sell": 1
+  },
+  "CDNS": {
+    "buy": 29,
+    "hold": 3,
+    "sell": 0
+  },
+  "COF": {
+    "buy": 22,
+    "hold": 6,
+    "sell": 0
+  },
+  "ACN": {
+    "buy": 23,
+    "hold": 10,
+    "sell": 0
+  },
+  "CVS": {
+    "buy": 27,
+    "hold": 6,
+    "sell": 0
+  },
+  "SYK": {
+    "buy": 27,
+    "hold": 8,
+    "sell": 0
+  },
+  "BMY": {
+    "buy": 14,
+    "hold": 20,
+    "sell": 2
+  },
+  "FTNT": {
+    "buy": 17,
+    "hold": 31,
+    "sell": 4
+  },
+  "SBUX": {
+    "buy": 23,
+    "hold": 19,
+    "sell": 5
+  },
+  "VRTX": {
+    "buy": 33,
+    "hold": 6,
+    "sell": 1
+  },
+  "PWR": {
+    "buy": 27,
+    "hold": 9,
+    "sell": 0
+  },
+  "ADBE": {
+    "buy": 19,
+    "hold": 22,
+    "sell": 4
+  },
+  "EQIX": {
+    "buy": 31,
+    "hold": 8,
+    "sell": 0
+  },
+  "PH": {
+    "buy": 28,
+    "hold": 7,
+    "sell": 0
+  },
+  "FCX": {
+    "buy": 24,
+    "hold": 5,
+    "sell": 1
+  },
+  "SO": {
+    "buy": 14,
+    "hold": 18,
+    "sell": 1
+  },
+  "TT": {
+    "buy": 19,
+    "hold": 14,
+    "sell": 1
+  },
+  "HWM": {
+    "buy": 23,
+    "hold": 5,
+    "sell": 0
+  },
+  "MAR": {
+    "buy": 15,
+    "hold": 15,
+    "sell": 1
+  },
+  "CEG": {
+    "buy": 23,
+    "hold": 4,
+    "sell": 0
+  },
+  "SNPS": {
+    "buy": 22,
+    "hold": 8,
+    "sell": 1
+  },
+  "BNY": {
+    "buy": 14,
+    "hold": 6,
+    "sell": 0
+  },
+  "DDOG": {
+    "buy": 52,
+    "hold": 3,
+    "sell": 1
+  },
+  "MDT": {
+    "buy": 21,
+    "hold": 15,
+    "sell": 1
+  },
+  "DUK": {
+    "buy": 14,
+    "hold": 13,
+    "sell": 1
+  },
+  "CMI": {
+    "buy": 17,
+    "hold": 11,
+    "sell": 0
+  },
+  "UPS": {
+    "buy": 17,
+    "hold": 12,
+    "sell": 4
+  },
+  "ADP": {
     "buy": 8,
+    "hold": 13,
+    "sell": 2
+  },
+  "GD": {
+    "buy": 20,
+    "hold": 12,
+    "sell": 1
+  },
+  "CME": {
+    "buy": 10,
+    "hold": 8,
+    "sell": 3
+  },
+  "CMCSA": {
+    "buy": 14,
+    "hold": 22,
+    "sell": 3
+  },
+  "PNC": {
+    "buy": 19,
+    "hold": 7,
+    "sell": 0
+  },
+  "CIEN": {
+    "buy": 18,
+    "hold": 8,
+    "sell": 0
+  },
+  "MCK": {
+    "buy": 20,
+    "hold": 3,
+    "sell": 0
+  },
+  "INTU": {
+    "buy": 31,
+    "hold": 10,
+    "sell": 0
+  },
+  "WMB": {
+    "buy": 23,
+    "hold": 5,
+    "sell": 1
+  },
+  "JCI": {
+    "buy": 16,
+    "hold": 11,
+    "sell": 0
+  },
+  "AMT": {
+    "buy": 22,
+    "hold": 7,
+    "sell": 0
+  },
+  "MNST": {
+    "buy": 20,
+    "hold": 12,
+    "sell": 0
+  },
+  "CSX": {
+    "buy": 19,
+    "hold": 8,
+    "sell": 1
+  },
+  "WM": {
+    "buy": 28,
+    "hold": 11,
+    "sell": 0
+  },
+  "USB": {
+    "buy": 14,
+    "hold": 10,
+    "sell": 2
+  },
+  "KKR": {
+    "buy": 23,
+    "hold": 3,
+    "sell": 0
+  },
+  "SLB": {
+    "buy": 27,
+    "hold": 4,
+    "sell": 2
+  },
+  "ELV": {
+    "buy": 17,
+    "hold": 12,
+    "sell": 0
+  },
+  "COHR": {
+    "buy": 22,
+    "hold": 7,
+    "sell": 0
+  },
+  "NXPI": {
+    "buy": 30,
+    "hold": 7,
+    "sell": 2
+  },
+  "HCA": {
+    "buy": 19,
+    "hold": 10,
+    "sell": 1
+  },
+  "ICE": {
+    "buy": 18,
+    "hold": 3,
+    "sell": 0
+  },
+  "LITE": {
+    "buy": 25,
+    "hold": 6,
+    "sell": 0
+  },
+  "MPWR": {
+    "buy": 22,
+    "hold": 3,
+    "sell": 0
+  },
+  "MMM": {
+    "buy": 13,
+    "hold": 9,
+    "sell": 1
+  },
+  "ABNB": {
+    "buy": 27,
+    "hold": 20,
+    "sell": 2
+  },
+  "EMR": {
+    "buy": 22,
+    "hold": 11,
+    "sell": 1
+  },
+  "HOOD": {
+    "buy": 26,
+    "hold": 5,
+    "sell": 1
+  },
+  "MCO": {
+    "buy": 21,
+    "hold": 9,
+    "sell": 0
+  },
+  "FDX": {
+    "buy": 21,
+    "hold": 10,
+    "sell": 2
+  },
+  "MDLZ": {
+    "buy": 22,
+    "hold": 12,
+    "sell": 0
+  },
+  "RCL": {
+    "buy": 24,
+    "hold": 9,
+    "sell": 0
+  },
+  "MRSH": {
+    "buy": 13,
+    "hold": 17,
+    "sell": 1
+  },
+  "SPG": {
+    "buy": 12,
+    "hold": 14,
+    "sell": 0
+  },
+  "MPC": {
+    "buy": 15,
+    "hold": 9,
+    "sell": 1
+  },
+  "VLO": {
+    "buy": 14,
+    "hold": 10,
+    "sell": 2
+  },
+  "NOC": {
+    "buy": 18,
+    "hold": 10,
+    "sell": 0
+  },
+  "HLT": {
+    "buy": 17,
+    "hold": 13,
+    "sell": 1
+  },
+  "HPE": {
+    "buy": 14,
+    "hold": 12,
+    "sell": 0
+  },
+  "APO": {
+    "buy": 17,
+    "hold": 6,
+    "sell": 0
+  },
+  "EOG": {
+    "buy": 19,
+    "hold": 18,
+    "sell": 0
+  },
+  "GM": {
+    "buy": 29,
+    "hold": 8,
+    "sell": 2
+  },
+  "PSX": {
+    "buy": 14,
+    "hold": 11,
+    "sell": 1
+  },
+  "CVNA": {
+    "buy": 22,
+    "hold": 9,
+    "sell": 1
+  },
+  "CI": {
+    "buy": 28,
+    "hold": 5,
+    "sell": 0
+  },
+  "ECL": {
+    "buy": 23,
+    "hold": 9,
+    "sell": 0
+  },
+  "ROST": {
+    "buy": 20,
+    "hold": 6,
+    "sell": 0
+  },
+  "SHW": {
+    "buy": 15,
+    "hold": 13,
+    "sell": 0
+  },
+  "ITW": {
+    "buy": 2,
+    "hold": 13,
+    "sell": 11
+  },
+  "ORLY": {
+    "buy": 29,
+    "hold": 7,
+    "sell": 0
+  },
+  "CRH": {
+    "buy": 26,
+    "hold": 3,
+    "sell": 0
+  },
+  "BSX": {
+    "buy": 32,
+    "hold": 8,
+    "sell": 0
+  },
+  "CL": {
+    "buy": 20,
+    "hold": 9,
+    "sell": 1
+  },
+  "KMI": {
+    "buy": 16,
+    "hold": 12,
+    "sell": 0
+  },
+  "TDG": {
+    "buy": 16,
+    "hold": 10,
+    "sell": 1
+  },
+  "CTAS": {
+    "buy": 14,
+    "hold": 12,
+    "sell": 1
+  },
+  "AEP": {
+    "buy": 16,
+    "hold": 12,
+    "sell": 0
+  },
+  "NSC": {
+    "buy": 10,
+    "hold": 17,
+    "sell": 0
+  },
+  "MSI": {
+    "buy": 17,
+    "hold": 3,
+    "sell": 0
+  },
+  "DASH": {
+    "buy": 42,
+    "hold": 11,
+    "sell": 0
+  },
+  "WBD": {
+    "buy": 2,
+    "hold": 19,
+    "sell": 7
+  },
+  "AON": {
+    "buy": 19,
+    "hold": 8,
+    "sell": 2
+  },
+  "DLR": {
+    "buy": 27,
+    "hold": 10,
+    "sell": 0
+  },
+  "FIX": {
+    "buy": 12,
     "hold": 2,
     "sell": 0
   },
   "NKE": {
     "buy": 22,
-    "hold": 17,
-    "sell": 3
+    "hold": 21,
+    "sell": 2
   },
   "F": {
     "buy": 10,
-    "hold": 12,
-    "sell": 3
+    "hold": 18,
+    "sell": 2
   },
   "BKR": {
-    "buy": 20,
+    "buy": 22,
     "hold": 3,
     "sell": 1
   },
   "TEL": {
-    "buy": 12,
-    "hold": 5,
+    "buy": 18,
+    "hold": 8,
     "sell": 0
   },
   "URI": {
-    "buy": 13,
-    "hold": 3,
+    "buy": 20,
+    "hold": 6,
     "sell": 1
   },
   "APD": {
-    "buy": 10,
-    "hold": 7,
-    "sell": 1
+    "buy": 18,
+    "hold": 9,
+    "sell": 0
   },
   "TRV": {
     "buy": 11,
-    "hold": 11,
-    "sell": 3
+    "hold": 21,
+    "sell": 1
   },
   "RSG": {
-    "buy": 13,
-    "hold": 12,
+    "buy": 19,
+    "hold": 14,
     "sell": 0
   },
   "TER": {
-    "buy": 12,
+    "buy": 16,
     "hold": 6,
-    "sell": 2
+    "sell": 1
   },
   "REGN": {
-    "buy": 16,
-    "hold": 10,
-    "sell": 1
+    "buy": 27,
+    "hold": 11,
+    "sell": 0
   },
   "TFC": {
-    "buy": 9,
-    "hold": 8,
-    "sell": 1
+    "buy": 13,
+    "hold": 10,
+    "sell": 2
   },
   "GWW": {
-    "buy": 5,
-    "hold": 8,
-    "sell": 2
+    "buy": 8,
+    "hold": 11,
+    "sell": 4
   },
   "PCAR": {
     "buy": 11,
-    "hold": 12,
+    "hold": 14,
     "sell": 1
   },
   "KEYS": {
-    "buy": 9,
-    "hold": 4,
-    "sell": 1
-  },
-  "NUE": {
-    "buy": 10,
+    "buy": 16,
     "hold": 4,
     "sell": 0
   },
+  "NUE": {
+    "buy": 17,
+    "hold": 5,
+    "sell": 2
+  },
   "OXY": {
-    "buy": 15,
-    "hold": 15,
-    "sell": 5
+    "buy": 12,
+    "hold": 17,
+    "sell": 1
   },
   "SRE": {
-    "buy": 9,
+    "buy": 18,
     "hold": 6,
     "sell": 0
   },
   "D": {
-    "buy": 10,
-    "hold": 11,
-    "sell": 1
+    "buy": 7,
+    "hold": 16,
+    "sell": 0
   },
   "AFL": {
-    "buy": 6,
-    "hold": 10,
-    "sell": 3
+    "buy": 3,
+    "hold": 12,
+    "sell": 8
   },
   "LHX": {
-    "buy": 15,
-    "hold": 5,
+    "buy": 18,
+    "hold": 6,
     "sell": 0
   },
   "FANG": {
-    "buy": 19,
-    "hold": 5,
+    "buy": 33,
+    "hold": 4,
     "sell": 0
   },
   "TRGP": {
-    "buy": 15,
-    "hold": 3,
+    "buy": 25,
+    "hold": 5,
     "sell": 0
   },
   "O": {
-    "buy": 8,
-    "hold": 10,
+    "buy": 12,
+    "hold": 18,
     "sell": 1
   },
   "TGT": {
-    "buy": 19,
-    "hold": 21,
+    "buy": 15,
+    "hold": 26,
     "sell": 3
   },
   "CARR": {
-    "buy": 13,
-    "hold": 10,
-    "sell": 1
+    "buy": 21,
+    "hold": 12,
+    "sell": 0
   },
   "OKE": {
-    "buy": 10,
-    "hold": 10,
+    "buy": 14,
+    "hold": 13,
     "sell": 0
   },
   "ALL": {
-    "buy": 13,
-    "hold": 9,
+    "buy": 17,
+    "hold": 12,
     "sell": 1
   },
   "DVN": {
-    "buy": 23,
-    "hold": 8,
-    "sell": 0
+    "buy": 26,
+    "hold": 5,
+    "sell": 1
   },
   "MET": {
-    "buy": 11,
-    "hold": 2,
+    "buy": 16,
+    "hold": 7,
     "sell": 0
   },
   "VST": {
-    "buy": 13,
+    "buy": 21,
     "hold": 2,
     "sell": 0
   },
   "AJG": {
-    "buy": 11,
-    "hold": 11,
-    "sell": 1
+    "buy": 21,
+    "hold": 8,
+    "sell": 0
   },
   "PSA": {
-    "buy": 12,
-    "hold": 12,
+    "buy": 10,
+    "hold": 13,
     "sell": 0
   },
   "MCHP": {
-    "buy": 15,
-    "hold": 8,
-    "sell": 0
-  },
-  "DAL": {
-    "buy": 23,
-    "hold": 2,
-    "sell": 0
-  },
-  "AME": {
-    "buy": 9,
-    "hold": 4,
-    "sell": 1
-  },
-  "CTVA": {
-    "buy": 14,
-    "hold": 9,
-    "sell": 1
-  },
-  "ROK": {
-    "buy": 10,
-    "hold": 11,
-    "sell": 1
-  },
-  "COR": {
-    "buy": 12,
-    "hold": 3,
-    "sell": 0
-  },
-  "FAST": {
-    "buy": 6,
-    "hold": 8,
-    "sell": 2
-  },
-  "EA": {
-    "buy": 17,
-    "hold": 19,
-    "sell": 1
-  },
-  "EW": {
-    "buy": 16,
-    "hold": 12,
-    "sell": 1
-  },
-  "ON": {
-    "buy": 14,
-    "hold": 17,
-    "sell": 1
-  },
-  "ADSK": {
-    "buy": 23,
+    "buy": 26,
     "hold": 7,
     "sell": 0
   },
-  "NDAQ": {
-    "buy": 15,
-    "hold": 3,
+  "DAL": {
+    "buy": 29,
+    "hold": 2,
     "sell": 1
   },
-  "AZO": {
+  "AME": {
+    "buy": 18,
+    "hold": 7,
+    "sell": 0
+  },
+  "CTVA": {
     "buy": 21,
+    "hold": 9,
+    "sell": 0
+  },
+  "ROK": {
+    "buy": 18,
+    "hold": 15,
+    "sell": 0
+  },
+  "COR": {
+    "buy": 16,
+    "hold": 4,
+    "sell": 0
+  },
+  "FAST": {
+    "buy": 5,
+    "hold": 10,
+    "sell": 8
+  },
+  "EA": {
+    "buy": 9,
+    "hold": 20,
+    "sell": 0
+  },
+  "EW": {
+    "buy": 31,
+    "hold": 11,
+    "sell": 0
+  },
+  "ON": {
+    "buy": 22,
+    "hold": 21,
+    "sell": 0
+  },
+  "ADSK": {
+    "buy": 36,
+    "hold": 4,
+    "sell": 0
+  },
+  "NDAQ": {
+    "buy": 21,
+    "hold": 3,
+    "sell": 0
+  },
+  "AZO": {
+    "buy": 25,
     "hold": 7,
     "sell": 0
   },
   "ETR": {
-    "buy": 15,
-    "hold": 4,
-    "sell": 1
+    "buy": 16,
+    "hold": 8,
+    "sell": 0
   },
   "XEL": {
-    "buy": 13,
-    "hold": 3,
-    "sell": 1
+    "buy": 22,
+    "hold": 2,
+    "sell": 0
   },
   "EBAY": {
-    "buy": 19,
-    "hold": 19,
-    "sell": 2
+    "buy": 15,
+    "hold": 23,
+    "sell": 1
   },
   "ODFL": {
-    "buy": 16,
+    "buy": 14,
     "hold": 16,
-    "sell": 4
-  },
-  "GRMN": {
-    "buy": 4,
-    "hold": 4,
     "sell": 2
   },
+  "GRMN": {
+    "buy": 7,
+    "hold": 8,
+    "sell": 1
+  },
   "EXC": {
-    "buy": 13,
-    "hold": 13,
+    "buy": 7,
+    "hold": 18,
     "sell": 2
   },
   "MSCI": {
-    "buy": 10,
+    "buy": 21,
     "hold": 3,
-    "sell": 0
+    "sell": 1
   },
   "COIN": {
-    "buy": 19,
+    "buy": 30,
     "hold": 11,
     "sell": 3
   },
   "CAH": {
-    "buy": 15,
+    "buy": 20,
     "hold": 3,
     "sell": 0
   },
   "FITB": {
+    "buy": 20,
+    "hold": 7,
+    "sell": 0
+  },
+  "WAB": {
+    "buy": 12,
+    "hold": 5,
+    "sell": 0
+  },
+  "STT": {
+    "buy": 14,
+    "hold": 7,
+    "sell": 0
+  },
+  "XYZ": {
+    "buy": 40,
+    "hold": 7,
+    "sell": 1
+  },
+  "IDXX": {
+    "buy": 14,
+    "hold": 8,
+    "sell": 0
+  },
+  "ARES": {
     "buy": 17,
     "hold": 6,
     "sell": 0
   },
-  "WAB": {
-    "buy": 10,
+  "DHI": {
+    "buy": 9,
+    "hold": 16,
+    "sell": 2
+  },
+  "KDP": {
+    "buy": 12,
+    "hold": 10,
+    "sell": 0
+  },
+  "TTWO": {
+    "buy": 34,
     "hold": 3,
     "sell": 0
   },
-  "STT": {
-    "buy": 9,
-    "hold": 6,
-    "sell": 1
-  },
-  "XYZ": {
-    "buy": 27,
-    "hold": 8,
-    "sell": 1
-  },
-  "IDXX": {
-    "buy": 7,
-    "hold": 4,
-    "sell": 0
-  },
-  "ARES": {
-    "buy": 13,
-    "hold": 5,
-    "sell": 1
-  },
-  "DHI": {
-    "buy": 10,
-    "hold": 10,
-    "sell": 4
-  },
-  "KDP": {
-    "buy": 11,
-    "hold": 10,
-    "sell": 1
-  },
-  "TTWO": {
-    "buy": 20,
-    "hold": 1,
-    "sell": 1
-  },
   "YUM": {
-    "buy": 13,
-    "hold": 15,
+    "buy": 16,
+    "hold": 17,
     "sell": 0
   },
   "AMP": {
-    "buy": 6,
-    "hold": 6,
+    "buy": 10,
+    "hold": 9,
     "sell": 1
   },
   "BDX": {
-    "buy": 8,
-    "hold": 10,
-    "sell": 1
-  },
-  "ADM": {
-    "buy": 4,
-    "hold": 5,
-    "sell": 3
-  },
-  "IBKR": {
-    "buy": 7,
-    "hold": 3,
-    "sell": 0
-  },
-  "AXON": {
-    "buy": 16,
-    "hold": 3,
-    "sell": 1
-  },
-  "JBL": {
-    "buy": 8,
-    "hold": 3,
-    "sell": 0
-  },
-  "PYPL": {
-    "buy": 32,
-    "hold": 33,
-    "sell": 6
-  },
-  "CCI": {
-    "buy": 12,
+    "buy": 9,
     "hold": 12,
     "sell": 0
   },
-  "VTR": {
-    "buy": 14,
+  "ADM": {
+    "buy": 2,
+    "hold": 10,
+    "sell": 7
+  },
+  "IBKR": {
+    "buy": 15,
+    "hold": 2,
+    "sell": 0
+  },
+  "AXON": {
+    "buy": 25,
     "hold": 3,
     "sell": 0
   },
-  "STLD": {
-    "buy": 8,
-    "hold": 5,
+  "JBL": {
+    "buy": 13,
+    "hold": 4,
+    "sell": 0
+  },
+  "PYPL": {
+    "buy": 14,
+    "hold": 34,
+    "sell": 4
+  },
+  "CCI": {
+    "buy": 14,
+    "hold": 10,
     "sell": 1
+  },
+  "VTR": {
+    "buy": 21,
+    "hold": 4,
+    "sell": 0
+  },
+  "STLD": {
+    "buy": 13,
+    "hold": 6,
+    "sell": 2
   },
   "AIG": {
     "buy": 12,
-    "hold": 13,
+    "hold": 15,
     "sell": 0
   },
   "TKO": {
-    "buy": 13,
+    "buy": 20,
     "hold": 7,
     "sell": 0
   },
   "PEG": {
-    "buy": 10,
-    "hold": 7,
+    "buy": 12,
+    "hold": 15,
     "sell": 0
   },
   "LYV": {
-    "buy": 20,
-    "hold": 3,
-    "sell": 2
-  },
-  "HUM": {
-    "buy": 15,
-    "hold": 16,
-    "sell": 4
-  },
-  "ED": {
-    "buy": 7,
-    "hold": 7,
-    "sell": 6
-  },
-  "CCL": {
-    "buy": 21,
-    "hold": 8,
+    "buy": 25,
+    "hold": 5,
     "sell": 1
   },
+  "HUM": {
+    "buy": 11,
+    "hold": 20,
+    "sell": 2
+  },
+  "ED": {
+    "buy": 3,
+    "hold": 11,
+    "sell": 12
+  },
+  "CCL": {
+    "buy": 24,
+    "hold": 6,
+    "sell": 0
+  },
   "IRM": {
-    "buy": 7,
-    "hold": 2,
+    "buy": 14,
+    "hold": 1,
     "sell": 1
   },
   "A": {
-    "buy": 12,
-    "hold": 7,
+    "buy": 22,
+    "hold": 6,
     "sell": 0
   },
   "KR": {
-    "buy": 9,
-    "hold": 9,
+    "buy": 19,
+    "hold": 14,
     "sell": 0
   },
   "CMG": {
-    "buy": 23,
+    "buy": 31,
     "hold": 12,
-    "sell": 1
+    "sell": 0
   },
   "CBRE": {
-    "buy": 8,
+    "buy": 18,
     "hold": 2,
     "sell": 0
   },
   "HSY": {
-    "buy": 16,
+    "buy": 12,
     "hold": 16,
-    "sell": 5
+    "sell": 1
   },
   "WDAY": {
-    "buy": 20,
-    "hold": 15,
-    "sell": 1
+    "buy": 28,
+    "hold": 20,
+    "sell": 0
   },
   "EME": {
     "buy": 10,
     "hold": 4,
-    "sell": 1
-  },
-  "VMC": {
-    "buy": 11,
-    "hold": 8,
     "sell": 0
   },
-  "WAT": {
-    "buy": 10,
+  "VMC": {
+    "buy": 18,
     "hold": 9,
+    "sell": 1
+  },
+  "WAT": {
+    "buy": 16,
+    "hold": 12,
     "sell": 0
   },
   "PCG": {
-    "buy": 8,
-    "hold": 6,
-    "sell": 1
-  },
-  "PAYX": {
-    "buy": 12,
-    "hold": 13,
-    "sell": 4
-  },
-  "WEC": {
-    "buy": 9,
-    "hold": 9,
-    "sell": 1
-  },
-  "SATS": {
-    "buy": 4,
-    "hold": 3,
-    "sell": 1
-  },
-  "PRU": {
-    "buy": 9,
-    "hold": 10,
-    "sell": 6
-  },
-  "SYY": {
-    "buy": 10,
-    "hold": 7,
-    "sell": 0
-  },
-  "UAL": {
-    "buy": 16,
-    "hold": 2,
-    "sell": 1
-  },
-  "HIG": {
-    "buy": 9,
-    "hold": 9,
-    "sell": 0
-  },
-  "NTAP": {
-    "buy": 10,
-    "hold": 10,
-    "sell": 1
-  },
-  "MLM": {
-    "buy": 11,
-    "hold": 9,
-    "sell": 1
-  },
-  "EQT": {
-    "buy": 20,
-    "hold": 6,
-    "sell": 1
-  },
-  "ROP": {
-    "buy": 8,
-    "hold": 7,
-    "sell": 4
-  },
-  "LVS": {
-    "buy": 12,
-    "hold": 7,
-    "sell": 0
-  },
-  "HAL": {
-    "buy": 18,
-    "hold": 8,
-    "sell": 1
-  },
-  "FSLR": {
-    "buy": 24,
-    "hold": 13,
-    "sell": 1
-  },
-  "KVUE": {
-    "buy": 12,
-    "hold": 13,
-    "sell": 0
-  },
-  "HBAN": {
-    "buy": 15,
+    "buy": 17,
     "hold": 4,
     "sell": 1
   },
+  "PAYX": {
+    "buy": 1,
+    "hold": 17,
+    "sell": 7
+  },
+  "WEC": {
+    "buy": 11,
+    "hold": 13,
+    "sell": 1
+  },
+  "SATS": {
+    "buy": 6,
+    "hold": 4,
+    "sell": 0
+  },
+  "PRU": {
+    "buy": 1,
+    "hold": 17,
+    "sell": 9
+  },
+  "SYY": {
+    "buy": 12,
+    "hold": 11,
+    "sell": 0
+  },
+  "UAL": {
+    "buy": 26,
+    "hold": 4,
+    "sell": 0
+  },
+  "HIG": {
+    "buy": 15,
+    "hold": 14,
+    "sell": 0
+  },
+  "NTAP": {
+    "buy": 12,
+    "hold": 15,
+    "sell": 1
+  },
+  "MLM": {
+    "buy": 17,
+    "hold": 11,
+    "sell": 1
+  },
+  "EQT": {
+    "buy": 22,
+    "hold": 7,
+    "sell": 0
+  },
+  "ROP": {
+    "buy": 11,
+    "hold": 11,
+    "sell": 3
+  },
+  "LVS": {
+    "buy": 19,
+    "hold": 6,
+    "sell": 0
+  },
+  "HAL": {
+    "buy": 25,
+    "hold": 6,
+    "sell": 2
+  },
+  "FSLR": {
+    "buy": 30,
+    "hold": 15,
+    "sell": 2
+  },
+  "KVUE": {
+    "buy": 0,
+    "hold": 15,
+    "sell": 3
+  },
+  "HBAN": {
+    "buy": 21,
+    "hold": 3,
+    "sell": 0
+  },
   "Q": {
-    "buy": 8,
-    "hold": 2,
+    "buy": 13,
+    "hold": 1,
     "sell": 0
   },
   "KMB": {
-    "buy": 11,
+    "buy": 9,
     "hold": 11,
-    "sell": 2
-  },
-  "ZTS": {
-    "buy": 8,
-    "hold": 8,
     "sell": 1
   },
+  "ZTS": {
+    "buy": 14,
+    "hold": 10,
+    "sell": 0
+  },
   "MTB": {
-    "buy": 12,
-    "hold": 12,
+    "buy": 10,
+    "hold": 13,
     "sell": 1
   },
   "NTRS": {
     "buy": 8,
-    "hold": 8,
-    "sell": 3
+    "hold": 12,
+    "sell": 2
   },
   "EXR": {
-    "buy": 9,
+    "buy": 10,
+    "hold": 12,
+    "sell": 2
+  },
+  "ACGL": {
+    "buy": 17,
     "hold": 10,
     "sell": 1
   },
-  "ACGL": {
-    "buy": 11,
-    "hold": 8,
-    "sell": 1
-  },
   "EL": {
-    "buy": 9,
-    "hold": 17,
-    "sell": 2
+    "buy": 18,
+    "hold": 15,
+    "sell": 1
   },
   "SMCI": {
     "buy": 11,
     "hold": 11,
-    "sell": 3
+    "sell": 4
   },
   "IQV": {
-    "buy": 16,
+    "buy": 24,
     "hold": 6,
     "sell": 0
   },
   "FISV": {
-    "buy": 26,
-    "hold": 27,
-    "sell": 2
+    "buy": 14,
+    "hold": 28,
+    "sell": 1
   },
   "VICI": {
-    "buy": 9,
-    "hold": 6,
+    "buy": 23,
+    "hold": 8,
     "sell": 0
   },
   "DTE": {
-    "buy": 10,
-    "hold": 4,
+    "buy": 15,
+    "hold": 9,
     "sell": 0
   },
   "CNC": {
-    "buy": 9,
+    "buy": 11,
     "hold": 14,
-    "sell": 3
-  },
-  "AEE": {
-    "buy": 9,
-    "hold": 6,
     "sell": 1
   },
-  "FICO": {
-    "buy": 11,
-    "hold": 5,
+  "AEE": {
+    "buy": 13,
+    "hold": 9,
     "sell": 0
   },
-  "CBOE": {
-    "buy": 7,
+  "FICO": {
+    "buy": 20,
     "hold": 8,
+    "sell": 1
+  },
+  "CBOE": {
+    "buy": 9,
+    "hold": 12,
     "sell": 3
   },
   "TDY": {
-    "buy": 7,
-    "hold": 3,
+    "buy": 13,
+    "hold": 5,
     "sell": 0
   },
   "RJF": {
-    "buy": 9,
-    "hold": 9,
+    "buy": 8,
+    "hold": 10,
     "sell": 0
   },
   "CPRT": {
-    "buy": 3,
-    "hold": 4,
-    "sell": 2
+    "buy": 12,
+    "hold": 7,
+    "sell": 1
   },
   "DOV": {
-    "buy": 9,
-    "hold": 7,
+    "buy": 16,
+    "hold": 9,
     "sell": 0
   },
   "DXCM": {
-    "buy": 19,
+    "buy": 32,
     "hold": 5,
-    "sell": 1
+    "sell": 0
   },
   "GEHC": {
-    "buy": 9,
+    "buy": 18,
     "hold": 9,
-    "sell": 1
+    "sell": 0
   },
   "NRG": {
-    "buy": 11,
+    "buy": 17,
     "hold": 4,
-    "sell": 1
+    "sell": 0
   },
   "ATO": {
-    "buy": 10,
-    "hold": 10,
-    "sell": 1
+    "buy": 6,
+    "hold": 12,
+    "sell": 0
   },
   "IR": {
-    "buy": 7,
-    "hold": 5,
+    "buy": 15,
+    "hold": 10,
     "sell": 0
   },
   "TPR": {
-    "buy": 15,
-    "hold": 5,
+    "buy": 20,
+    "hold": 8,
     "sell": 0
   },
   "BIIB": {
-    "buy": 14,
-    "hold": 18,
+    "buy": 27,
+    "hold": 16,
     "sell": 1
   },
   "CASY": {
-    "buy": 9,
-    "hold": 6,
-    "sell": 1
+    "buy": 17,
+    "hold": 9,
+    "sell": 0
   },
   "KHC": {
-    "buy": 14,
-    "hold": 15,
-    "sell": 6
+    "buy": 2,
+    "hold": 18,
+    "sell": 9
   },
   "FOXA": {
-    "buy": 9,
-    "hold": 9,
+    "buy": 14,
+    "hold": 13,
     "sell": 1
   },
   "CNP": {
-    "buy": 8,
-    "hold": 9,
-    "sell": 1
-  },
-  "EIX": {
-    "buy": 9,
-    "hold": 6,
-    "sell": 3
-  },
-  "EXPE": {
-    "buy": 23,
-    "hold": 23,
-    "sell": 1
-  },
-  "VRSN": {
-    "buy": 3,
-    "hold": 3,
+    "buy": 13,
+    "hold": 10,
     "sell": 0
   },
-  "OTIS": {
-    "buy": 7,
-    "hold": 7,
-    "sell": 2
+  "EIX": {
+    "buy": 10,
+    "hold": 8,
+    "sell": 4
   },
-  "RMD": {
-    "buy": 9,
-    "hold": 5,
+  "EXPE": {
+    "buy": 21,
+    "hold": 23,
+    "sell": 0
+  },
+  "VRSN": {
+    "buy": 7,
+    "hold": 3,
     "sell": 1
   },
+  "OTIS": {
+    "buy": 11,
+    "hold": 11,
+    "sell": 1
+  },
+  "RMD": {
+    "buy": 15,
+    "hold": 8,
+    "sell": 2
+  },
   "CFG": {
-    "buy": 19,
-    "hold": 6,
+    "buy": 20,
+    "hold": 2,
     "sell": 0
   },
   "XYL": {
-    "buy": 9,
-    "hold": 7,
+    "buy": 18,
+    "hold": 10,
     "sell": 0
   },
   "FE": {
-    "buy": 8,
-    "hold": 8,
+    "buy": 16,
+    "hold": 9,
     "sell": 0
   },
   "PPL": {
-    "buy": 9,
-    "hold": 3,
+    "buy": 16,
+    "hold": 5,
     "sell": 0
   },
   "AVB": {
-    "buy": 13,
-    "hold": 13,
+    "buy": 7,
+    "hold": 17,
     "sell": 0
   },
   "CTSH": {
-    "buy": 13,
-    "hold": 14,
+    "buy": 19,
+    "hold": 18,
     "sell": 0
   },
   "FOX": {
-    "buy": 4,
-    "hold": 2,
+    "buy": 14,
+    "hold": 13,
     "sell": 1
   },
   "JBHT": {
-    "buy": 12,
+    "buy": 18,
     "hold": 11,
-    "sell": 0
+    "sell": 1
   },
   "ES": {
-    "buy": 5,
-    "hold": 5,
+    "buy": 14,
+    "hold": 8,
     "sell": 3
   },
   "TPL": {
-    "buy": 2,
-    "hold": 2,
+    "buy": 6,
+    "hold": 1,
     "sell": 1
   },
   "EQR": {
-    "buy": 12,
-    "hold": 13,
+    "buy": 11,
+    "hold": 15,
     "sell": 0
   },
   "WRB": {
-    "buy": 13,
-    "hold": 13,
-    "sell": 4
+    "buy": 1,
+    "hold": 18,
+    "sell": 8
   },
   "HUBB": {
-    "buy": 5,
-    "hold": 5,
+    "buy": 13,
+    "hold": 9,
     "sell": 0
   },
   "PPG": {
-    "buy": 11,
-    "hold": 11,
+    "buy": 14,
+    "hold": 16,
     "sell": 0
   },
   "BG": {
-    "buy": 8,
-    "hold": 3,
+    "buy": 18,
+    "hold": 2,
     "sell": 0
   },
   "DOW": {
-    "buy": 10,
-    "hold": 16,
+    "buy": 12,
+    "hold": 10,
     "sell": 2
   },
   "HPQ": {
-    "buy": 9,
-    "hold": 10,
-    "sell": 6
+    "buy": 2,
+    "hold": 13,
+    "sell": 11
   },
   "CINF": {
-    "buy": 4,
-    "hold": 1,
+    "buy": 10,
+    "hold": 6,
     "sell": 0
   },
   "WTW": {
-    "buy": 10,
-    "hold": 6,
-    "sell": 1
+    "buy": 20,
+    "hold": 8,
+    "sell": 0
   },
   "AWK": {
-    "buy": 7,
-    "hold": 8,
-    "sell": 3
-  },
-  "WSM": {
-    "buy": 9,
+    "buy": 6,
     "hold": 11,
     "sell": 1
   },
+  "WSM": {
+    "buy": 12,
+    "hold": 15,
+    "sell": 0
+  },
   "RF": {
-    "buy": 11,
-    "hold": 9,
+    "buy": 15,
+    "hold": 11,
     "sell": 3
   },
   "SYF": {
-    "buy": 13,
-    "hold": 8,
+    "buy": 18,
+    "hold": 9,
     "sell": 0
   },
   "MTD": {
-    "buy": 7,
-    "hold": 7,
+    "buy": 10,
+    "hold": 10,
     "sell": 0
   },
   "STZ": {
-    "buy": 13,
-    "hold": 10,
+    "buy": 17,
+    "hold": 9,
     "sell": 2
   },
   "CPAY": {
-    "buy": 13,
-    "hold": 5,
+    "buy": 18,
+    "hold": 4,
     "sell": 0
   },
   "VRSK": {
-    "buy": 7,
-    "hold": 7,
-    "sell": 2
+    "buy": 15,
+    "hold": 10,
+    "sell": 1
   },
   "DG": {
-    "buy": 16,
-    "hold": 16,
+    "buy": 18,
+    "hold": 20,
     "sell": 1
   },
   "AKAM": {
-    "buy": 12,
-    "hold": 10,
-    "sell": 3
-  },
-  "FFIV": {
-    "buy": 6,
-    "hold": 7,
+    "buy": 20,
+    "hold": 11,
     "sell": 2
   },
-  "KEY": {
-    "buy": 13,
+  "FFIV": {
+    "buy": 11,
     "hold": 8,
     "sell": 1
   },
+  "KEY": {
+    "buy": 12,
+    "hold": 11,
+    "sell": 0
+  },
   "CHD": {
-    "buy": 10,
-    "hold": 8,
+    "buy": 13,
+    "hold": 11,
     "sell": 2
   },
   "DRI": {
-    "buy": 20,
-    "hold": 9,
+    "buy": 21,
+    "hold": 12,
     "sell": 1
   },
   "PHM": {
-    "buy": 10,
-    "hold": 7,
-    "sell": 1
+    "buy": 13,
+    "hold": 8,
+    "sell": 2
   },
   "LEN": {
-    "buy": 10,
+    "buy": 1,
     "hold": 13,
-    "sell": 8
+    "sell": 13
   },
   "TROW": {
-    "buy": 11,
-    "hold": 12,
-    "sell": 5
+    "buy": 0,
+    "hold": 11,
+    "sell": 8
   },
   "PFG": {
-    "buy": 7,
-    "hold": 7,
-    "sell": 4
+    "buy": 5,
+    "hold": 13,
+    "sell": 1
   },
   "CMS": {
-    "buy": 8,
-    "hold": 6,
+    "buy": 13,
+    "hold": 9,
     "sell": 0
   },
   "SW": {
-    "buy": 11,
+    "buy": 23,
     "hold": 2,
-    "sell": 1
+    "sell": 0
   },
   "WST": {
-    "buy": 9,
+    "buy": 18,
     "hold": 4,
     "sell": 0
   },
   "NI": {
-    "buy": 10,
-    "hold": 3,
+    "buy": 20,
+    "hold": 4,
     "sell": 0
   },
   "FIS": {
-    "buy": 13,
-    "hold": 8,
-    "sell": 2
-  },
-  "EXE": {
-    "buy": 16,
-    "hold": 5,
+    "buy": 20,
+    "hold": 10,
     "sell": 1
   },
+  "EXE": {
+    "buy": 26,
+    "hold": 4,
+    "sell": 0
+  },
   "LYB": {
-    "buy": 8,
-    "hold": 17,
+    "buy": 11,
+    "hold": 10,
     "sell": 4
   },
   "ROL": {
-    "buy": 11,
-    "hold": 7,
-    "sell": 0
-  },
-  "RL": {
-    "buy": 16,
-    "hold": 3,
-    "sell": 1
-  },
-  "L": {
-    "buy": 1,
-    "hold": 0,
-    "sell": 0
-  },
-  "ULTA": {
-    "buy": 19,
-    "hold": 11,
-    "sell": 1
-  },
-  "OMC": {
-    "buy": 5,
-    "hold": 5,
-    "sell": 1
-  },
-  "DGX": {
-    "buy": 8,
+    "buy": 15,
     "hold": 8,
     "sell": 0
   },
-  "LH": {
-    "buy": 9,
+  "RL": {
+    "buy": 24,
+    "hold": 4,
+    "sell": 0
+  },
+  "L": {
+    "buy": 0,
     "hold": 3,
+    "sell": 4
+  },
+  "ULTA": {
+    "buy": 25,
+    "hold": 8,
+    "sell": 1
+  },
+  "OMC": {
+    "buy": 10,
+    "hold": 7,
+    "sell": 1
+  },
+  "DGX": {
+    "buy": 13,
+    "hold": 11,
+    "sell": 0
+  },
+  "LH": {
+    "buy": 22,
+    "hold": 6,
     "sell": 0
   },
   "CHRW": {
-    "buy": 17,
+    "buy": 22,
     "hold": 8,
     "sell": 1
   },
   "DLTR": {
-    "buy": 10,
+    "buy": 14,
     "hold": 14,
     "sell": 7
   },
   "TSN": {
-    "buy": 10,
-    "hold": 12,
-    "sell": 0
-  },
-  "EFX": {
-    "buy": 13,
-    "hold": 6,
-    "sell": 0
-  },
-  "SBAC": {
     "buy": 9,
     "hold": 10,
     "sell": 0
   },
+  "EFX": {
+    "buy": 20,
+    "hold": 10,
+    "sell": 0
+  },
+  "SBAC": {
+    "buy": 16,
+    "hold": 11,
+    "sell": 0
+  },
   "LUV": {
-    "buy": 9,
-    "hold": 9,
+    "buy": 14,
+    "hold": 11,
     "sell": 5
   },
   "EXPD": {
-    "buy": 5,
-    "hold": 7,
-    "sell": 4
+    "buy": 2,
+    "hold": 11,
+    "sell": 8
   },
   "STE": {
-    "buy": 6,
-    "hold": 3,
+    "buy": 10,
+    "hold": 5,
     "sell": 0
   },
   "ALB": {
-    "buy": 14,
+    "buy": 17,
     "hold": 12,
-    "sell": 2
+    "sell": 0
   },
   "GPN": {
     "buy": 16,
-    "hold": 17,
-    "sell": 3
+    "hold": 20,
+    "sell": 2
   },
   "VLTO": {
-    "buy": 6,
-    "hold": 7,
+    "buy": 17,
+    "hold": 9,
     "sell": 0
   },
   "PKG": {
-    "buy": 6,
+    "buy": 11,
     "hold": 5,
     "sell": 0
   },
   "DD": {
-    "buy": 12,
-    "hold": 3,
-    "sell": 1
+    "buy": 21,
+    "hold": 4,
+    "sell": 0
   },
   "CHTR": {
-    "buy": 9,
-    "hold": 10,
-    "sell": 6
+    "buy": 6,
+    "hold": 14,
+    "sell": 9
   },
   "SNA": {
-    "buy": 5,
-    "hold": 1,
-    "sell": 1
+    "buy": 8,
+    "hold": 6,
+    "sell": 2
   },
   "BRO": {
-    "buy": 14,
-    "hold": 15,
-    "sell": 1
+    "buy": 8,
+    "hold": 18,
+    "sell": 0
   },
   "EVRG": {
-    "buy": 8,
-    "hold": 3,
+    "buy": 13,
+    "hold": 7,
     "sell": 0
   },
   "IFF": {
-    "buy": 13,
-    "hold": 5,
-    "sell": 1
+    "buy": 15,
+    "hold": 6,
+    "sell": 0
   },
   "ESS": {
-    "buy": 12,
-    "hold": 14,
-    "sell": 1
+    "buy": 9,
+    "hold": 19,
+    "sell": 3
   },
   "INCY": {
-    "buy": 12,
-    "hold": 13,
+    "buy": 16,
+    "hold": 18,
     "sell": 1
   },
   "FTV": {
-    "buy": 11,
-    "hold": 11,
+    "buy": 7,
+    "hold": 14,
     "sell": 2
   },
   "LNT": {
-    "buy": 9,
+    "buy": 12,
+    "hold": 6,
+    "sell": 0
+  },
+  "VTRS": {
+    "buy": 12,
     "hold": 5,
     "sell": 1
   },
-  "VTRS": {
-    "buy": 5,
-    "hold": 3,
-    "sell": 2
-  },
   "MRNA": {
-    "buy": 11,
-    "hold": 15,
-    "sell": 5
+    "buy": 4,
+    "hold": 19,
+    "sell": 7
   },
   "LII": {
-    "buy": 10,
-    "hold": 10,
-    "sell": 4
-  },
-  "IP": {
     "buy": 9,
-    "hold": 4,
+    "hold": 14,
     "sell": 2
   },
+  "IP": {
+    "buy": 15,
+    "hold": 5,
+    "sell": 1
+  },
   "BR": {
-    "buy": 4,
+    "buy": 13,
     "hold": 5,
     "sell": 0
   },
   "CDW": {
-    "buy": 4,
-    "hold": 5,
-    "sell": 1
+    "buy": 11,
+    "hold": 6,
+    "sell": 0
   },
   "AMCR": {
-    "buy": 8,
-    "hold": 5,
+    "buy": 14,
+    "hold": 4,
     "sell": 0
   },
   "GIS": {
-    "buy": 10,
-    "hold": 13,
-    "sell": 7
+    "buy": 4,
+    "hold": 15,
+    "sell": 9
   },
   "WY": {
-    "buy": 6,
-    "hold": 4,
+    "buy": 16,
+    "hold": 5,
     "sell": 1
   },
   "CF": {
-    "buy": 10,
-    "hold": 13,
+    "buy": 12,
+    "hold": 15,
     "sell": 3
   },
   "INVH": {
-    "buy": 9,
-    "hold": 10,
+    "buy": 16,
+    "hold": 14,
     "sell": 1
   },
   "GNRC": {
-    "buy": 13,
-    "hold": 7,
+    "buy": 19,
+    "hold": 8,
     "sell": 0
   },
   "NVR": {
-    "buy": 4,
-    "hold": 5,
-    "sell": 1
+    "buy": 2,
+    "hold": 6,
+    "sell": 7
   },
   "GEN": {
-    "buy": 7,
-    "hold": 7,
+    "buy": 10,
+    "hold": 6,
     "sell": 0
   },
   "PTC": {
-    "buy": 11,
-    "hold": 5,
+    "buy": 15,
+    "hold": 9,
     "sell": 1
   },
   "HST": {
-    "buy": 8,
-    "hold": 6,
-    "sell": 1
+    "buy": 15,
+    "hold": 10,
+    "sell": 0
   },
   "ZBH": {
     "buy": 12,
-    "hold": 13,
-    "sell": 3
+    "hold": 20,
+    "sell": 2
   },
   "BEN": {
     "buy": 6,
-    "hold": 6,
-    "sell": 5
+    "hold": 8,
+    "sell": 2
   },
   "NDSN": {
-    "buy": 5,
-    "hold": 4,
+    "buy": 11,
+    "hold": 5,
     "sell": 0
   },
   "KIM": {
-    "buy": 8,
-    "hold": 9,
+    "buy": 13,
+    "hold": 16,
     "sell": 0
   },
   "LDOS": {
-    "buy": 9,
-    "hold": 7,
+    "buy": 14,
+    "hold": 11,
     "sell": 0
   },
   "TXT": {
-    "buy": 8,
-    "hold": 8,
-    "sell": 1
+    "buy": 11,
+    "hold": 12,
+    "sell": 0
   },
   "TSCO": {
-    "buy": 15,
-    "hold": 14,
-    "sell": 1
+    "buy": 21,
+    "hold": 16,
+    "sell": 0
   },
   "IEX": {
-    "buy": 6,
-    "hold": 3,
+    "buy": 12,
+    "hold": 8,
     "sell": 0
   },
   "APTV": {
-    "buy": 21,
-    "hold": 6,
-    "sell": 2
-  },
-  "MAA": {
-    "buy": 12,
-    "hold": 13,
-    "sell": 2
-  },
-  "DECK": {
-    "buy": 13,
-    "hold": 13,
-    "sell": 3
-  },
-  "BBY": {
-    "buy": 14,
-    "hold": 14,
-    "sell": 2
-  },
-  "NWS": {
-    "buy": 2,
+    "buy": 28,
     "hold": 2,
     "sell": 0
   },
-  "LULU": {
-    "buy": 28,
-    "hold": 30,
+  "MAA": {
+    "buy": 13,
+    "hold": 13,
+    "sell": 4
+  },
+  "DECK": {
+    "buy": 19,
+    "hold": 12,
     "sell": 2
   },
+  "BBY": {
+    "buy": 8,
+    "hold": 20,
+    "sell": 2
+  },
+  "NWS": {
+    "buy": 14,
+    "hold": 1,
+    "sell": 0
+  },
+  "LULU": {
+    "buy": 8,
+    "hold": 30,
+    "sell": 1
+  },
   "NWSA": {
-    "buy": 6,
-    "hold": 3,
+    "buy": 14,
+    "hold": 1,
     "sell": 0
   },
   "J": {
-    "buy": 6,
-    "hold": 6,
+    "buy": 18,
+    "hold": 7,
     "sell": 0
   },
   "BALL": {
-    "buy": 10,
-    "hold": 6,
-    "sell": 1
+    "buy": 18,
+    "hold": 4,
+    "sell": 0
   },
   "REG": {
-    "buy": 11,
+    "buy": 14,
     "hold": 11,
     "sell": 0
   },
   "CSGP": {
-    "buy": 12,
+    "buy": 20,
     "hold": 5,
-    "sell": 3
+    "sell": 1
   },
   "MAS": {
-    "buy": 11,
+    "buy": 12,
     "hold": 13,
     "sell": 1
   },
   "GPC": {
-    "buy": 5,
-    "hold": 5,
-    "sell": 1
+    "buy": 9,
+    "hold": 9,
+    "sell": 0
   },
   "DOC": {
-    "buy": 11,
+    "buy": 12,
     "hold": 11,
     "sell": 0
   },
   "TRMB": {
-    "buy": 10,
-    "hold": 2,
+    "buy": 20,
+    "hold": 1,
     "sell": 0
   },
   "APA": {
-    "buy": 18,
+    "buy": 10,
     "hold": 19,
-    "sell": 4
+    "sell": 3
   },
   "SOLV": {
-    "buy": 8,
-    "hold": 7,
-    "sell": 1
-  },
-  "TYL": {
     "buy": 12,
-    "hold": 4,
-    "sell": 1
-  },
-  "UDR": {
-    "buy": 9,
-    "hold": 9,
+    "hold": 8,
     "sell": 2
   },
+  "TYL": {
+    "buy": 22,
+    "hold": 5,
+    "sell": 0
+  },
+  "UDR": {
+    "buy": 11,
+    "hold": 14,
+    "sell": 3
+  },
   "HRL": {
-    "buy": 5,
-    "hold": 6,
-    "sell": 1
+    "buy": 6,
+    "hold": 9,
+    "sell": 0
   },
   "EG": {
-    "buy": 12,
-    "hold": 12,
+    "buy": 13,
+    "hold": 14,
     "sell": 0
   },
   "MKC": {
-    "buy": 8,
-    "hold": 8,
+    "buy": 10,
+    "hold": 9,
     "sell": 1
   },
   "MGM": {
-    "buy": 16,
-    "hold": 8,
-    "sell": 4
+    "buy": 17,
+    "hold": 11,
+    "sell": 3
   },
   "AIZ": {
-    "buy": 9,
+    "buy": 11,
     "hold": 2,
     "sell": 0
   },
   "SWK": {
-    "buy": 7,
-    "hold": 7,
+    "buy": 9,
+    "hold": 14,
     "sell": 1
   },
   "IVZ": {
-    "buy": 11,
-    "hold": 13,
-    "sell": 1
+    "buy": 8,
+    "hold": 9,
+    "sell": 0
   },
   "ZBRA": {
-    "buy": 8,
-    "hold": 6,
+    "buy": 19,
+    "hold": 7,
     "sell": 0
   },
   "PSKY": {
-    "buy": 5,
-    "hold": 8,
-    "sell": 8
+    "buy": 2,
+    "hold": 15,
+    "sell": 9
   },
   "DVA": {
-    "buy": 4,
-    "hold": 5,
+    "buy": 7,
+    "hold": 6,
     "sell": 1
   },
   "AVY": {
-    "buy": 9,
+    "buy": 12,
     "hold": 5,
     "sell": 0
   },
   "PNW": {
-    "buy": 12,
-    "hold": 13,
-    "sell": 1
+    "buy": 7,
+    "hold": 15,
+    "sell": 0
   },
   "ALGN": {
-    "buy": 9,
-    "hold": 8,
+    "buy": 17,
+    "hold": 6,
     "sell": 1
   },
   "SWKS": {
-    "buy": 15,
-    "hold": 18,
+    "buy": 10,
+    "hold": 19,
     "sell": 3
   },
   "HAS": {
-    "buy": 11,
-    "hold": 3,
-    "sell": 1
-  },
-  "GL": {
-    "buy": 8,
+    "buy": 17,
     "hold": 4,
     "sell": 0
   },
+  "GL": {
+    "buy": 18,
+    "hold": 5,
+    "sell": 0
+  },
   "GDDY": {
-    "buy": 8,
-    "hold": 8,
+    "buy": 14,
+    "hold": 10,
     "sell": 0
   },
   "COO": {
-    "buy": 8,
-    "hold": 7,
+    "buy": 13,
+    "hold": 10,
     "sell": 1
   },
   "HII": {
-    "buy": 7,
-    "hold": 7,
-    "sell": 1
+    "buy": 9,
+    "hold": 8,
+    "sell": 0
   },
   "PNR": {
-    "buy": 12,
-    "hold": 3,
+    "buy": 16,
+    "hold": 5,
     "sell": 3
   },
   "IT": {
-    "buy": 7,
-    "hold": 7,
+    "buy": 12,
+    "hold": 11,
     "sell": 2
   },
   "RVTY": {
-    "buy": 10,
-    "hold": 9,
-    "sell": 1
+    "buy": 13,
+    "hold": 11,
+    "sell": 0
   },
   "ALLE": {
-    "buy": 9,
-    "hold": 9,
-    "sell": 1
+    "buy": 10,
+    "hold": 10,
+    "sell": 0
   },
   "CPT": {
-    "buy": 10,
-    "hold": 11,
-    "sell": 2
+    "buy": 11,
+    "hold": 15,
+    "sell": 3
   },
   "BXP": {
-    "buy": 11,
-    "hold": 11,
+    "buy": 13,
+    "hold": 12,
     "sell": 1
   },
   "ERIE": {
-    "buy": 1,
-    "hold": 1,
-    "sell": 1
+    "buy": 6,
+    "hold": 2,
+    "sell": 0
   },
   "CLX": {
-    "buy": 11,
-    "hold": 12,
-    "sell": 5
+    "buy": 2,
+    "hold": 16,
+    "sell": 9
   },
   "SJM": {
-    "buy": 11,
-    "hold": 9,
-    "sell": 1
+    "buy": 14,
+    "hold": 11,
+    "sell": 0
   },
   "WYNN": {
-    "buy": 15,
-    "hold": 3,
+    "buy": 26,
+    "hold": 1,
     "sell": 0
   },
   "AES": {
-    "buy": 8,
-    "hold": 8,
-    "sell": 1
+    "buy": 0,
+    "hold": 13,
+    "sell": 5
   },
   "FRT": {
-    "buy": 9,
+    "buy": 16,
     "hold": 8,
     "sell": 0
   },
   "DPZ": {
-    "buy": 17,
-    "hold": 13,
+    "buy": 20,
+    "hold": 15,
     "sell": 2
   },
   "TTD": {
-    "buy": 25,
-    "hold": 21,
-    "sell": 5
-  },
-  "PODD": {
-    "buy": 21,
-    "hold": 5,
-    "sell": 1
-  },
-  "JKHY": {
-    "buy": 9,
-    "hold": 9,
-    "sell": 1
-  },
-  "BAX": {
-    "buy": 8,
-    "hold": 9,
+    "buy": 18,
+    "hold": 22,
     "sell": 3
   },
+  "PODD": {
+    "buy": 30,
+    "hold": 4,
+    "sell": 0
+  },
+  "JKHY": {
+    "buy": 16,
+    "hold": 6,
+    "sell": 0
+  },
+  "BAX": {
+    "buy": 1,
+    "hold": 16,
+    "sell": 7
+  },
   "FDS": {
-    "buy": 9,
-    "hold": 9,
-    "sell": 6
+    "buy": 3,
+    "hold": 14,
+    "sell": 10
   },
   "ARE": {
-    "buy": 11,
-    "hold": 12,
+    "buy": 6,
+    "hold": 14,
     "sell": 2
   },
   "HSIC": {
-    "buy": 7,
-    "hold": 7,
+    "buy": 14,
+    "hold": 9,
     "sell": 1
   },
   "UHS": {
     "buy": 11,
-    "hold": 11,
+    "hold": 14,
     "sell": 1
   },
   "CRL": {
-    "buy": 11,
-    "hold": 11,
-    "sell": 1
+    "buy": 16,
+    "hold": 8,
+    "sell": 0
   },
   "NCLH": {
-    "buy": 12,
-    "hold": 12,
+    "buy": 15,
+    "hold": 14,
     "sell": 1
   },
   "BLDR": {
-    "buy": 15,
-    "hold": 11,
-    "sell": 4
+    "buy": 17,
+    "hold": 14,
+    "sell": 1
   },
   "AOS": {
-    "buy": 6,
-    "hold": 7,
-    "sell": 3
+    "buy": 8,
+    "hold": 8,
+    "sell": 2
   },
   "TECH": {
-    "buy": 9,
+    "buy": 16,
     "hold": 5,
     "sell": 1
   },
   "MOS": {
-    "buy": 11,
-    "hold": 11,
-    "sell": 3
+    "buy": 10,
+    "hold": 13,
+    "sell": 2
   },
   "TAP": {
-    "buy": 11,
-    "hold": 11,
+    "buy": 9,
+    "hold": 12,
     "sell": 5
   },
   "POOL": {
-    "buy": 6,
-    "hold": 7,
-    "sell": 2
+    "buy": 11,
+    "hold": 11,
+    "sell": 1
   },
   "CPB": {
-    "buy": 13,
-    "hold": 14,
-    "sell": 8
+    "buy": 2,
+    "hold": 15,
+    "sell": 11
   },
   "CAG": {
-    "buy": 11,
-    "hold": 13,
-    "sell": 6
+    "buy": 1,
+    "hold": 16,
+    "sell": 9
   },
   "EPAM": {
-    "buy": 11,
-    "hold": 7,
-    "sell": 2
+    "buy": 16,
+    "hold": 10,
+    "sell": 0
   }
 }

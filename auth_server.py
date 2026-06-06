@@ -94,6 +94,19 @@ def init_db():
             FOREIGN KEY (user_id) REFERENCES users(id)
         )
     ''')
+    conn.execute('''
+        CREATE TABLE IF NOT EXISTS journal_entries (
+            id         INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id    INTEGER NOT NULL,
+            client_id  TEXT    NOT NULL,   -- uuid generated client-side (sync/dedup)
+            type       TEXT    NOT NULL,   -- 'trade' | 'investment'
+            data       TEXT    NOT NULL,   -- JSON blob of the entry fields
+            created_at TEXT    DEFAULT (datetime('now')),
+            updated_at TEXT    DEFAULT (datetime('now')),
+            UNIQUE(user_id, client_id),
+            FOREIGN KEY (user_id) REFERENCES users(id)
+        )
+    ''')
     conn.commit()
     conn.close()
     print(f'  Database ready: {DB_PATH}')
@@ -238,6 +251,84 @@ def remove_from_watchlist(symbol):
     conn.close()
     return jsonify({'ok': True, 'symbol': symbol})
 
+# ── Journal (trading + investment) — account-synced storage ──
+import json as _json
+
+def _journal_rows(conn, user_id):
+    rows = conn.execute(
+        'SELECT client_id, type, data, created_at, updated_at '
+        'FROM journal_entries WHERE user_id = ? ORDER BY updated_at DESC',
+        (user_id,)
+    ).fetchall()
+    out = []
+    for r in rows:
+        try:
+            data = _json.loads(r['data'])
+        except (ValueError, TypeError):
+            data = {}
+        out.append({
+            'client_id':  r['client_id'],
+            'type':       r['type'],
+            'data':       data,
+            'created_at': r['created_at'],
+            'updated_at': r['updated_at'],
+        })
+    return out
+
+@app.route('/api/journal', methods=['GET'])
+def get_journal():
+    payload = require_auth()
+    if not payload:
+        return jsonify({'error': 'Unauthorized'}), 401
+    conn = get_db()
+    entries = _journal_rows(conn, payload['user_id'])
+    conn.close()
+    return jsonify({'entries': entries})
+
+@app.route('/api/journal', methods=['POST'])
+def upsert_journal():
+    payload = require_auth()
+    if not payload:
+        return jsonify({'error': 'Unauthorized'}), 401
+    body = request.get_json() or {}
+    # Accept either a single entry or a list (for local→account migration).
+    items = body.get('entries') if isinstance(body.get('entries'), list) else [body]
+
+    conn = get_db()
+    saved = 0
+    for it in items:
+        client_id = (it.get('client_id') or '').strip()
+        etype     = (it.get('type') or '').strip()
+        data      = it.get('data')
+        if not client_id or etype not in ('trade', 'investment') or not isinstance(data, dict):
+            continue
+        conn.execute(
+            '''INSERT INTO journal_entries (user_id, client_id, type, data)
+               VALUES (?, ?, ?, ?)
+               ON CONFLICT(user_id, client_id) DO UPDATE SET
+                 type = excluded.type,
+                 data = excluded.data,
+                 updated_at = datetime('now')''',
+            (payload['user_id'], client_id, etype, _json.dumps(data))
+        )
+        saved += 1
+    conn.commit()
+    entries = _journal_rows(conn, payload['user_id'])
+    conn.close()
+    return jsonify({'ok': True, 'saved': saved, 'entries': entries})
+
+@app.route('/api/journal/<client_id>', methods=['DELETE'])
+def delete_journal(client_id):
+    payload = require_auth()
+    if not payload:
+        return jsonify({'error': 'Unauthorized'}), 401
+    conn = get_db()
+    conn.execute('DELETE FROM journal_entries WHERE user_id = ? AND client_id = ?',
+                 (payload['user_id'], client_id))
+    conn.commit()
+    conn.close()
+    return jsonify({'ok': True, 'client_id': client_id})
+
 # ── GDPR / privacy: data export + account deletion ──────────
 @app.route('/api/auth/export', methods=['GET'])
 def export_data():
@@ -250,12 +341,14 @@ def export_data():
                         (payload['user_id'],)).fetchone()
     rows = conn.execute('SELECT symbol, added_at FROM watchlist WHERE user_id = ?',
                         (payload['user_id'],)).fetchall()
+    journal = _journal_rows(conn, payload['user_id'])
     conn.close()
     if not user:
         return jsonify({'error': 'Account not found'}), 404
     return jsonify({
         'account':   dict(user),
         'watchlist': [dict(r) for r in rows],
+        'journal':   journal,
         'note': 'This is all personal data Brick Street stores about you. '
                 'Card/billing data, if any, is held by our payment processor.'
     })
@@ -268,6 +361,7 @@ def delete_account():
         return jsonify({'error': 'Unauthorized'}), 401
     conn = get_db()
     conn.execute('DELETE FROM watchlist WHERE user_id = ?', (payload['user_id'],))
+    conn.execute('DELETE FROM journal_entries WHERE user_id = ?', (payload['user_id'],))
     conn.execute('DELETE FROM users WHERE id = ?', (payload['user_id'],))
     conn.commit()
     conn.close()

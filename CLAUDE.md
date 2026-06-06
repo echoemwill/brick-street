@@ -3,7 +3,7 @@
 ## What it does
 
 A real-time financial intelligence dashboard that:
-- Scrapes analyst consensus ratings (Buy / Hold / Sell) for every S&P 500 stock from MarketBeat
+- Pulls analyst consensus ratings (Buy / Hold / Sell) for every S&P 500 stock from Finnhub (licensed API)
 - Filters for the strongest buy signals only
 - Enriches each stock with live prices and quarterly EPS earnings surprise data
 - Shows the current Federal Reserve interest rate and history
@@ -14,6 +14,32 @@ A real-time financial intelligence dashboard that:
 - Buy  ≥ 10
 - Hold ≤ 10
 - Sell <  5
+
+---
+
+## ⚖️ Data sourcing policy (READ BEFORE ADDING ANY DATA SOURCE)
+
+This is a hard rule for **every** change to this project, now and in the future.
+
+**Only use legitimate, licensed data sources that grant us the legal right to use
+and display their information.** Never integrate a source that could expose the
+project to legal action.
+
+Concretely:
+- ✅ **Use** official, documented APIs with clear terms of service (e.g. Finnhub,
+  FRED) where the licence covers our use case.
+- ❌ **Do not** scrape websites, use unofficial/undocumented endpoints, or
+  otherwise pull data in a way that violates a provider's terms of service or
+  copyright (e.g. MarketBeat scraping, Yahoo/yfinance unofficial endpoints).
+- 💳 **Paid is fine.** If a source requires a paid or commercial/redistribution
+  plan before it can be used commercially, that is acceptable — the owner will pay
+  for it. Prefer a properly licensed paid source over a free-but-unlicensed one.
+- 📜 Honour each provider's **attribution** requirements (credit them in the UI).
+- When adding a source, confirm in the code/docs **which licence tier** is required
+  for commercial use, and note it in `LICENSING.md`.
+
+If a requested feature can only be built with a source that fails these rules,
+**stop and flag it** rather than implementing it — propose a licensed alternative.
 
 ---
 
@@ -30,6 +56,7 @@ StockPulse/
 ├── data_sources.py           ← Finnhub client (analyst ratings, prices, earnings)
 ├── fetch_stocks.py           ← Orchestrator: ratings → filter → prices → earnings
 ├── fetch_fed_rate.py         ← Federal Reserve rate history (FRED API, public domain)
+├── fetch_macro.py            ← Unemployment / CPI / GDP indicators (FRED, public domain)
 ├── fetch_calendar.py         ← Economic events calendar (Finnhub API)
 ├── auth_server.py            ← Flask server: serves site + login/watchlist API
 │
@@ -45,14 +72,26 @@ StockPulse/
 │   ├── filtered_stocks.json  ← Stocks passing the filter + prices (read by website)
 │   ├── earnings.json         ← EPS surprise data per stock (read by website)
 │   ├── fed_rate.json         ← Fed rate history + next meeting (read by website)
+│   ├── macro.json            ← Unemployment / CPI / GDP indicators (read by website)
 │   ├── calendar.json         ← Upcoming economic events (read by website)
-│   └── users.db              ← User accounts + watchlists (gitignored)
+│   └── users.db              ← User accounts + watchlists + journal (gitignored)
 └── website/
     ├── index.html
     ├── style.css
     ├── app.js
+    ├── journal.css           ← Trading/investment journal styles
+    ├── journal.js            ← Journal logic (local for guests, synced for accounts)
     └── legal.html            ← Terms, Privacy, Disclaimer (draft — lawyer review)
 ```
+
+> **Journal:** the "Journal" view tab offers a **Trading** and an **Investing**
+> template (toggle). Smart manual entry — symbol auto-fills price/company via
+> `/api/quote`, and P&L / % / R-multiple / holding period compute automatically.
+> Guests get an unlimited **local** journal (`localStorage`, device-only); logged-in
+> users get **server sync** (`journal_entries` table), an **analytics** dashboard,
+> and **CSV export**. On login, local entries migrate up to the account once.
+> API: `GET/POST /api/journal`, `DELETE /api/journal/<client_id>` (see `auth_server.py`).
+> Future: CSV import + optional broker API sync.
 
 > **Going commercial?** All stock data now comes from **Finnhub** (licensed) via
 > `data_sources.py` + `fetch_stocks.py`, replacing the deprecated scrapers. A public,
@@ -83,18 +122,23 @@ BS_SECRET=your_random_32+_chars   # JWT signing secret (auth_server). Generate w
 
 ### Run order
 
-**Step 1 — analyst ratings + prices + earnings (licensed, ~15–20 min):**
+**Step 1 — analyst ratings + prices + earnings (licensed, ~25–35 min):**
 ```bash
 python3 fetch_stocks.py
 ```
-Pulls analyst consensus for all ~500 S&P 500 stocks from Finnhub, filters them
-(buy ≥ 10, hold ≤ 10, sell < 5), then adds current price + last 4 quarters of EPS
-surprise for the survivors. Resume-safe via `data/stock_progress.json`.
-Outputs: `data/filtered_stocks.json`, `data/earnings.json`, `data/all_results.json`
+Pulls analyst consensus for all ~500 S&P 500 stocks from Finnhub, then adds the
+current price + last 4 quarters of EPS surprise for **every** scored stock (the
+website displays the whole list, sortable by Buy/Hold/Sell/Price). It also flags
+the strong-buy survivors (buy ≥ 10, hold ≤ 10, sell < 5) into
+`filtered_stocks.json` for backward compatibility. Resume-safe via
+`data/stock_progress.json` + the `price` key in `all_results.json`.
+Outputs: `data/all_results.json` (full list w/ price), `data/earnings.json`,
+`data/filtered_stocks.json` (survivors)
 
 **Step 2 — independent, run anytime:**
 ```bash
 python3 fetch_fed_rate.py   # → data/fed_rate.json  (FRED, public domain)
+python3 fetch_macro.py      # → data/macro.json     (FRED, public domain)
 python3 fetch_calendar.py   # → data/calendar.json  (Finnhub)
 ```
 
@@ -133,7 +177,7 @@ yfinance (unofficial endpoints), stockanalysis.com. The old `scraper.py`,
 - **Analyst ratings table** — all stocks passing the Buy/Hold/Sell filter
 - **Signal % bar** — buy % of total analyst votes per stock
 - **Earnings column** — last 4 quarters of EPS surprise % (green = beat, red = miss)
-- **Live prices** — fetched directly in browser from Yahoo Finance
+- **Prices** — current price per stock, pre-loaded from `filtered_stocks.json` (licensed Finnhub data)
 - **TradingView charts** — inline chart panel on hover/click per stock
 - **Sort + search** — sort by Buy/Hold/Sell/Symbol, live search
 

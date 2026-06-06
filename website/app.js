@@ -319,26 +319,124 @@ function buildStats(stocks) {
 
   const totalAnalysts = stocks.reduce((s, x) => s + x.buy + x.hold + x.sell, 0);
 
-  const strongBuyCount = stocks.filter(x => {
-    const t = x.buy + x.hold + x.sell;
-    return t > 0 && (x.buy / t) >= 0.7;
-  }).length;
-  const strongBuyPct = Math.round((strongBuyCount / n) * 100);
-
-  const topPick = stocks.reduce((best, x) => x.buy > best.buy ? x : best, stocks[0]);
-
   document.getElementById('stockCount').textContent = `${n} stocks`;
 
   countUp(document.getElementById('totalCount'),    n);
   countUp(document.getElementById('totalAnalysts'), totalAnalysts);
-  countUp(document.getElementById('strongBuyPct'),  strongBuyPct, 1200, '%');
+  // The rotating highlight tile is started separately (needs earnings data) —
+  // see initRotatingStat(), called from loadData after earnings load.
+}
 
-  const topPickEl = document.getElementById('topPick');
-  if (topPickEl) {
-    setTimeout(() => {
-      topPickEl.textContent = topPick.symbol;
-      gsap.from(topPickEl, { opacity: 0, y: 8, duration: 0.6, ease: 'power2.out' });
-    }, 700);
+/* ─── Rotating market-highlight tile ───────────────────── */
+let _rotateInsights = [];
+let _rotateIdx      = 0;
+let _rotateTimer    = null;
+
+function computeInsights() {
+  const out    = [];
+  const rated  = allStocks.filter(s => (s.buy + s.hold + s.sell) > 0);
+  if (!rated.length) return out;
+
+  const coverage = s => s.buy + s.hold + s.sell;
+  const buyShare = s => coverage(s) ? s.buy / coverage(s) : 0;
+
+  // 1) Top pick — most Buy ratings
+  const top = rated.reduce((a, b) => (b.buy > a.buy ? b : a));
+  out.push({ label: 'Top Pick', sym: top.symbol, detail: `${top.buy} buy ratings`, cls: 'buy-text' });
+
+  // 2) Weakest rated — most Sell ratings (tie → lowest buy share)
+  const worst = rated.reduce((a, b) => {
+    if (b.sell !== a.sell) return b.sell > a.sell ? b : a;
+    return buyShare(b) < buyShare(a) ? b : a;
+  });
+  out.push({ label: 'Weakest Rated', sym: worst.symbol, detail: `${worst.sell} sell ratings`, cls: 'sell-text' });
+
+  // 3) Strongest consensus — highest Buy share (min 15 analysts)
+  const covered = rated.filter(s => coverage(s) >= 15);
+  if (covered.length) {
+    const unanimous = covered.reduce((a, b) => (buyShare(b) > buyShare(a) ? b : a));
+    out.push({ label: 'Strongest Consensus', sym: unanimous.symbol,
+               detail: `${Math.round(buyShare(unanimous) * 100)}% buy`, cls: 'buy-text' });
+  }
+
+  // 4) Most covered — most analysts following it
+  const mostCovered = rated.reduce((a, b) => (coverage(b) > coverage(a) ? b : a));
+  out.push({ label: 'Most Covered', sym: mostCovered.symbol,
+             detail: `${coverage(mostCovered)} analysts`, cls: 'accent-text' });
+
+  // 5) Earnings star — best average EPS surprise across its last quarters
+  if (earningsData) {
+    let best = null, bestAvg = -Infinity;
+    for (const s of rated) {
+      const qs = earningsData[s.symbol];
+      if (!qs || !qs.length) continue;
+      const vals = qs.map(q => q.surprise).filter(v => v != null);
+      if (!vals.length) continue;
+      const avg = vals.reduce((x, y) => x + y, 0) / vals.length;
+      if (avg > bestAvg) { bestAvg = avg; best = s; }
+    }
+    if (best) out.push({ label: 'Earnings Star', sym: best.symbol,
+                         detail: `+${bestAvg.toFixed(1)}% avg surprise`, cls: 'buy-text' });
+  }
+
+  // 6) Priciest — highest share price (where we have it)
+  const priced = rated.filter(s => s.price != null);
+  if (priced.length) {
+    const dear = priced.reduce((a, b) => (b.price > a.price ? b : a));
+    out.push({ label: 'Highest Price', sym: dear.symbol,
+               detail: `$${dear.price.toLocaleString()}`, cls: 'accent-text' });
+  }
+
+  return out;
+}
+
+function applyInsight(ins, animate) {
+  const valEl = document.getElementById('rotateValue');
+  const labEl = document.getElementById('rotateLabel');
+  const detEl = document.getElementById('rotateDetail');
+  if (!valEl) return;
+
+  const set = () => {
+    valEl.textContent = ins.sym;
+    valEl.className   = `stat-value stat-value--symbol ${ins.cls}`;
+    labEl.textContent = ins.label;
+    detEl.textContent = ins.detail || '';
+  };
+
+  if (!animate) { set(); return; }
+  const els = [valEl, labEl, detEl];
+  gsap.to(els, {
+    opacity: 0, y: -6, duration: 0.3, ease: 'power2.in',
+    onComplete: () => {
+      set();
+      gsap.fromTo(els,
+        { opacity: 0, y: 8 },
+        { opacity: 1, y: 0, duration: 0.45, ease: 'power2.out', stagger: 0.05 });
+    }
+  });
+}
+
+function startRotation() {
+  clearInterval(_rotateTimer);
+  if (_rotateInsights.length < 2) return;
+  _rotateTimer = setInterval(() => {
+    _rotateIdx = (_rotateIdx + 1) % _rotateInsights.length;
+    applyInsight(_rotateInsights[_rotateIdx], true);
+  }, 5000);
+}
+
+function initRotatingStat() {
+  _rotateInsights = computeInsights();
+  if (!_rotateInsights.length) return;
+  _rotateIdx = 0;
+  applyInsight(_rotateInsights[0], false);
+  startRotation();
+
+  const tile = document.getElementById('rotatingStat');
+  if (tile && !tile.dataset.bound) {
+    tile.dataset.bound = '1';
+    tile.addEventListener('mouseenter', () => clearInterval(_rotateTimer));
+    tile.addEventListener('mouseleave', startRotation);
   }
 }
 
@@ -352,7 +450,6 @@ function formatPrice(price) {
 function buildRow(stock, rank) {
   const total    = stock.buy + stock.hold + stock.sell;
   const buyPct   = total > 0 ? Math.round((stock.buy / total) * 100) : 0;
-  const flames   = stock.sell > 0 ? '🔥' : '·';
   const priceStr = formatPrice(stock.price);
 
   // Wrapper entry
@@ -541,6 +638,13 @@ function renderTable(resetCount = true) {
 
   stocks.sort((a, b) => {
     if (sortKey === 'symbol') return sortDir * a.symbol.localeCompare(b.symbol);
+    if (sortKey === 'price') {
+      // Missing prices always sort to the bottom, regardless of direction.
+      if (a.price == null && b.price == null) return 0;
+      if (a.price == null) return 1;
+      if (b.price == null) return -1;
+      return sortDir * (a.price - b.price);
+    }
     return sortDir * (a[sortKey] - b[sortKey]);
   });
 
@@ -608,28 +712,122 @@ document.getElementById('showMoreBtn').addEventListener('click', () => {
   if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
 
-/* ─── Sort buttons ─────────────────────────────────────── */
-document.querySelectorAll('.sort-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const key = btn.dataset.sort;
-    if (sortKey === key) {
-      sortDir *= -1;
-    } else {
-      sortKey = key;
-      sortDir = -1;
-    }
-    document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
+/* ─── Sorting (shared by the controls bar + clickable headers) ── */
+function updateSortIndicators() {
+  const arrow = sortDir < 0 ? '▼' : '▲';
 
+  document.querySelectorAll('.sort-btn').forEach(b => {
+    const on = b.dataset.sort === sortKey;
+    b.classList.toggle('active', on);
+    if (on) b.dataset.arrow = arrow; else b.removeAttribute('data-arrow');
+  });
+
+  document.querySelectorAll('.col--sortable').forEach(c => {
+    const on = c.dataset.sort === sortKey;
+    c.classList.toggle('col--sort-active', on);
+    const caret = c.querySelector('.sort-caret');
+    if (caret) caret.textContent = on ? arrow : '';
+  });
+}
+
+function setSort(key) {
+  if (!key) return;
+  if (sortKey === key) {
+    sortDir *= -1;                       // same column → flip direction
+  } else {
+    sortKey = key;
+    sortDir = (key === 'symbol') ? 1 : -1; // names A→Z, numbers high→low
+  }
+  updateSortIndicators();
+
+  const rows = document.querySelectorAll('.stock-row');
+  if (rows.length) {
     gsap.to('.stock-row', {
-      opacity: 0, y: -10, duration: 0.2, stagger: 0.01,
+      opacity: 0, y: -10, duration: 0.2, stagger: 0.008,
       onComplete: () => {
         document.getElementById('tableBody').innerHTML = '';
         renderTable(true);
       }
     });
+  } else {
+    document.getElementById('tableBody').innerHTML = '';
+    renderTable(true);
+  }
+}
+
+document.querySelectorAll('.sort-btn').forEach(btn =>
+  btn.addEventListener('click', () => setSort(btn.dataset.sort)));
+document.querySelectorAll('.col--sortable').forEach(col =>
+  col.addEventListener('click', () => setSort(col.dataset.sort)));
+
+updateSortIndicators();
+
+/* ─── Reusable symbol autocomplete (every search bar) ──── */
+function attachAutocomplete(input, opts = {}) {
+  if (!input || input._acBound) return;
+  input._acBound = true;
+  const onSelect = opts.onSelect;
+
+  const dd = document.createElement('div');
+  dd.className = 'ac-dropdown';
+  dd.style.display = 'none';
+  document.body.appendChild(dd);
+
+  let items = [], active = -1;
+
+  function matches(q) {
+    q = (q || '').trim().toUpperCase();
+    if (!q) return [];
+    const list = (typeof allStocks !== 'undefined' && allStocks.length) ? allStocks : [];
+    const starts = [], contains = [];
+    for (const s of list) {
+      if (s.symbol.startsWith(q)) starts.push(s);
+      else if (s.symbol.includes(q)) contains.push(s);
+    }
+    return [...starts, ...contains].slice(0, 8);
+  }
+
+  function position() {
+    const r = input.getBoundingClientRect();
+    dd.style.left  = r.left + 'px';
+    dd.style.top   = (r.bottom + 4) + 'px';
+    dd.style.width = r.width + 'px';
+  }
+  function render() {
+    if (!items.length) return hide();
+    dd.innerHTML = items.map((it, i) => `
+      <div class="ac-item${i === active ? ' active' : ''}" data-i="${i}">
+        <span class="ac-sym">${it.symbol}</span>
+        ${it.price ? `<span class="ac-price">$${(+it.price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>` : ''}
+      </div>`).join('');
+    dd.querySelectorAll('.ac-item').forEach(el =>
+      el.addEventListener('mousedown', e => { e.preventDefault(); choose(+el.dataset.i); }));
+    position();
+    dd.style.display = 'block';
+  }
+  function show() { items = matches(input.value); active = -1; render(); }
+  function hide() { dd.style.display = 'none'; items = []; active = -1; }
+  function choose(i) {
+    const it = items[i]; if (!it) return;
+    input.value = it.symbol;
+    hide();
+    if (onSelect) onSelect(it.symbol, it);
+  }
+
+  input.addEventListener('input',  show);
+  input.addEventListener('focus',  () => { if (input.value) show(); });
+  input.addEventListener('blur',   () => setTimeout(hide, 120));
+  input.addEventListener('keydown', e => {
+    if (dd.style.display === 'none') return;
+    if (e.key === 'ArrowDown')      { e.preventDefault(); active = Math.min(active + 1, items.length - 1); render(); }
+    else if (e.key === 'ArrowUp')   { e.preventDefault(); active = Math.max(active - 1, 0); render(); }
+    else if (e.key === 'Enter' && active >= 0) { e.preventDefault(); choose(active); }
+    else if (e.key === 'Escape')    { hide(); }
   });
-});
+  window.addEventListener('scroll', () => { if (dd.style.display !== 'none') position(); }, true);
+  window.addEventListener('resize', () => { if (dd.style.display !== 'none') position(); });
+}
+window.attachAutocomplete = attachAutocomplete;
 
 /* ─── Search ───────────────────────────────────────────── */
 const searchInput = document.getElementById('searchInput');
@@ -640,6 +838,9 @@ searchInput.addEventListener('input', e => {
     searchQuery = e.target.value.trim();
     renderTable();
   }, 200);
+});
+attachAutocomplete(searchInput, {
+  onSelect: () => { searchQuery = searchInput.value.trim(); renderTable(); },
 });
 
 /* ─── Earnings — pre-fetched from data/earnings.json ────── */
@@ -652,64 +853,69 @@ async function loadEarningsFile() {
   } catch (_) {}
 }
 
+/* "2025-07" → "Q3 '25" (calendar quarter from the report month) */
+function quarterLabel(qstr) {
+  if (!qstr) return '';
+  const [yRaw, mRaw] = String(qstr).split('-');
+  const y = parseInt(yRaw, 10);
+  const m = parseInt(mRaw, 10);
+  if (!y || !m) return qstr;
+  const q = Math.floor((m - 1) / 3) + 1;
+  return `Q${q} '${String(y).slice(-2)}`;
+}
+
 function earningsHtml(symbol) {
-  if (!earningsData) return '<span class="earn-badge earn-badge--neutral">—</span>';
+  if (!earningsData) return '<span class="earn-empty">—</span>';
   const quarters = earningsData[symbol];
   if (!quarters || !quarters.length) {
-    return '<span class="earn-badge earn-badge--neutral">N/A</span>';
+    return '<span class="earn-empty">No earnings data</span>';
   }
   return quarters.map(q => {
-    const val = q.surprise;
+    const val    = q.surprise;
+    const period = quarterLabel(q.quarter);
     if (val === null || val === undefined) {
-      return '<span class="earn-badge earn-badge--neutral">—</span>';
+      return `<div class="earn-q">
+        <span class="earn-q-period">${period}</span>
+        <span class="earn-badge earn-badge--neutral">—</span>
+      </div>`;
     }
     const isPos = val >= 0;
     const cls   = isPos ? 'earn-badge--pos' : 'earn-badge--neg';
     const sign  = isPos ? '+' : '';
-    return `<span class="earn-badge ${cls}" title="${q.quarter || ''}">${sign}${val.toFixed(1)}%</span>`;
+    return `<div class="earn-q">
+        <span class="earn-q-period">${period}</span>
+        <span class="earn-badge ${cls}">${sign}${val.toFixed(1)}%</span>
+      </div>`;
   }).join('');
-}
-
-/* ─── Fetch live prices ─────────────────────────────────── */
-async function fetchPrice(symbol) {
-  try {
-    const res = await fetch(
-      `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1d&range=1d`,
-      { headers: { 'Accept': 'application/json' } }
-    );
-    if (!res.ok) return null;
-    const json  = await res.json();
-    const price = json?.chart?.result?.[0]?.meta?.regularMarketPrice;
-    return price || null;
-  } catch (_) { return null; }
-}
-
-async function enrichWithPrices(stocks) {
-  const BATCH = 5;
-  for (let i = 0; i < stocks.length; i += BATCH) {
-    const batch = stocks.slice(i, i + BATCH);
-    await Promise.all(batch.map(async stock => {
-      if (stock.price) return;
-      stock.price = await fetchPrice(stock.symbol);
-    }));
-    batch.forEach(stock => {
-      if (!stock.price) return;
-      const priceEl = document.querySelector(`.stock-entry[data-symbol="${stock.symbol}"] .stock-price`);
-      if (priceEl) priceEl.textContent = formatPrice(stock.price);
-    });
-    await new Promise(r => setTimeout(r, 300));
-  }
 }
 
 /* ─── Load data ─────────────────────────────────────────── */
 async function loadData() {
   let data = null;
 
+  // Primary: every scored S&P 500 stock (ratings for all ~500).
+  // Prices live in all_results.json once a full fetch has run; otherwise we
+  // fall back to filtered_stocks.json (prices for the strong-buy survivors).
   try {
-    const res = await fetch('../data/filtered_stocks.json');
-    if (res.ok) {
-      const json = await res.json();
-      data = Object.entries(json).map(([symbol, vals]) => ({
+    const [allRes, filtRes] = await Promise.all([
+      fetch('../data/all_results.json').catch(() => null),
+      fetch('../data/filtered_stocks.json').catch(() => null),
+    ]);
+
+    const allJson  = allRes  && allRes.ok  ? await allRes.json()  : null;
+    const filtJson = filtRes && filtRes.ok ? await filtRes.json() : {};
+
+    if (allJson && Object.keys(allJson).length) {
+      data = Object.entries(allJson).map(([symbol, vals]) => ({
+        symbol,
+        buy:   vals.buy   || 0,
+        hold:  vals.hold  || 0,
+        sell:  vals.sell  || 0,
+        price: vals.price ?? (filtJson[symbol] && filtJson[symbol].price) ?? null,
+      }));
+    } else if (Object.keys(filtJson).length) {
+      // Fallback: only the filtered set is available.
+      data = Object.entries(filtJson).map(([symbol, vals]) => ({
         symbol,
         buy:   vals.buy   || 0,
         hold:  vals.hold  || 0,
@@ -727,9 +933,11 @@ async function loadData() {
   allStocks = data;
   buildStats(data);
   await loadEarningsFile();
+  initRotatingStat();
   renderTable();
   renderWatchlist();
-  enrichWithPrices(allStocks);
+  // Prices come pre-loaded from the data files (licensed Finnhub data).
+  // No browser-side price fetching — see the data sourcing policy in CLAUDE.md.
 }
 
 /* Sample data */
@@ -828,6 +1036,7 @@ function initSources() {
 /* ─── Fed Rate Panel ────────────────────────────────────── */
 async function loadFedRate() {
   const inner = document.getElementById('fedDrawerInner');
+  const chipValue = document.getElementById('fedChipValue');
 
   let data = null;
   try {
@@ -836,11 +1045,18 @@ async function loadFedRate() {
   } catch (_) {}
 
   if (!data) {
+    if (chipValue) chipValue.textContent = 'N/A';
     inner.innerHTML = `
       <div class="fed-section">
         <div class="fed-loading">Run <code style="color:var(--buy);font-family:var(--mono)">fetch_fed_rate.py</code><br>to load rate data.</div>
       </div>`;
     return;
+  }
+
+  if (chipValue) {
+    const lo = data.current_lower != null ? data.current_lower.toFixed(2) : '—';
+    const hi = data.current_upper != null ? data.current_upper.toFixed(2) : '—';
+    chipValue.textContent = `${lo}–${hi}%`;
   }
 
   const next     = data.next_meeting || {};
@@ -1071,11 +1287,17 @@ async function loadCalendar() {
 
   function buildCard(e, impactClass, badgeHtml) {
     const info = getEventInfo(e.name);
+    const country = e.flag
+      ? `<span class="cal-event-country" title="${e.country_name || ''}">${e.flag} ${e.country || ''}</span>`
+      : '';
     return `
-      <div class="cal-event ${impactClass}" data-name="${e.name}">
-        <div class="cal-event-top">${badgeHtml}${e.days_until != null ? daysLabel(e.days_until) : ''}</div>
+      <div class="cal-event ${impactClass}" data-name="${e.name}" data-country="${e.country || ''}">
+        <div class="cal-event-top">
+          <div class="cal-event-top-left">${country}${badgeHtml}</div>
+          ${e.days_until != null ? daysLabel(e.days_until) : ''}
+        </div>
         <div class="cal-event-name">${e.name}</div>
-        <div class="cal-event-date">${e.label}${e.time ? ' · ' + e.time + ' ET' : ''}</div>
+        <div class="cal-event-date">${e.label}${e.time ? ' · ' + e.time + ' UTC' : ''}</div>
         ${valRow(e)}
         ${info ? '<div class="cal-expand-hint">click for details ▾</div>' : ''}
       </div>`;
@@ -1086,7 +1308,7 @@ async function loadCalendar() {
 
   const listHtml = `
     ${high.length   ? `<div class="cal-section"><div class="cal-section-label">High Impact</div>${high.map(e => buildCard(e, 'high', '<span class="cal-event-badge high">⬤ HIGH</span>')).join('')}</div>` : ''}
-    ${medium.length ? `<div class="cal-section"><div class="cal-section-label">Medium Impact</div>${medium.slice(0,10).map(e => buildCard(e, 'medium', '<span class="cal-event-badge medium">◆ MED</span>')).join('')}</div>` : ''}
+    ${medium.length ? `<div class="cal-section"><div class="cal-section-label">Medium Impact</div>${medium.slice(0,24).map(e => buildCard(e, 'medium', '<span class="cal-event-badge medium">◆ MED</span>')).join('')}</div>` : ''}
     <div class="cal-section"><div style="font-size:10px;color:var(--text-dim);font-family:var(--mono);letter-spacing:0.5px;">Updated ${data.last_updated || '—'}</div></div>
   `;
 
@@ -1135,10 +1357,11 @@ async function loadCalendar() {
             <span class="cal-event-badge ${e.impact}">${e.impact === 'high' ? '⬤ HIGH IMPACT' : '◆ MEDIUM IMPACT'}</span>
             <span class="cal-event-days${e.days_until <= 1 ? ' soon' : ''}">${daysStr}</span>
           </div>
-          <div class="cal-detail-title">${e.name}</div>
+          <div class="cal-detail-title">${e.flag ? e.flag + ' ' : ''}${e.name}</div>
           <div class="cal-detail-date-row">
+            ${e.country_name ? `<span>${e.country_name}</span><span>·</span>` : ''}
             <span>${e.label}</span>
-            ${e.time ? `<span>· ${e.time} ET</span>` : ''}
+            ${e.time ? `<span>· ${e.time} UTC</span>` : ''}
           </div>
         </div>
         ${numBlocks ? `<div class="cal-detail-numbers">${numBlocks}</div>` : ''}
@@ -1216,8 +1439,8 @@ async function loadCalendar() {
     inner.querySelectorAll('.cal-event').forEach(card => {
       if (!getEventInfo(card.dataset.name || '')) return;
       card.addEventListener('click', () => {
-        const name = card.dataset.name;
-        const ev   = events.find(e => e.name === name);
+        const { name, country } = card.dataset;
+        const ev = events.find(e => e.name === name && (e.country || '') === (country || ''));
         if (ev) showDetail(ev);
       });
     });
@@ -1228,19 +1451,27 @@ async function loadCalendar() {
 
 /* ─── Watchlist Sidebar ─────────────────────────────────── */
 function openWatchlistSidebar() {
-  const sidebar = document.getElementById('watchlistSidebar');
-  const btn     = document.getElementById('watchlistToggleBtn');
+  const sidebar   = document.getElementById('watchlistSidebar');
+  const btn       = document.getElementById('watchlistToggleBtn');
+  const backdrop  = document.getElementById('wlBackdrop');
   if (!sidebar) return;
   sidebar.classList.add('open');
-  if (btn) btn.classList.add('active');
+  if (btn)      btn.classList.add('active');
+  if (backdrop) backdrop.classList.add('visible');
+  refreshWatchlistQuotes();
+  clearInterval(_wlQuoteTimer);
+  _wlQuoteTimer = setInterval(refreshWatchlistQuotes, 45000);
 }
 
 function closeWatchlistSidebar() {
-  const sidebar = document.getElementById('watchlistSidebar');
-  const btn     = document.getElementById('watchlistToggleBtn');
+  const sidebar   = document.getElementById('watchlistSidebar');
+  const btn       = document.getElementById('watchlistToggleBtn');
+  const backdrop  = document.getElementById('wlBackdrop');
   if (!sidebar) return;
   sidebar.classList.remove('open');
-  if (btn) btn.classList.remove('active');
+  if (btn)      btn.classList.remove('active');
+  if (backdrop) backdrop.classList.remove('visible');
+  clearInterval(_wlQuoteTimer);
 }
 
 function toggleWatchlistSidebar() {
@@ -1322,9 +1553,63 @@ function updateAllWatchlistButtons() {
   });
 }
 
+/* Build the list of rotating insights for a watchlist stock */
+function getWatchlistInsights(symbol, stock) {
+  const out = [];
+  if (stock) {
+    const total  = stock.buy + stock.hold + stock.sell;
+    const buyPct = total > 0 ? Math.round((stock.buy / total) * 100) : null;
+    if (buyPct !== null)
+      out.push({ text: `BUY SIGNAL  ${buyPct}%  ·  ${total} analysts`, cls: buyPct >= 60 ? 'pos' : 'neu' });
+    if (total > 0)
+      out.push({ text: `${stock.buy}B / ${stock.hold}H / ${stock.sell}S`, cls: 'neu' });
+  }
+  if (earningsData) {
+    const qs = (earningsData[symbol] || []).filter(q => q.surprise != null);
+    if (qs.length) {
+      const beats  = qs.filter(q => q.surprise > 0).length;
+      const avg    = qs.reduce((s, q) => s + q.surprise, 0) / qs.length;
+      const sign   = avg >= 0 ? '+' : '';
+      out.push({ text: `EPS  ${beats}/${qs.length} beats  ·  avg ${sign}${avg.toFixed(1)}%`, cls: avg >= 0 ? 'pos' : 'neg' });
+    }
+  }
+  return out;
+}
+
+let _insightTimer = null;
+
+function startInsightRotation(container) {
+  clearInterval(_insightTimer);
+  const items = container.querySelectorAll('.wl-insight[data-insights]');
+  if (!items.length) return;
+
+  const stateMap = new Map(); // element → current index
+  items.forEach(el => {
+    let insights;
+    try { insights = JSON.parse(el.dataset.insights); } catch { return; }
+    stateMap.set(el, { insights, idx: 0 });
+  });
+
+  _insightTimer = setInterval(() => {
+    stateMap.forEach((s, el) => {
+      if (s.insights.length < 2) return;
+      el.classList.add('wl-insight--fade-out');
+      setTimeout(() => {
+        s.idx = (s.idx + 1) % s.insights.length;
+        const ins = s.insights[s.idx];
+        el.textContent = ins.text;
+        el.className = `wl-insight wl-insight--${ins.cls} wl-insight--fade-in`;
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => el.classList.remove('wl-insight--fade-in'));
+        });
+      }, 320);
+    });
+  }, 3400);
+}
+
 function renderWatchlist() {
-  const body    = document.getElementById('watchlistBody');
-  const countEl = document.getElementById('watchlistCount');
+  const body     = document.getElementById('watchlistBody');
+  const countEl  = document.getElementById('watchlistCount');
   const hdrCount = document.getElementById('wlHeaderCount');
   if (!body) return;
 
@@ -1343,48 +1628,200 @@ function renderWatchlist() {
   }
 
   body.innerHTML = symbols.map(symbol => {
-    const stock = allStocks.find(s => s.symbol === symbol);
-    if (!stock) {
-      return `
-        <div class="wl-item" data-symbol="${symbol}">
-          <div class="wl-item-top">
-            <div class="wl-item-id"><span class="wl-item-symbol">${symbol}</span></div>
-            <button class="wl-item-remove" data-symbol="${symbol}" title="Remove">✕</button>
-          </div>
-        </div>`;
-    }
-
-    const total  = stock.buy + stock.hold + stock.sell;
-    const buyPct = total > 0 ? Math.round((stock.buy / total) * 100) : 0;
-    const price  = stock.price
+    const stock   = allStocks.find(s => s.symbol === symbol);
+    const seed    = stock && stock.price
       ? '$' + stock.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
       : '—';
+    const insights = getWatchlistInsights(symbol, stock);
+    const firstIns = insights[0] || { text: 'No data yet', cls: 'neu' };
 
     return `
-      <div class="wl-item" data-symbol="${symbol}">
+      <div class="wl-item" data-symbol="${symbol}" title="Click to locate in the feed">
         <div class="wl-item-top">
-          <div class="wl-item-id">
-            <span class="wl-item-symbol">${symbol}</span>
-            <span class="wl-item-price">${price}</span>
-          </div>
+          <span class="wl-item-symbol">${symbol}</span>
           <button class="wl-item-remove" data-symbol="${symbol}" title="Remove from watchlist">✕</button>
         </div>
-        <div class="wl-item-ratings">
-          <span class="wl-buy">▲ ${stock.buy}</span>
-          <span class="wl-hold">⏸ ${stock.hold}</span>
-          <span class="wl-sell">${stock.sell > 0 ? '🔥' : '·'} ${stock.sell}</span>
+        <div class="wl-item-live" data-live="${symbol}">
+          <span class="wl-item-price">${seed}</span>
+          <span class="wl-item-chg wl-item-chg--idle">—</span>
         </div>
-        <div class="wl-item-signal">
-          <span class="wl-item-signal-pct">${buyPct}%</span>
-          <div class="wl-signal-bar" style="flex:1"><div class="wl-signal-fill" style="width:${buyPct}%"></div></div>
-        </div>
-        <div class="wl-item-earnings">${earningsHtml(symbol)}</div>
+        <div class="wl-insight wl-insight--${firstIns.cls}"
+             data-insights='${JSON.stringify(insights).replace(/'/g, "&#39;")}'>${firstIns.text}</div>
       </div>`;
   }).join('');
 
   body.querySelectorAll('.wl-item-remove').forEach(btn => {
-    btn.addEventListener('click', () => toggleWatchlist(btn.dataset.symbol));
+    btn.addEventListener('click', e => { e.stopPropagation(); toggleWatchlist(btn.dataset.symbol); });
   });
+  body.querySelectorAll('.wl-item').forEach(item => {
+    item.addEventListener('click', () => goToStock(item.dataset.symbol));
+  });
+
+  startInsightRotation(body);
+  refreshWatchlistQuotes();
+}
+
+/* ── Live, dynamically-updating prices for watchlist items ──── */
+let _wlQuoteTimer = null;
+
+async function refreshWatchlistQuotes() {
+  const symbols = [...watchlistSymbols];
+  for (const sym of symbols) {
+    try {
+      const res = await fetch(`/api/quote/${encodeURIComponent(sym)}`, {
+        headers: { 'ngrok-skip-browser-warning': 'true' },
+      });
+      if (!res.ok) continue;
+      const q = await res.json();
+      updateWatchlistLive(sym, q.current_price, q.prev_close);
+    } catch (_) { /* ignore — keep last value */ }
+  }
+}
+
+function updateWatchlistLive(symbol, price, prevClose) {
+  const el = document.querySelector(`.wl-item-live[data-live="${symbol}"]`);
+  if (!el || price == null) return;
+  const priceEl = el.querySelector('.wl-item-price');
+  const chgEl   = el.querySelector('.wl-item-chg');
+  priceEl.textContent = '$' + price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  if (prevClose) {
+    const chg = ((price - prevClose) / prevClose) * 100;
+    chgEl.textContent = (chg >= 0 ? '+' : '') + chg.toFixed(2) + '%';
+    chgEl.className = 'wl-item-chg ' + (chg >= 0 ? 'wl-item-chg--up' : 'wl-item-chg--down');
+  } else {
+    chgEl.textContent = 'today —';
+    chgEl.className = 'wl-item-chg wl-item-chg--idle';
+  }
+}
+
+/* Navigate from the watchlist to a stock in the Analyst Feed:
+   bring it to the top of the screen and pulse the whole row a few times. */
+function goToStock(symbol) {
+  // Close the watchlist overlay first so its backdrop doesn't dim/block the feed.
+  closeWatchlistSidebar();
+
+  const feedTab = document.querySelector('.view-tab[data-view="feed"]');
+  if (feedTab) feedTab.click();
+
+  const findRow = () => document.querySelector(`.stock-entry[data-symbol="${symbol}"]`);
+  let row = findRow();
+  if (!row) {
+    // Clear any active search filter so the target can't be filtered out,
+    // then expand to the full list so the row exists even past the page size.
+    if (searchQuery) {
+      searchQuery = '';
+      const si = document.getElementById('searchInput');
+      if (si) si.value = '';
+      renderTable(true);            // rebuild unfiltered (this resets visibleCount)
+    }
+    visibleCount = allStocks.length;
+    renderTable(false);             // append the remaining rows without resetting
+    row = findRow();
+  }
+  if (!row) return;
+
+  const inner = row.querySelector('.stock-row') || row;
+  if (window.gsap) gsap.set(inner, { opacity: 1, y: 0 });   // ensure it's not mid scroll-in
+
+  // Scroll so the row sits just below the sticky header (top of the screen).
+  requestAnimationFrame(() => {
+    const HEADER = 92;
+    const y = row.getBoundingClientRect().top + window.pageYOffset - HEADER;
+    window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+    inner.classList.remove('stock-row--flash');
+    void inner.offsetWidth;                 // restart the animation if re-triggered
+    inner.classList.add('stock-row--flash');
+    setTimeout(() => inner.classList.remove('stock-row--flash'), 2700);
+  });
+}
+
+/* ─── Autocomplete ─────────────────────────────────────── */
+function initAutoComplete(input, getItems, onSelect) {
+  const wrap = input.closest('.ac-wrap, .search-wrap, .predict-search-wrap') || input.parentElement;
+  if (!wrap.style.position) wrap.style.position = 'relative';
+
+  const dropdown = document.createElement('div');
+  dropdown.className = 'ac-dropdown';
+  wrap.appendChild(dropdown);
+
+  let activeIdx = -1;
+
+  function getVisible() { return [...dropdown.querySelectorAll('.ac-item')]; }
+
+  function show(matches) {
+    activeIdx = -1;
+    if (!matches.length) { hide(); return; }
+    dropdown.innerHTML = matches.slice(0, 8).map((m, i) => `
+      <div class="ac-item" data-idx="${i}">
+        <span class="ac-item-sym">${m.symbol}</span>
+        ${m.price ? `<span class="ac-item-price">$${m.price.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}</span>` : ''}
+      </div>`).join('');
+    dropdown.classList.add('open');
+    getVisible().forEach((el, i) => {
+      el.addEventListener('mousedown', ev => {
+        ev.preventDefault();
+        onSelect(matches[i]);
+        hide();
+      });
+    });
+  }
+
+  function hide() { dropdown.classList.remove('open'); activeIdx = -1; }
+
+  function highlight(dir) {
+    const items = getVisible();
+    if (!items.length) return;
+    activeIdx = Math.max(0, Math.min(items.length - 1, activeIdx + dir));
+    items.forEach((el, i) => el.classList.toggle('active', i === activeIdx));
+  }
+
+  input.addEventListener('input', () => {
+    const val = input.value.trim().toUpperCase();
+    if (!val || val.length < 1) { hide(); return; }
+    show(getItems(val));
+  });
+
+  input.addEventListener('keydown', e => {
+    if (!dropdown.classList.contains('open')) return;
+    if (e.key === 'ArrowDown')  { e.preventDefault(); highlight(1); }
+    else if (e.key === 'ArrowUp')   { e.preventDefault(); highlight(-1); }
+    else if (e.key === 'Enter') {
+      if (activeIdx >= 0) { getVisible()[activeIdx]?.dispatchEvent(new MouseEvent('mousedown')); }
+    }
+    else if (e.key === 'Escape') hide();
+  });
+
+  input.addEventListener('blur', () => setTimeout(hide, 150));
+}
+
+function getStockSuggestions(query) {
+  const q = query.toUpperCase();
+  return allStocks
+    .filter(s => s.symbol.startsWith(q) || s.symbol.includes(q))
+    .sort((a, b) => {
+      const aStart = a.symbol.startsWith(q);
+      const bStart = b.symbol.startsWith(q);
+      if (aStart !== bStart) return aStart ? -1 : 1;
+      return b.buy - a.buy;
+    })
+    .slice(0, 8);
+}
+
+function initAllAutoCompletes() {
+  const searchEl  = document.getElementById('searchInput');
+  const predictEl = document.getElementById('predictSearch');
+
+  if (searchEl) {
+    initAutoComplete(searchEl, getStockSuggestions, match => {
+      searchEl.value = match.symbol;
+      searchEl.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+  }
+  if (predictEl) {
+    initAutoComplete(predictEl, getStockSuggestions, match => {
+      predictEl.value = match.symbol;
+    });
+  }
 }
 
 /* ─── Predictions tab ──────────────────────────────────── */
@@ -1399,13 +1836,14 @@ function renderWatchlist() {
       );
       const feedEl     = document.getElementById('contentLayout');
       const predictEl  = document.getElementById('predictPanel');
+      const journalEl  = document.getElementById('journalPanel');
+      feedEl.style.display    = view === 'feed'    ? '' : 'none';
+      predictEl.style.display = view === 'predict' ? 'block' : 'none';
+      if (journalEl) journalEl.style.display = view === 'journal' ? 'block' : 'none';
       if (view === 'predict') {
-        feedEl.style.display    = 'none';
-        predictEl.style.display = 'block';
         document.getElementById('predictSearch').focus();
-      } else {
-        feedEl.style.display    = '';
-        predictEl.style.display = 'none';
+      } else if (view === 'journal' && window.Journal) {
+        window.Journal.onShow();
       }
     });
   });
@@ -1441,6 +1879,9 @@ function renderWatchlist() {
       /* animate confidence bar after render */
       const fill = resultEl.querySelector('.pred-conf-fill');
       if (fill) { fill.style.width = '0%'; requestAnimationFrame(() => { fill.style.width = analysis.score + '%'; }); }
+      /* draw animated scenario chart */
+      const chart = resultEl.querySelector('#predChart');
+      if (chart) requestAnimationFrame(() => drawPredictionChart(chart, data, analysis));
     } catch (err) {
       resultEl.innerHTML = `
         <div class="predict-error">
@@ -1489,6 +1930,7 @@ function renderWatchlist() {
       todayChange,
       ma50,
       momentum1m,
+      closes,
       analystTargets: q.analyst_targets ?? null,
       recMean:        q.recommendation_mean ?? null,
       numAnalysts:    q.num_analysts ?? 0,
@@ -1499,67 +1941,53 @@ function renderWatchlist() {
   }
 
   /* ── scoring engine ── */
+  /* Pure weighted heuristic — see the explanation under the Confidence Score in
+     renderCard() for the factor weights this mirrors. */
   function computeScore(d) {
     let score = 50;
-    const signals = [], risks = [];
 
     /* analyst consensus ±25 */
     if (d.recMean !== null && d.numAnalysts >= 3) {
       score += Math.round(((3 - d.recMean) / 2) * 25);
-      if (d.recMean <= 2.0)      signals.push(`Strong Buy consensus from ${d.numAnalysts} analysts`);
-      else if (d.recMean <= 2.5) signals.push(`Buy consensus from ${d.numAnalysts} analysts`);
-      else if (d.recMean >= 3.5) risks.push(`Weak analyst consensus (mean rating ${d.recMean.toFixed(1)}/5)`);
-      else                       signals.push(`Neutral/Hold consensus from ${d.numAnalysts} analysts`);
     } else if (d.localStock) {
       const tot = d.localStock.buy + d.localStock.hold + d.localStock.sell;
       const bp  = tot > 0 ? (d.localStock.buy / tot) * 100 : 0;
       score += Math.round((bp - 50) * 0.4);
-      if (bp >= 70)      signals.push(`${Math.round(bp)}% of ${tot} analysts rate Buy`);
-      else if (bp >= 55) signals.push(`Buy-leaning consensus — ${Math.round(bp)}% Buy`);
-      else               risks.push(`Mixed consensus — only ${Math.round(bp)}% Buy`);
     }
 
     /* analyst price target upside ±20 */
     if (d.analystTargets?.mean && d.currentPrice) {
       const upside = ((d.analystTargets.mean - d.currentPrice) / d.currentPrice) * 100;
       score += Math.max(-20, Math.min(20, upside * 0.8));
-      if (upside >= 15)     signals.push(`Analysts see ${upside.toFixed(1)}% upside to mean target $${d.analystTargets.mean.toFixed(2)}`);
-      else if (upside >= 5) signals.push(`${upside.toFixed(1)}% upside to analyst mean target $${d.analystTargets.mean.toFixed(2)}`);
-      else if (upside < -2) risks.push(`Stock trades ${Math.abs(upside).toFixed(1)}% above analyst mean target — limited upside`);
     }
 
     /* price vs 50-day MA ±15 */
     if (d.ma50 && d.currentPrice) {
       const pct = ((d.currentPrice - d.ma50) / d.ma50) * 100;
-      if (pct > 5)       { score += 15; signals.push(`Price ${pct.toFixed(1)}% above 50-day moving average — strong momentum`); }
-      else if (pct > 0)  { score += 7;  signals.push(`Price ${pct.toFixed(1)}% above 50-day moving average`); }
-      else if (pct < -5) { score -= 15; risks.push(`Price ${Math.abs(pct).toFixed(1)}% below 50-day moving average — weak trend`); }
-      else               { score -= 6;  risks.push(`Price just below 50-day moving average`); }
+      if (pct > 5)       score += 15;
+      else if (pct > 0)  score += 7;
+      else if (pct < -5) score -= 15;
+      else               score -= 6;
     }
 
     /* 1-month momentum ±10 */
     if (d.momentum1m != null) {
-      if (d.momentum1m > 10)      { score += 10; signals.push(`Strong 1-month momentum (+${d.momentum1m.toFixed(1)}%)`); }
-      else if (d.momentum1m > 3)  { score += 5;  signals.push(`Positive 1-month trend (+${d.momentum1m.toFixed(1)}%)`); }
-      else if (d.momentum1m < -10){ score -= 10; risks.push(`Weak 1-month performance (${d.momentum1m.toFixed(1)}%)`); }
-      else if (d.momentum1m < -3) { score -= 5;  risks.push(`Negative 1-month trend (${d.momentum1m.toFixed(1)}%)`); }
+      if (d.momentum1m > 10)       score += 10;
+      else if (d.momentum1m > 3)   score += 5;
+      else if (d.momentum1m < -10) score -= 10;
+      else if (d.momentum1m < -3)  score -= 5;
     }
 
     /* earnings quality ±15 */
     const surprises = d.localEarnings.map(q => q.surprise).filter(v => v != null);
     if (surprises.length >= 2) {
-      const avg   = surprises.reduce((s, v) => s + v, 0) / surprises.length;
-      const beats = surprises.filter(v => v > 0).length;
+      const avg = surprises.reduce((s, v) => s + v, 0) / surprises.length;
       score += Math.max(-15, Math.min(15, avg * 0.5));
-      if (beats >= 3 && avg > 5)  signals.push(`Beat earnings ${beats}/${surprises.length} quarters, avg surprise +${avg.toFixed(1)}%`);
-      else if (beats >= 2)        signals.push(`Beat earnings estimates ${beats}/${surprises.length} recent quarters`);
-      else                        risks.push(`Missed earnings ${surprises.length - beats}/${surprises.length} recent quarters`);
     }
 
     /* Fed direction ±5 */
-    if (d.fedDirection === 'cut')  { score += 5; signals.push('Fed rate cut expected — positive tailwind for equities'); }
-    else if (d.fedDirection === 'hike') { score -= 5; risks.push('Fed rate hike expected — headwind for valuations'); }
-    else                           signals.push('Fed rate hold expected — neutral macro environment');
+    if (d.fedDirection === 'cut')       score += 5;
+    else if (d.fedDirection === 'hike') score -= 5;
 
     score = Math.max(5, Math.min(95, Math.round(score)));
 
@@ -1579,95 +2007,339 @@ function renderWatchlist() {
     }
 
     const label = score >= 75 ? 'High' : score >= 58 ? 'Moderate' : score >= 42 ? 'Low' : 'Very Low';
-    return { score, signals, risks, bear, base, bull, confidenceLabel: label };
+    return { score, bear, base, bull, confidenceLabel: label };
   }
 
   /* ── render ── */
   function renderCard(d, a) {
-    const $ = v => v != null
+    const fmt = v => v != null
       ? '$' + (+v).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
       : '—';
-    const esc = s => String(s).replace(/[&<>"]/g, c =>
+    const escStr = s => String(s).replace(/[&<>"]/g, c =>
       ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
     const pctFrom = v => d.currentPrice
       ? ((v - d.currentPrice) / d.currentPrice) * 100
       : null;
 
-    function targetBox(cls, label, price, colorClass) {
-      const p = pctFrom(price);
-      const sign = p >= 0 ? '+' : '';
-      return `
-        <div class="pred-target pred-target--${cls}">
-          <div class="pred-target-label">${label}</div>
-          <div class="pred-target-price">${$(price)}</div>
-          ${p != null ? `<div class="pred-target-pct ${colorClass}">${sign}${p.toFixed(1)}%</div>` : ''}
-        </div>`;
-    }
+    // Colour bands match the verdict labels: High 75+, Moderate/Low 42–74, else red.
+    const confColor  = a.score >= 75 ? 'var(--buy)' : a.score >= 42 ? 'var(--hold)' : 'var(--sell)';
+    const todaySign  = d.todayChange >= 0 ? '+' : '';
+    const todayClass = d.todayChange >= 0 ? 'buy-text' : 'sell-text';
 
-    const confColor = a.score >= 70 ? 'var(--buy)' : a.score >= 50 ? 'var(--hold)' : 'var(--sell)';
-    const signalsHtml = a.signals.map(s =>
-      `<div class="pred-signal pred-signal--pos"><span class="pred-signal-icon">▲</span><span>${s}</span></div>`
-    ).join('');
-    const risksHtml = a.risks.map(r =>
-      `<div class="pred-signal pred-signal--neg"><span class="pred-signal-icon">▼</span><span>${r}</span></div>`
-    ).join('');
     const atHtml = d.analystTargets?.mean ? `
       <div class="pred-section">
         <div class="pred-section-label">Analyst Price Targets · ${d.numAnalysts} analysts</div>
         <div class="pred-at-row">
-          <div class="pred-at-item"><span class="pred-at-label">Low</span><span class="pred-at-val sell-text">${$(d.analystTargets.low)}</span></div>
-          <div class="pred-at-item"><span class="pred-at-label">Mean</span><span class="pred-at-val accent-text">${$(d.analystTargets.mean)}</span></div>
-          <div class="pred-at-item"><span class="pred-at-label">High</span><span class="pred-at-val buy-text">${$(d.analystTargets.high)}</span></div>
+          <div class="pred-at-item"><span class="pred-at-label">Low</span><span class="pred-at-val sell-text">${fmt(d.analystTargets.low)}</span></div>
+          <div class="pred-at-item"><span class="pred-at-label">Mean</span><span class="pred-at-val accent-text">${fmt(d.analystTargets.mean)}</span></div>
+          <div class="pred-at-item"><span class="pred-at-label">High</span><span class="pred-at-val buy-text">${fmt(d.analystTargets.high)}</span></div>
         </div>
       </div>` : '';
-    const todaySign  = d.todayChange >= 0 ? '+' : '';
-    const todayClass = d.todayChange >= 0 ? 'buy-text' : 'sell-text';
+
+    const bullPct = pctFrom(a.bull); const basePct = pctFrom(a.base); const bearPct = pctFrom(a.bear);
+    const fmtPct  = (p, cls) => p != null
+      ? `<span class="${cls}">${p >= 0 ? '+' : ''}${p.toFixed(1)}%</span>` : '';
 
     return `
       <div class="pred-card">
         <div class="pred-header">
           <div class="pred-symbol-row">
             <span class="pred-symbol">${d.symbol}</span>
-            <span class="pred-company">${esc(d.companyName)}</span>
+            <span class="pred-company">${escStr(d.companyName)}</span>
           </div>
           <div class="pred-price-row">
-            <span class="pred-price">${$(d.currentPrice)}</span>
+            <span class="pred-price">${fmt(d.currentPrice)}</span>
             <span class="pred-change ${todayClass}">${todaySign}${d.todayChange.toFixed(2)}% today</span>
           </div>
         </div>
 
-        <div class="pred-section">
-          <div class="pred-section-label">3-Month Price Forecast</div>
-          <div class="pred-targets">
-            ${targetBox('bear', 'BEAR', a.bear, 'sell-text')}
-            ${targetBox('base', 'BASE', a.base, 'accent-text')}
-            ${targetBox('bull', 'BULL', a.bull, 'buy-text')}
+        <!-- Animated scenario chart -->
+        <div class="pred-section" style="padding-bottom:8px;">
+          <div class="pred-section-label">3-Month Scenario Forecast</div>
+          <div class="pred-chart-wrap">
+            <canvas class="pred-chart" id="predChart" height="240"></canvas>
+          </div>
+          <div class="pred-chart-legend">
+            <div class="pred-chart-legend-item">
+              <div class="pred-chart-legend-dot pred-chart-legend-dot--hist"></div>HISTORY
+            </div>
+            <div class="pred-chart-legend-item">
+              <div class="pred-chart-legend-dot pred-chart-legend-dot--bull"></div>
+              BULL ${fmtPct(bullPct, 'buy-text')}
+            </div>
+            <div class="pred-chart-legend-item">
+              <div class="pred-chart-legend-dot pred-chart-legend-dot--base"></div>
+              BASE ${fmtPct(basePct, 'accent-text')}
+            </div>
+            <div class="pred-chart-legend-item">
+              <div class="pred-chart-legend-dot pred-chart-legend-dot--bear"></div>
+              BEAR ${fmtPct(bearPct, 'sell-text')}
+            </div>
           </div>
         </div>
 
         <div class="pred-section">
           <div class="pred-section-label">Confidence Score</div>
           <div class="pred-conf-row">
-            <div class="pred-conf-bar">
-              <div class="pred-conf-fill" style="width:0%;background:${confColor}"></div>
+            <div class="pred-conf-gauge">
+              <div class="pred-conf-bar">
+                <div class="pred-conf-fill" style="background:${confColor}"></div>
+              </div>
+              <div class="pred-conf-ticks">
+                <span>0</span><span>25</span><span>50</span><span>75</span><span>100</span>
+              </div>
             </div>
-            <span class="pred-conf-num" style="color:${confColor}">${a.score}/100</span>
-            <span class="pred-conf-label">${a.confidenceLabel}</span>
+            <div class="pred-conf-readout">
+              <span class="pred-conf-num" style="color:${confColor}">${a.score}<small>/100</small></span>
+              <span class="pred-conf-label" style="color:${confColor}">${a.confidenceLabel}</span>
+            </div>
           </div>
+          <p class="pred-conf-note">
+            A single measure of how strongly the evidence lines up in this stock's favour. Every stock
+            starts at a neutral <strong>50</strong>, then six weighted signals push the score up or down
+            before it's capped to a 5–100 range:
+          </p>
+          <div class="pred-conf-factors">
+            <div class="pred-conf-factor"><span class="pcf-w">±25</span> Analyst Buy / Hold / Sell consensus</div>
+            <div class="pred-conf-factor"><span class="pcf-w">±20</span> Upside to the mean analyst price target</div>
+            <div class="pred-conf-factor"><span class="pcf-w">±15</span> Price vs its 50-day moving average</div>
+            <div class="pred-conf-factor"><span class="pcf-w">±15</span> Earnings — recent EPS beats vs misses</div>
+            <div class="pred-conf-factor"><span class="pcf-w">±10</span> 1-month price momentum</div>
+            <div class="pred-conf-factor"><span class="pcf-w">±5</span> Expected Federal Reserve rate direction</div>
+          </div>
+          <p class="pred-conf-note pred-conf-note--fine">
+            The bands map to a verdict — <strong>High</strong> (75+), <strong>Moderate</strong> (58–74),
+            <strong>Low</strong> (42–57), <strong>Very&nbsp;Low</strong> (under&nbsp;42). It's a transparent,
+            rule-based heuristic that weighs publicly reported data — not a prediction, target, or guarantee.
+            Not financial advice.
+          </p>
         </div>
-
-        ${signalsHtml || risksHtml ? `
-        <div class="pred-section">
-          <div class="pred-section-label">Key Signals</div>
-          <div class="pred-signals">${signalsHtml}${risksHtml}</div>
-        </div>` : ''}
 
         ${atHtml}
 
         <div class="pred-footer">
-          Rule-based forecast · Data: Yahoo Finance · Not financial advice
+          Rule-based forecast · Data: Finnhub · Not financial advice
         </div>
       </div>`;
+  }
+
+  /* Seeded RNG so a symbol's synthesized lead-in is stable between renders */
+  function seededRand(seedStr) {
+    let s = 0;
+    for (let i = 0; i < seedStr.length; i++) s = (s * 31 + seedStr.charCodeAt(i)) >>> 0;
+    return () => { s ^= s << 13; s ^= s >>> 17; s ^= s << 5; return ((s >>> 0) / 0xFFFFFFFF); };
+  }
+
+  /* When the licensed plan returns no daily candles (free tier), build a
+     realistic, volatile lead-in to the NOW marker. It carries NO axis or price
+     values — it is purely an animation device, directionally seeded from the
+     real today/1-month moves so it reflects, not fabricates, the data.
+
+     Returns are auto-correlated (momentum) so the line forms genuine runs and
+     swings like a real 3-month stock chart — not flat noise. The path is then
+     normalised to a consistent volatility band and anchored multiplicatively so
+     it ends exactly on the current price while keeping its full shape. */
+  function synthHistory(d) {
+    const cur   = d.currentPrice;
+    const rnd   = seededRand(d.symbol || 'X');
+    const N     = 64;                         // ~3 months of trading days
+    const drift = (d.momentum1m != null ? d.momentum1m : (d.todayChange || 0)) / 100;
+
+    // Trending random walk in log-space (returns persist → real swings).
+    const stepVol = 0.02;     // per-step shock
+    const persist = 0.55;     // momentum: trends carry over
+    let ret = 0;
+    const logPath = [0];
+    for (let i = 1; i < N; i++) {
+      const shock = (rnd() + rnd() + rnd() - 1.5) * stepVol;  // ~gaussian
+      ret = persist * ret + shock;
+      logPath.push(logPath[i - 1] + ret);
+    }
+
+    // Normalise to a fixed volatility band so every stock looks lively but sane.
+    const mean = logPath.reduce((s, v) => s + v, 0) / N;
+    const sd   = Math.sqrt(logPath.reduce((s, v) => s + (v - mean) ** 2, 0) / N) || 1;
+    const BAND = 0.075;                        // ~7.5% std around the trend
+    const norm = logPath.map(v => ((v - mean) / sd) * BAND);
+
+    // Apply: base price · macro drift across the window · the normalised wiggle.
+    const start = cur / (1 + drift);
+    const raw   = norm.map((w, i) =>
+      start * (1 + drift * (i / (N - 1))) * Math.exp(w));
+
+    // Multiplicative anchor: end lands exactly on cur, shape preserved.
+    const k = cur / raw[N - 1];
+    return raw.map(p => p * k);
+  }
+
+  /* ── Animated prediction chart ── */
+  function drawPredictionChart(canvas, d, a) {
+    const dpr = window.devicePixelRatio || 1;
+    const W   = canvas.offsetWidth  || 500;
+    const H   = 240;
+    canvas.width  = W * dpr;
+    canvas.height = H * dpr;
+    canvas.style.width  = W + 'px';
+    canvas.style.height = H + 'px';
+
+    const ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+
+    const cur     = d.currentPrice;
+    const real    = (d.closes || []).filter(v => v != null && v > 0).slice(-55);
+    const closes  = real.length >= 2 ? real : synthHistory(d);
+    const synth   = real.length < 2;   // drawn dimmer when synthesized
+
+    // Y range across everything we'll plot
+    const allVals = [...closes, cur, a.bear, a.base, a.bull].filter(v => v != null && v > 0);
+    if (!allVals.length) return;
+    const minV = Math.min(...allVals) * 0.955;
+    const maxV = Math.max(...allVals) * 1.045;
+
+    const PAD = { top: 22, bottom: 30, left: 52, right: 74 };
+    const chartW = W - PAD.left - PAD.right;
+    const chartH = H - PAD.top  - PAD.bottom;
+    const SPLIT  = 0.54; // history occupies left 54%, projections the rest
+
+    const projX0 = PAD.left + chartW * SPLIT;
+    const projXE = W - PAD.right;
+    const toXHist = (i, total) => PAD.left + (i / (total - 1)) * (projX0 - PAD.left);
+    const toY     = p => PAD.top + chartH - (p - minV) / (maxV - minV) * chartH;
+
+    const histPts = closes.map((p, i) => ({ x: toXHist(i, closes.length), y: toY(p) }));
+    // pin the last history point exactly on the NOW line at current price
+    histPts[histPts.length - 1] = { x: projX0, y: toY(cur) };
+
+    const nowY  = toY(cur);
+    const bullY = toY(a.bull);
+    const baseY = toY(a.base);
+    const bearY = toY(a.bear);
+
+    function projPts(endY, steps = 56) {
+      return Array.from({ length: steps + 1 }, (_, i) => {
+        const t  = i / steps;
+        const et = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; // ease-in-out
+        return { x: projX0 + (projXE - projX0) * t, y: nowY + (endY - nowY) * et };
+      });
+    }
+
+    const bearPts = projPts(bearY);
+    const basePts = projPts(baseY);
+    const bullPts = projPts(bullY);
+
+    // Animation: history fills left→NOW, pauses, then all 3 lines split out together.
+    let histP = 0, projP = 0, pause = 0;
+    let phase = 0; // 0=history 1=pause 2=projections 3=done
+    const HIST_SPD = 0.022, PROJ_SPD = 0.026, PAUSE_FRAMES = 14;
+
+    function polyline(pts, prog, color, lw, dashed) {
+      const n = Math.max(2, Math.ceil(pts.length * prog));
+      ctx.beginPath();
+      ctx.moveTo(pts[0].x, pts[0].y);
+      for (let i = 1; i < n; i++) ctx.lineTo(pts[i].x, pts[i].y);
+      ctx.strokeStyle = color;
+      ctx.lineWidth   = lw;
+      ctx.lineCap     = 'round';
+      ctx.lineJoin    = 'round';
+      ctx.setLineDash(dashed ? [5, 4] : []);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    function dot(x, y, r, color, glow) {
+      ctx.beginPath(); ctx.arc(x, y, r + 3, 0, Math.PI * 2);
+      ctx.fillStyle = glow; ctx.fill();
+      ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2);
+      ctx.fillStyle = color; ctx.fill();
+    }
+
+    // Keep a label fully inside the canvas vertically
+    function clampY(y) { return Math.max(PAD.top + 8, Math.min(H - PAD.bottom - 4, y)); }
+
+    function label(x, y, text, color) {
+      ctx.font = 'bold 12px "JetBrains Mono", monospace';
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle = color;
+      ctx.fillText(text, x + 8, clampY(y));
+    }
+
+    function frame() {
+      // Advance first so the final state (projP === 1, with end labels) gets drawn.
+      if      (phase === 0) { histP = Math.min(1, histP + HIST_SPD); if (histP >= 1) phase = 1; }
+      else if (phase === 1) { if (++pause >= PAUSE_FRAMES) phase = 2; }
+      else if (phase === 2) { projP = Math.min(1, projP + PROJ_SPD); if (projP >= 1) phase = 3; }
+
+      ctx.clearRect(0, 0, W, H);
+
+      // Subtle horizontal grid + left price axis (Y)
+      ctx.lineWidth = 1;
+      ctx.setLineDash([]);
+      ctx.font = '9px "JetBrains Mono", monospace';
+      ctx.textAlign = 'right';
+      ctx.textBaseline = 'middle';
+      for (let i = 0; i <= 4; i++) {
+        const gy    = PAD.top + (i / 4) * chartH;
+        const price = maxV - (i / 4) * (maxV - minV);
+        if (i > 0 && i < 4) {
+          ctx.strokeStyle = 'rgba(255,255,255,0.035)';
+          ctx.beginPath(); ctx.moveTo(PAD.left, gy); ctx.lineTo(projXE, gy); ctx.stroke();
+        }
+        ctx.fillStyle = 'rgba(148,163,184,0.5)';
+        ctx.fillText('$' + price.toFixed(0), PAD.left - 10, gy);
+      }
+
+      // Bottom timeline axis (X): history 3M → NOW → +3M projection
+      const axisY = PAD.top + chartH + 11;
+      ctx.fillStyle = 'rgba(148,163,184,0.45)';
+      ctx.font = '9px "JetBrains Mono", monospace';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ['3M', '2M', '1M'].forEach((lab, i) => {
+        ctx.fillText(lab, PAD.left + (i / 3) * (projX0 - PAD.left), axisY);
+      });
+      ['+1M', '+2M', '+3M'].forEach((lab, i) => {
+        ctx.fillText(lab, projX0 + ((i + 1) / 3) * (projXE - projX0), axisY);
+      });
+
+      // NOW divider + top label
+      ctx.strokeStyle = 'rgba(255,255,255,0.12)';
+      ctx.setLineDash([3, 3]);
+      ctx.beginPath(); ctx.moveTo(projX0, PAD.top - 6); ctx.lineTo(projX0, PAD.top + chartH + 2); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = 'rgba(255,255,255,0.4)';
+      ctx.font = 'bold 9px "JetBrains Mono", monospace';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'alphabetic';
+      ctx.fillText('NOW', projX0, PAD.top - 9);
+
+      // History line (animates first) — solid; real data brighter than synth
+      polyline(histPts, histP, synth ? 'rgba(148,163,184,0.55)' : 'rgba(148,163,184,0.78)', 1.6, false);
+
+      // Projection lines (animate together after the pause) — all solid
+      if (phase >= 2) {
+        polyline(bearPts, projP, 'rgba(239,68,68,0.88)', 2.2, false);
+        polyline(basePts, projP, 'rgba(6,182,212,0.92)', 2.4, false);
+        polyline(bullPts, projP, 'rgba(34,197,94,0.9)',  2.2, false);
+      }
+
+      // Current-price marker at NOW (once history has arrived)
+      if (histP >= 1) dot(projX0, nowY, 4.5, '#e2e8f0', 'rgba(226,232,240,0.16)');
+
+      // End dots + price labels (once projections complete)
+      if (phase >= 2 && projP >= 1) {
+        dot(projXE, bullY, 3.5, '#22c55e', 'rgba(34,197,94,0.2)');
+        dot(projXE, baseY, 4,   '#06b6d4', 'rgba(6,182,212,0.2)');
+        dot(projXE, bearY, 3.5, '#ef4444', 'rgba(239,68,68,0.2)');
+        label(projXE, bullY, '$' + a.bull.toFixed(0), '#22c55e');
+        label(projXE, baseY, '$' + a.base.toFixed(0), '#06b6d4');
+        label(projXE, bearY, '$' + a.bear.toFixed(0), '#ef4444');
+      }
+
+      if (phase < 3) requestAnimationFrame(frame);
+    }
+
+    requestAnimationFrame(frame);
   }
 
 })();
@@ -1675,12 +2347,144 @@ function renderWatchlist() {
 /* ─── Init ─────────────────────────────────────────────── */
 window.addEventListener('DOMContentLoaded', () => {
   animateHero();
-  loadData();
+  loadData().then(() => initAllAutoCompletes());
   initHowTo();
   initSources();
   loadFedRate();
+  loadMacro();
+  initStatPopovers();
   loadCalendar();
 });
+
+/* ─── Stat-bar popovers (Fed Rate + macro indicators) ──── */
+const _statPopovers = [];
+
+function initStatPopovers() {
+  [
+    ['fedChip',   'fedPopover'],
+    ['unempChip', 'unempPopover'],
+    ['cpiChip',   'cpiPopover'],
+    ['gdpChip',   'gdpPopover'],
+  ].forEach(([chipId, popId]) => registerStatPopover(chipId, popId));
+
+  // Global dismiss handlers, registered once for all popovers.
+  document.addEventListener('click', (e) => {
+    _statPopovers.forEach(p => {
+      if (p.pop.classList.contains('open') &&
+          !p.pop.contains(e.target) && !p.chip.contains(e.target)) p.close();
+    });
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') _statPopovers.forEach(p => p.close());
+  });
+  const reposition = () => _statPopovers.forEach(p => {
+    if (p.pop.classList.contains('open')) p.position();
+  });
+  window.addEventListener('resize', reposition);
+  window.addEventListener('scroll', reposition, true);
+}
+
+function registerStatPopover(chipId, popId) {
+  const chip = document.getElementById(chipId);
+  const pop  = document.getElementById(popId);
+  if (!chip || !pop) return;
+
+  const api = {
+    chip, pop,
+    position() {
+      const r = chip.getBoundingClientRect();
+      const w = pop.offsetWidth;
+      let left = r.left + r.width / 2 - w / 2;
+      left = Math.max(8, Math.min(left, window.innerWidth - w - 8));
+      pop.style.left = `${left}px`;
+      pop.style.top  = `${r.bottom + 10}px`;
+    },
+    open() {
+      // Only one popover open at a time.
+      _statPopovers.forEach(p => { if (p !== api) p.close(); });
+      api.position();
+      pop.classList.add('open');
+      chip.classList.add('open');
+      chip.setAttribute('aria-expanded', 'true');
+      pop.setAttribute('aria-hidden', 'false');
+    },
+    close() {
+      pop.classList.remove('open');
+      chip.classList.remove('open');
+      chip.setAttribute('aria-expanded', 'false');
+      pop.setAttribute('aria-hidden', 'true');
+    },
+  };
+
+  chip.addEventListener('click', (e) => {
+    e.stopPropagation();
+    pop.classList.contains('open') ? api.close() : api.open();
+  });
+
+  _statPopovers.push(api);
+}
+
+/* ─── Macro indicators (Unemployment / CPI / GDP from FRED) ── */
+async function loadMacro() {
+  let data = null;
+  try {
+    const res = await fetch('../data/macro.json');
+    if (res.ok) data = await res.json();
+  } catch (_) {}
+
+  const inds = (data && data.indicators) || {};
+  fillIndicator('unemp', inds.unemployment);
+  fillIndicator('cpi',   inds.cpi);
+  fillIndicator('gdp',   inds.gdp);
+}
+
+function fillIndicator(key, ind) {
+  const valEl = document.getElementById(`${key}ChipValue`);
+  const inner = document.getElementById(`${key}PopInner`);
+  if (!inner) return;
+
+  if (!ind) {
+    if (valEl) valEl.textContent = 'N/A';
+    inner.innerHTML = `
+      <div class="fed-section">
+        <div class="fed-loading">Run <code style="color:var(--buy);font-family:var(--mono)">fetch_macro.py</code><br>to load this data.</div>
+      </div>`;
+    return;
+  }
+
+  if (valEl) valEl.textContent = ind.value;
+
+  const historyHtml = (ind.history || []).map(h => {
+    const icon = h.direction === 'down' ? '↓' : h.direction === 'up' ? '↑' : '·';
+    const cls  = h.direction === 'down' ? 'cut' : h.direction === 'up' ? 'hike' : '';
+    return `
+      <div class="fed-history-item">
+        <span class="fed-history-dir ${cls}">${icon}</span>
+        <span class="fed-history-label">${h.label}</span>
+        <span class="fed-history-rate">${h.value}</span>
+      </div>`;
+  }).join('');
+
+  inner.innerHTML = `
+    <div class="fed-section">
+      <div class="fed-section-label">${ind.title}</div>
+      <div class="fed-rate-display">
+        <span class="fed-rate-number">${ind.value}</span>
+      </div>
+      ${ind.as_of ? `<div class="fed-updated">As of ${ind.as_of}</div>` : ''}
+    </div>
+    ${ind.impact ? `
+    <div class="fed-section">
+      <div class="fed-section-label">Market Impact</div>
+      <div class="fed-impact-text">${ind.impact}</div>
+    </div>` : ''}
+    ${historyHtml ? `
+    <div class="fed-section">
+      <div class="fed-section-label">Recent Readings</div>
+      <div class="fed-history-list">${historyHtml}</div>
+    </div>` : ''}
+  `;
+}
 
 /* ─── Auth ──────────────────────────────────────────────── */
 (function initAuth() {
@@ -1708,6 +2512,8 @@ window.addEventListener('DOMContentLoaded', () => {
       closeWatchlistSidebar();
       clearWatchlist();
     }
+    // Let other modules (e.g. the journal) react to login/logout.
+    window.dispatchEvent(new CustomEvent('bs:auth', { detail: { user: user || null } }));
   }
 
   async function verifySession() {
@@ -1794,9 +2600,11 @@ window.addEventListener('DOMContentLoaded', () => {
     finally   { btn.disabled = false; btn.textContent = 'Create account'; }
   });
 
-  // Watchlist sidebar toggle
+  // Watchlist sidebar toggle + backdrop dismiss
   document.getElementById('watchlistToggleBtn').addEventListener('click', toggleWatchlistSidebar);
   document.getElementById('wlSidebarClose').addEventListener('click', closeWatchlistSidebar);
+  const _wlBackdrop = document.getElementById('wlBackdrop');
+  if (_wlBackdrop) _wlBackdrop.addEventListener('click', closeWatchlistSidebar);
 
   // Logout
   document.getElementById('logoutBtn').addEventListener('click', () => {

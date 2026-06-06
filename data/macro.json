@@ -1,0 +1,119 @@
+{
+  "last_updated": "2026-06-05",
+  "indicators": {
+    "unemployment": {
+      "title": "Unemployment Rate",
+      "value": "4.3%",
+      "as_of": "May 2026",
+      "impact": "The Fed has a dual mandate: stable prices <strong>and</strong> maximum employment. A rising unemployment rate cools the economy and gives the Fed room to cut rates \u2014 generally <strong>bullish</strong> for equities. A very low rate keeps the Fed hawkish, pressuring rate-sensitive growth and tech stocks.",
+      "history": [
+        {
+          "label": "May 2026",
+          "value": "4.3%",
+          "direction": "flat"
+        },
+        {
+          "label": "Apr 2026",
+          "value": "4.3%",
+          "direction": "flat"
+        },
+        {
+          "label": "Mar 2026",
+          "value": "4.3%",
+          "direction": "down"
+        },
+        {
+          "label": "Feb 2026",
+          "value": "4.4%",
+          "direction": "up"
+        },
+        {
+          "label": "Jan 2026",
+          "value": "4.3%",
+          "direction": "down"
+        },
+        {
+          "label": "Dec 2025",
+          "value": "4.4%",
+          "direction": "down"
+        }
+      ]
+    },
+    "cpi": {
+      "title": "CPI Inflation (YoY)",
+      "value": "3.9%",
+      "as_of": "Apr 2026",
+      "impact": "CPI is the headline inflation gauge; the Fed targets ~2%. A hot CPI print means the Fed stays restrictive or hikes \u2014 a <strong>headwind</strong> for stocks, especially high-PE tech. Cooling inflation opens the door to rate cuts and typically fuels a <strong>broad rally</strong>.",
+      "history": [
+        {
+          "label": "Apr 2026",
+          "value": "3.9%",
+          "direction": "up"
+        },
+        {
+          "label": "Mar 2026",
+          "value": "3.3%",
+          "direction": "up"
+        },
+        {
+          "label": "Feb 2026",
+          "value": "2.7%",
+          "direction": "down"
+        },
+        {
+          "label": "Jan 2026",
+          "value": "2.8%",
+          "direction": "down"
+        },
+        {
+          "label": "Dec 2025",
+          "value": "3.0%",
+          "direction": "up"
+        },
+        {
+          "label": "Nov 2025",
+          "value": "3.0%",
+          "direction": "down"
+        }
+      ]
+    },
+    "gdp": {
+      "title": "GDP Growth (annualised)",
+      "value": "+1.6%",
+      "as_of": "Q1 2026",
+      "impact": "GDP is the broadest measure of economic health and drives corporate earnings. Solid growth (~2\u20133%) supports equities and cyclicals. Contraction \u2014 two negative quarters is a recession \u2014 sparks a <strong>defensive rotation</strong> into staples, healthcare, and bonds.",
+      "history": [
+        {
+          "label": "Q1 2026",
+          "value": "+1.6%",
+          "direction": "up"
+        },
+        {
+          "label": "Q4 2025",
+          "value": "+0.5%",
+          "direction": "down"
+        },
+        {
+          "label": "Q3 2025",
+          "value": "+4.4%",
+          "direction": "up"
+        },
+        {
+          "label": "Q2 2025",
+          "value": "+3.8%",
+          "direction": "up"
+        },
+        {
+          "label": "Q1 2025",
+          "value": "-0.6%",
+          "direction": "down"
+        },
+        {
+          "label": "Q4 2024",
+          "value": "+1.9%",
+          "direction": "down"
+        }
+      ]
+    }
+  }
+}
