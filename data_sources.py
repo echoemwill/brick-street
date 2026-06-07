@@ -158,6 +158,65 @@ class Finnhub:
         except FinnhubError:
             return None
 
+    def profile(self, symbol: str):
+        """Company profile → {name, sector, logo} or None.
+
+        Uses /stock/profile2: `logo` is a Finnhub-hosted logo URL and
+        `finnhubIndustry` is the sector/industry label we display as a chip.
+        """
+        try:
+            d = self._get("/stock/profile2", symbol=symbol)
+        except FinnhubError:
+            return None
+        if not d:
+            return None
+        return {
+            "name":   d.get("name"),
+            "sector": d.get("finnhubIndustry"),
+            "logo":   d.get("logo"),
+        }
+
+    def insider_trades(self, symbol: str, since: str | None = None):
+        """Open-market insider TRADES (Form 4 codes 'P' buy / 'S' sell) →
+        [{name, direction, shares, price, value, date}] newest first, or [].
+
+        Both genuine open-market purchases ("P", direction "buy") and sales
+        ("S", direction "sell") count — the panel surfaces major insider moves
+        in either direction. We still exclude option exercises (M), tax
+        withholding (F), grants (A), gifts (G) etc. Split lots within one filing
+        (same person + date + direction) are summed; `shares`/`value` are always
+        reported as positive magnitudes (direction carries the sign).
+        `since` (YYYY-MM-DD) optionally drops older transactions.
+        """
+        try:
+            rows = self._get("/stock/insider-transactions", symbol=symbol).get("data", [])
+        except FinnhubError:
+            return []
+        codes = {"P": "buy", "S": "sell"}
+        agg = {}
+        for r in rows:
+            direction = codes.get(r.get("transactionCode"))
+            if not direction:
+                continue
+            chg = r.get("change") or 0
+            if chg == 0:
+                continue
+            date = r.get("transactionDate") or r.get("filingDate") or ""
+            if since and date < since:
+                continue
+            key = (r.get("name"), date, direction)
+            b = agg.setdefault(key, {"name": r.get("name"), "direction": direction,
+                                     "date": date, "shares": 0,
+                                     "price": r.get("transactionPrice") or 0})
+            b["shares"] += abs(chg)
+            b["price"] = b["price"] or (r.get("transactionPrice") or 0)
+        out = []
+        for b in agg.values():
+            b["value"] = round(b["shares"] * (b["price"] or 0))
+            out.append(b)
+        out.sort(key=lambda x: x["date"], reverse=True)
+        return out
+
     def recommendation_mean(self, symbol: str):
         """(mean 1–5, total analysts) Yahoo-style, or (None, 0).
         1=Strong Buy … 5=Strong Sell, computed from the consensus counts."""

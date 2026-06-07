@@ -463,6 +463,7 @@ function buildRow(stock, rank) {
 
       <div class="row-symbol">
         <div class="symbol-text">
+          ${stock.logo ? `<img class="sym-logo" src="${stock.logo}" alt="" loading="lazy" onerror="this.style.display='none'">` : ''}
           <span class="sym-label">${stock.symbol}</span>
           ${priceStr ? `<span class="stock-price">${priceStr}</span>` : '<span class="stock-price">—</span>'}
           <button class="tv-btn" title="View ${stock.symbol} chart">
@@ -477,6 +478,12 @@ function buildRow(stock, rank) {
             </svg>
           </button>
         </div>
+      </div>
+
+      <div class="row-sector">
+        ${stock.sector
+          ? `<span class="sector-chip" title="${stock.sector}">${stock.sector}</span>`
+          : `<span class="sector-chip sector-chip--empty">—</span>`}
       </div>
 
       <div class="row-buy">
@@ -497,6 +504,10 @@ function buildRow(stock, rank) {
 
       <div class="row-earnings">
         ${earningsHtml(stock.symbol)}
+      </div>
+
+      <div class="row-insider">
+        ${insiderHtml(stock)}
       </div>
     </div>
 
@@ -622,6 +633,26 @@ function buildRow(stock, rank) {
 /* ─── Render table ─────────────────────────────────────── */
 let _filteredSorted = [];
 
+/* Average EPS surprise % across a symbol's reported quarters, or null when no
+   earnings data exists. Used by the "Earnings" sort (high avg = best). */
+function earnAvg(symbol) {
+  if (!earningsData) return null;
+  const qs = earningsData[symbol];
+  if (!qs || !qs.length) return null;
+  const vals = qs.map(q => q.surprise).filter(v => v != null);
+  if (!vals.length) return null;
+  return vals.reduce((s, v) => s + v, 0) / vals.length;
+}
+
+/* Signed share count of a stock's headline insider trade: +shares for a buy,
+   −shares for a sell, or null if none. Lets the "Insider" sort surface the
+   biggest buys (descending) or the biggest sells (ascending) from one column. */
+function insiderMag(stock) {
+  const b = stock.insider;
+  if (!b || !b.shares) return null;
+  return b.direction === 'sell' ? -b.shares : b.shares;
+}
+
 function renderTable(resetCount = true) {
   const body = document.getElementById('tableBody');
 
@@ -638,12 +669,35 @@ function renderTable(resetCount = true) {
 
   stocks.sort((a, b) => {
     if (sortKey === 'symbol') return sortDir * a.symbol.localeCompare(b.symbol);
+    if (sortKey === 'sector') {
+      // Missing sectors always sort to the bottom, regardless of direction.
+      if (!a.sector && !b.sector) return 0;
+      if (!a.sector) return 1;
+      if (!b.sector) return -1;
+      return sortDir * a.sector.localeCompare(b.sector);
+    }
     if (sortKey === 'price') {
       // Missing prices always sort to the bottom, regardless of direction.
       if (a.price == null && b.price == null) return 0;
       if (a.price == null) return 1;
       if (b.price == null) return -1;
       return sortDir * (a.price - b.price);
+    }
+    if (sortKey === 'earnings') {
+      // Average EPS surprise %; stocks with no earnings data sink to the bottom.
+      const av = earnAvg(a.symbol), bv = earnAvg(b.symbol);
+      if (av == null && bv == null) return 0;
+      if (av == null) return 1;
+      if (bv == null) return -1;
+      return sortDir * (av - bv);
+    }
+    if (sortKey === 'insider') {
+      // Signed shares of the headline trade (+buy / −sell); no-trade rows sink.
+      const av = insiderMag(a), bv = insiderMag(b);
+      if (av == null && bv == null) return 0;
+      if (av == null) return 1;
+      if (bv == null) return -1;
+      return sortDir * (av - bv);
     }
     return sortDir * (a[sortKey] - b[sortKey]);
   });
@@ -736,7 +790,7 @@ function setSort(key) {
     sortDir *= -1;                       // same column → flip direction
   } else {
     sortKey = key;
-    sortDir = (key === 'symbol') ? 1 : -1; // names A→Z, numbers high→low
+    sortDir = (key === 'symbol' || key === 'sector') ? 1 : -1; // names A→Z, numbers high→low
   }
   updateSortIndicators();
 
@@ -897,30 +951,57 @@ async function loadData() {
   // Prices live in all_results.json once a full fetch has run; otherwise we
   // fall back to filtered_stocks.json (prices for the strong-buy survivors).
   try {
-    const [allRes, filtRes] = await Promise.all([
+    const [allRes, filtRes, profRes, insRes] = await Promise.all([
       fetch('../data/all_results.json').catch(() => null),
       fetch('../data/filtered_stocks.json').catch(() => null),
+      fetch('../data/profiles.json').catch(() => null),
+      fetch('../data/insiders.json').catch(() => null),
     ]);
 
     const allJson  = allRes  && allRes.ok  ? await allRes.json()  : null;
     const filtJson = filtRes && filtRes.ok ? await filtRes.json() : {};
+    // Sector + logo per symbol (from fetch_profiles.py). Absent until that
+    // script has run, so every read is optional-chained.
+    const profJson = profRes && profRes.ok ? await profRes.json() : {};
+    // Open-market insider trades (from fetch_insiders.py), keyed by symbol —
+    // both buys and sells. Absent until that script has run, so reads are
+    // optional-chained.
+    const insJson  = insRes  && insRes.ok  ? await insRes.json()  : null;
+    const insBySym = (insJson && insJson.by_symbol) || {};
+
+    const prof = (symbol) => profJson[symbol] || {};
+    // The single most *significant* open-market insider trade for a symbol
+    // (largest by dollar value, buy or sell), or null. We skip odd-lot/filing
+    // noise (< 100 shares) so the column only flags major moves.
+    const MIN_TRADE_SHARES = 100;
+    const insider = (symbol) => {
+      const list = (insBySym[symbol] || []).filter(t => (t.shares || 0) >= MIN_TRADE_SHARES);
+      if (!list.length) return null;
+      return list.reduce((a, b) => ((b.value || 0) > (a.value || 0) ? b : a));
+    };
 
     if (allJson && Object.keys(allJson).length) {
       data = Object.entries(allJson).map(([symbol, vals]) => ({
         symbol,
-        buy:   vals.buy   || 0,
-        hold:  vals.hold  || 0,
-        sell:  vals.sell  || 0,
-        price: vals.price ?? (filtJson[symbol] && filtJson[symbol].price) ?? null,
+        buy:    vals.buy   || 0,
+        hold:   vals.hold  || 0,
+        sell:   vals.sell  || 0,
+        price:  vals.price ?? (filtJson[symbol] && filtJson[symbol].price) ?? null,
+        sector: prof(symbol).sector || null,
+        logo:   prof(symbol).logo   || null,
+        insider: insider(symbol),
       }));
     } else if (Object.keys(filtJson).length) {
       // Fallback: only the filtered set is available.
       data = Object.entries(filtJson).map(([symbol, vals]) => ({
         symbol,
-        buy:   vals.buy   || 0,
-        hold:  vals.hold  || 0,
-        sell:  vals.sell  || 0,
-        price: vals.price || null,
+        buy:    vals.buy   || 0,
+        hold:   vals.hold  || 0,
+        sell:   vals.sell  || 0,
+        price:  vals.price || null,
+        sector: prof(symbol).sector || null,
+        logo:   prof(symbol).logo   || null,
+        insider: insider(symbol),
       }));
     }
   } catch (_) {}
@@ -938,6 +1019,41 @@ async function loadData() {
   renderWatchlist();
   // Prices come pre-loaded from the data files (licensed Finnhub data).
   // No browser-side price fetching — see the data sourcing policy in CLAUDE.md.
+}
+
+/* ─── Insider trade cell (major open-market buy or sell, per row) ── */
+function insiderHtml(stock) {
+  const b = stock.insider;
+  if (!b || !b.shares) {
+    return `<span class="insider-empty">—</span>`;
+  }
+  const who   = (b.name || 'Insider').split(' ')[0]; // surname only, keep it compact
+  const sell  = b.direction === 'sell';
+  const arrow = sell ? '▼ −' : '▲ +';
+  const verb  = sell ? 'sold' : 'bought';
+  return `
+    <div class="insider-buy ${sell ? 'sell' : 'buy'}" title="${b.name || 'Insider'} ${verb} ${(b.shares).toLocaleString()} shares${b.value ? ' (' + smFmtValue(b.value) + ')' : ''} on ${b.date}">
+      <span class="insider-shares">${arrow}${(b.shares).toLocaleString()}</span>
+      <span class="insider-meta">${who} · ${smAgo(b.date)}</span>
+    </div>`;
+}
+
+function smFmtValue(v) {
+  if (v >= 1e9) return '$' + (v / 1e9).toFixed(1) + 'B';
+  if (v >= 1e6) return '$' + (v / 1e6).toFixed(1) + 'M';
+  if (v >= 1e3) return '$' + (v / 1e3).toFixed(0) + 'K';
+  return '$' + v;
+}
+
+function smAgo(date) {
+  if (!date) return '';
+  const days = Math.floor((Date.now() - new Date(date).getTime()) / 86400000);
+  if (isNaN(days)) return date;
+  if (days <= 0)   return 'today';
+  if (days === 1)  return '1d ago';
+  if (days < 30)   return days + 'd ago';
+  if (days < 365)  return Math.floor(days / 30) + 'mo ago';
+  return Math.floor(days / 365) + 'y ago';
 }
 
 /* Sample data */
@@ -1453,11 +1569,10 @@ async function loadCalendar() {
 function openWatchlistSidebar() {
   const sidebar   = document.getElementById('watchlistSidebar');
   const btn       = document.getElementById('watchlistToggleBtn');
-  const backdrop  = document.getElementById('wlBackdrop');
   if (!sidebar) return;
   sidebar.classList.add('open');
+  document.body.classList.add('wl-open');   // shrink the page so it sits beside, not under
   if (btn)      btn.classList.add('active');
-  if (backdrop) backdrop.classList.add('visible');
   refreshWatchlistQuotes();
   clearInterval(_wlQuoteTimer);
   _wlQuoteTimer = setInterval(refreshWatchlistQuotes, 45000);
@@ -1466,11 +1581,10 @@ function openWatchlistSidebar() {
 function closeWatchlistSidebar() {
   const sidebar   = document.getElementById('watchlistSidebar');
   const btn       = document.getElementById('watchlistToggleBtn');
-  const backdrop  = document.getElementById('wlBackdrop');
   if (!sidebar) return;
   sidebar.classList.remove('open');
+  document.body.classList.remove('wl-open');
   if (btn)      btn.classList.remove('active');
-  if (backdrop) backdrop.classList.remove('visible');
   clearInterval(_wlQuoteTimer);
 }
 
@@ -1721,17 +1835,51 @@ function goToStock(symbol) {
   if (!row) return;
 
   const inner = row.querySelector('.stock-row') || row;
-  if (window.gsap) gsap.set(inner, { opacity: 1, y: 0 });   // ensure it's not mid scroll-in
+  // Force EVERY rendered row visible: after a programmatic jump the staggered
+  // scroll-in reveal (rows start at opacity:0) never fires for the rows we skip
+  // past, leaving them blank. Revealing all here keeps the feed looking complete.
+  if (window.gsap) gsap.set('.stock-row', { opacity: 1, y: 0 });
 
-  // Scroll so the row sits just below the sticky header (top of the screen).
-  requestAnimationFrame(() => {
-    const HEADER = 92;
-    const y = row.getBoundingClientRect().top + window.pageYOffset - HEADER;
-    window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+  // Scroll so the row sits just below the sticky header (top of the screen),
+  // THEN pulse — so the user actually sees the pulse after arriving, even when
+  // the target was far away and the smooth scroll took a while.
+  const doFlash = () => {
     inner.classList.remove('stock-row--flash');
     void inner.offsetWidth;                 // restart the animation if re-triggered
     inner.classList.add('stock-row--flash');
-    setTimeout(() => inner.classList.remove('stock-row--flash'), 2700);
+    setTimeout(() => inner.classList.remove('stock-row--flash'), 1100);  // one 1s pulse
+  };
+  // Tiny pause after the scroll stops so the pulse reads as a distinct event.
+  const flashAfterSettle = () => setTimeout(doFlash, 140);
+
+  requestAnimationFrame(() => {
+    const HEADER  = 92;
+    const targetY = Math.max(0, row.getBoundingClientRect().top + window.pageYOffset - HEADER);
+    window.scrollTo({ top: targetY, behavior: 'smooth' });
+
+    // Fire the pulse only once the ROW itself has reached the top of the screen
+    // and stopped — watching the row's real position (not pageYOffset guesses)
+    // so it works whether we scroll up, down, far, near, smooth or instant.
+    // `moved` guards against firing during the brief lag before a big smooth
+    // scroll actually starts (the row sitting still ≠ "settled").
+    let prevTop = null, stable = 0, moved = false;
+    const started = performance.now();
+    const watch = () => {
+      const top      = row.getBoundingClientRect().top;
+      const atTop    = Math.abs(top - HEADER) < 8;        // row parked at the header line
+      if (prevTop !== null && Math.abs(top - prevTop) >= 0.5) { moved = true; stable = 0; }
+      else { stable += 1; }
+      prevTop = top;
+
+      const settledAtTop = atTop && stable >= 2;           // arrived and motion stopped
+      const stoppedMoving = moved && stable >= 6;          // scroll ended (e.g. unreachable target)
+      if (settledAtTop || stoppedMoving || performance.now() - started > 4000) {
+        flashAfterSettle();
+      } else {
+        requestAnimationFrame(watch);
+      }
+    };
+    requestAnimationFrame(watch);
   });
 }
 

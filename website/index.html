@@ -6,13 +6,36 @@
   <title>Brick Street — Analyst Intelligence</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=21" />
+  <link rel="stylesheet" href="style.css?v=24" />
   <link rel="stylesheet" href="journal.css?v=1" />
 </head>
 <body>
 
   <!-- Watchlist overlay backdrop -->
   <div class="wl-backdrop" id="wlBackdrop"></div>
+
+  <!-- WATCHLIST SIDEBAR — body-level (fixed overlay) so it stacks above the
+       backdrop. Must NOT live inside .content-shell (z-index:1), or the
+       backdrop (z-index:349) would paint over it and swallow clicks. -->
+  <aside class="watchlist-sidebar" id="watchlistSidebar">
+    <div class="wl-sidebar-inner">
+      <div class="wl-sidebar-header">
+        <div class="wl-sidebar-title-row">
+          <svg class="wl-sidebar-star" viewBox="0 0 24 24" fill="currentColor"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+          <span class="wl-sidebar-title">Watchlist</span>
+          <span class="watchlist-count" id="watchlistCount">0 stocks</span>
+          <button class="wl-sidebar-close" id="wlSidebarClose">✕</button>
+        </div>
+        <p class="wl-sidebar-hint">Click ★ on any stock to save it here</p>
+      </div>
+      <div class="wl-sidebar-body" id="watchlistBody">
+        <div class="watchlist-empty-state">
+          <svg viewBox="0 0 24 24" fill="none"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>Click ★ on any stock to add it here</span>
+        </div>
+      </div>
+    </div>
+  </aside>
 
   <!-- Background layers -->
   <div class="bg-layer noise"></div>
@@ -258,6 +281,8 @@
         <button class="sort-btn" data-sort="hold">Hold</button>
         <button class="sort-btn" data-sort="sell">Sell</button>
         <button class="sort-btn" data-sort="price">Price</button>
+        <button class="sort-btn" data-sort="earnings">Earnings</button>
+        <button class="sort-btn" data-sort="insider">Insider</button>
         <button class="sort-btn" data-sort="symbol">Symbol</button>
         <div class="search-wrap">
           <input class="search-input" type="text" placeholder="Search symbol…" id="searchInput" />
@@ -271,6 +296,9 @@
           <div class="col col-symbol col--sortable" data-sort="symbol" title="Sort alphabetically by symbol">
             Symbol <span class="sort-caret"></span>
           </div>
+          <div class="col col-sector col--sortable" data-sort="sector" title="Sort by sector">
+            Sector <span class="sort-caret"></span>
+          </div>
           <div class="col col-buy col--sortable" data-sort="buy" title="Sort by Buy ratings">
             Buy <span class="sort-caret"></span>
           </div>
@@ -281,10 +309,16 @@
             Sell <span class="sort-caret"></span>
           </div>
           <div class="col col-signal">Signal</div>
-          <div class="col col-earnings">
+          <div class="col col-earnings col--sortable" data-sort="earnings" title="Sort by average EPS surprise (best → worst)">
             <div class="earn-head">
-              <span class="earn-head-title">Earnings — EPS surprise %</span>
+              <span class="earn-head-title">Earnings — EPS surprise % <span class="sort-caret"></span></span>
               <span class="earn-head-sub">last 4 reported quarters · oldest → latest</span>
+            </div>
+          </div>
+          <div class="col col-insider col--sortable" data-sort="insider" title="Sort by insider trade size (most bought ↔ most sold)">
+            <div class="earn-head">
+              <span class="earn-head-title">Insider Trades <span class="sort-caret"></span></span>
+              <span class="earn-head-sub">major exec buys &amp; sells</span>
             </div>
           </div>
         </div>
@@ -304,27 +338,6 @@
   </div><!-- end .content-layout -->
 
   </div><!-- end .main-views -->
-
-  <!-- WATCHLIST SIDEBAR (sits beside the active view, on every tab) -->
-  <aside class="watchlist-sidebar" id="watchlistSidebar">
-    <div class="wl-sidebar-inner">
-      <div class="wl-sidebar-header">
-        <div class="wl-sidebar-title-row">
-          <svg class="wl-sidebar-star" viewBox="0 0 24 24" fill="currentColor"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
-          <span class="wl-sidebar-title">Watchlist</span>
-          <span class="watchlist-count" id="watchlistCount">0 stocks</span>
-          <button class="wl-sidebar-close" id="wlSidebarClose">✕</button>
-        </div>
-        <p class="wl-sidebar-hint">Click ★ on any stock to save it here</p>
-      </div>
-      <div class="wl-sidebar-body" id="watchlistBody">
-        <div class="watchlist-empty-state">
-          <svg viewBox="0 0 24 24" fill="none"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <span>Click ★ on any stock to add it here</span>
-        </div>
-      </div>
-    </div>
-  </aside>
 
   </div><!-- end .content-shell -->
 
@@ -562,7 +575,7 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  <script src="app.js?v=21"></script>
+  <script src="app.js?v=24"></script>
   <script src="journal.js?v=1"></script>
 </body>
 </html>

@@ -4,16 +4,10 @@
 
 A real-time financial intelligence dashboard that:
 - Pulls analyst consensus ratings (Buy / Hold / Sell) for every S&P 500 stock from Finnhub (licensed API)
-- Filters for the strongest buy signals only
-- Enriches each stock with live prices and quarterly EPS earnings surprise data
-- Shows the current Federal Reserve interest rate and history
-- Shows an upcoming economic events calendar with market impact explanations
-- Displays everything on a dark, animated, professional-grade dashboard
 
-**Stock filter criteria (all three must pass):**
-- Buy  ≥ 10
-- Hold ≤ 10
-- Sell <  5
+- Enriches each stock with live prices and quarterly EPS earnings surprise data
+- Shows an upcoming economic events calendar with market impact explanations
+- Displays everything on a professional-grade dashboard
 
 ---
 
@@ -39,10 +33,10 @@ Concretely:
   for commercial use, and note it in `LICENSING.md`.
 
 If a requested feature can only be built with a source that fails these rules,
-**stop and flag it** rather than implementing it — propose a licensed alternative.
+**stop and flag it** rather than implementing it — propose an alternative.
 
 ---
-
+- This section File structure to be updated only when its mentioned to update the CLAUDE.md 
 ## File structure
 
 ```
@@ -212,3 +206,22 @@ yfinance (unofficial endpoints), stockanalysis.com. The old `scraper.py`,
 - Finnhub free tier is fine for development/testing but is **non-commercial**; a public paid site needs a commercial/redistribution plan (see `LICENSING.md`).
 - `data_sources.py` is the single provider abstraction — swapping Finnhub for another licensed provider means editing only that one file.
 - Before going live: set `BS_ENV=production`, a strong `BS_SECRET`, `BS_ALLOWED_ORIGINS`, and serve over HTTPS.
+
+
+################### Stuf imported by me ###################
+ ## Rule regarding the efficiency 
+
+ When prompt you to change something in thie website always keep in mind that the new change must not cause any kind of bug or disfunctionallity of something else which is working already perfect on the website. 
+
+ ## Rules regarding the privileges available for the non loged user, the loged user and the user which is on subscription plan 3$ a mounth. 
+
+ When I tell you to create something and do not mention nothing about this functionality would be available to a user of subscription then this is created for everybody. 
+
+ When I want to make something available for the logged in user, then I will mention it like "Make this available only for the loggedin user. 
+
+ And If I want you to create something and mention that this is only for the accounts with subscription then this is what i mean. 
+
+ ## Rule about the cost 
+
+Everytime when we add a new source of information to the project or add new functionality which in a some way required buying something like API's, data access etc. And when I ask you how much money will be my costs, you calculate all the costs and tell me how much it will be per day/mounth/year and give me this information. 
+
