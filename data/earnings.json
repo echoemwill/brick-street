@@ -5678,5 +5678,3284 @@
       "quarter": "2026-03",
       "surprise": -3.3
     }
+  ],
+  "AAPL": [
+    {
+      "quarter": "2025-06",
+      "surprise": 7.3
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 2.4
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 4.2
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 1.1
+    }
+  ],
+  "TSLA": [
+    {
+      "quarter": "2025-06",
+      "surprise": -8.5
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": -10.5
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 10.1
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 8.7
+    }
+  ],
+  "AMD": [
+    {
+      "quarter": "2025-06",
+      "surprise": -3.2
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 2.1
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 14.8
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 4.8
+    }
+  ],
+  "JPM": [
+    {
+      "quarter": "2025-06",
+      "surprise": 9.6
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 3.8
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 3.5
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 8.0
+    }
+  ],
+  "XOM": [
+    {
+      "quarter": "2025-06",
+      "surprise": 5.1
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 2.4
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 0.5
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 14.3
+    }
+  ],
+  "INTC": [
+    {
+      "quarter": "2025-06",
+      "surprise": 726.4
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 2200.0
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 80.9
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 1971.4
+    }
+  ],
+  "COST": [
+    {
+      "quarter": "2025-09",
+      "surprise": -0.8
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 3.3
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": -1.5
+    },
+    {
+      "quarter": "2026-06",
+      "surprise": -1.9
+    }
+  ],
+  "NFLX": [
+    {
+      "quarter": "2025-06",
+      "surprise": -0.4
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": -17.4
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -0.5
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": -10.2
+    }
+  ],
+  "MS": [
+    {
+      "quarter": "2025-06",
+      "surprise": 5.8
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 29.3
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 6.8
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 10.9
+    }
+  ],
+  "GS": [
+    {
+      "quarter": "2025-06",
+      "surprise": 11.2
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 8.1
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 16.5
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 3.3
+    }
+  ],
+  "HD": [
+    {
+      "quarter": "2025-09",
+      "surprise": -3.6
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -5.4
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 4.0
+    },
+    {
+      "quarter": "2026-06",
+      "surprise": -2.2
+    }
+  ],
+  "MRK": [
+    {
+      "quarter": "2025-06",
+      "surprise": 7.7
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 13.1
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 3.0
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 16.0
+    }
+  ],
+  "TXN": [
+    {
+      "quarter": "2025-06",
+      "surprise": 3.1
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": -1.6
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -2.8
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 21.6
+    }
+  ],
+  "QCOM": [
+    {
+      "quarter": "2025-06",
+      "surprise": 0.1
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 2.3
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 0.6
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 1.4
+    }
+  ],
+  "PANW": [
+    {
+      "quarter": "2025-09",
+      "surprise": 5.3
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 2.4
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 7.2
+    },
+    {
+      "quarter": "2026-06",
+      "surprise": 4.8
+    }
+  ],
+  "AXP": [
+    {
+      "quarter": "2025-06",
+      "surprise": 3.9
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 2.6
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -1.2
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 5.3
+    }
+  ],
+  "VZ": [
+    {
+      "quarter": "2025-06",
+      "surprise": 0.0
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": -1.2
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 0.4
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 3.8
+    }
+  ],
+  "MCD": [
+    {
+      "quarter": "2025-06",
+      "surprise": 0.4
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": -4.2
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 1.4
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 2.2
+    }
+  ],
+  "CRWD": [
+    {
+      "quarter": "2025-09",
+      "surprise": 9.9
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 0.0
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": -0.3
+    },
+    {
+      "quarter": "2026-06",
+      "surprise": 1.0
+    }
+  ],
+  "PEP": [
+    {
+      "quarter": "2025-06",
+      "surprise": 3.4
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 0.4
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 0.0
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 2.8
+    }
+  ],
+  "AMGN": [
+    {
+      "quarter": "2025-06",
+      "surprise": 11.6
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 10.3
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 9.6
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 6.1
+    }
+  ],
+  "CRM": [
+    {
+      "quarter": "2025-09",
+      "surprise": 3.7
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 12.6
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 23.9
+    },
+    {
+      "quarter": "2026-06",
+      "surprise": 23.2
+    }
+  ],
+  "PFE": [
+    {
+      "quarter": "2025-06",
+      "surprise": 32.9
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 36.0
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 14.3
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 3.5
+    }
+  ],
+  "BX": [
+    {
+      "quarter": "2025-06",
+      "surprise": 7.0
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 20.3
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 10.7
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": -1.9
+    }
+  ],
+  "CB": [
+    {
+      "quarter": "2025-06",
+      "surprise": -0.2
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 18.2
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 7.7
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 0.3
+    }
+  ],
+  "LMT": [
+    {
+      "quarter": "2025-06",
+      "surprise": 12.0
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 8.2
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 29.0
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": -5.2
+    }
+  ],
+  "LOW": [
+    {
+      "quarter": "2025-09",
+      "surprise": 1.0
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 2.1
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 0.8
+    },
+    {
+      "quarter": "2026-06",
+      "surprise": 0.9
+    }
+  ],
+  "PGR": [
+    {
+      "quarter": "2025-06",
+      "surprise": 9.1
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": -20.4
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 4.8
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 1.0
+    }
+  ],
+  "BMY": [
+    {
+      "quarter": "2025-06",
+      "surprise": 35.0
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 6.9
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 11.9
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 10.4
+    }
+  ],
+  "FTNT": [
+    {
+      "quarter": "2025-06",
+      "surprise": 6.2
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 14.8
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 7.2
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 30.2
+    }
+  ],
+  "SBUX": [
+    {
+      "quarter": "2025-06",
+      "surprise": -7.8
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": -9.5
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -6.3
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 14.2
+    }
+  ],
+  "ADBE": [
+    {
+      "quarter": "2025-06",
+      "surprise": -0.1
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 0.5
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -0.0
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 1.2
+    }
+  ],
+  "SO": [
+    {
+      "quarter": "2000-09",
+      "surprise": 10.5
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 3.1
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -6.9
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 5.9
+    }
+  ],
+  "MAR": [
+    {
+      "quarter": "2025-06",
+      "surprise": 0.1
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 2.2
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -2.2
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 5.5
+    }
+  ],
+  "MDT": [
+    {
+      "quarter": "2025-09",
+      "surprise": 1.5
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 2.4
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 0.9
+    },
+    {
+      "quarter": "2026-06",
+      "surprise": -0.4
+    }
+  ],
+  "UPS": [
+    {
+      "quarter": "2025-06",
+      "surprise": -1.7
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 32.7
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 7.0
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 3.8
+    }
+  ],
+  "GD": [
+    {
+      "quarter": "2025-06",
+      "surprise": 2.8
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 1.8
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -1.1
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 8.2
+    }
+  ],
+  "CMCSA": [
+    {
+      "quarter": "2025-06",
+      "surprise": 2.8
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": -0.9
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 8.1
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 5.1
+    }
+  ],
+  "ABNB": [
+    {
+      "quarter": "2025-06",
+      "surprise": 6.6
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": -7.5
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -16.4
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": -11.9
+    }
+  ],
+  "MRSH": [
+    {
+      "quarter": "2025-06",
+      "surprise": 0.3
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 1.7
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 5.4
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": -0.0
+    }
+  ],
+  "HPE": [
+    {
+      "quarter": "2025-09",
+      "surprise": 1.2
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 5.4
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 9.3
+    },
+    {
+      "quarter": "2026-06",
+      "surprise": 46.4
+    }
+  ],
+  "EOG": [
+    {
+      "quarter": "2025-06",
+      "surprise": 3.8
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 10.4
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 2.6
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 5.8
+    }
+  ],
+  "PSX": [
+    {
+      "quarter": "2025-06",
+      "surprise": 38.1
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 15.2
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 13.0
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 221.3
+    }
+  ],
+  "ITW": [
+    {
+      "quarter": "2025-06",
+      "surprise": -0.3
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 2.5
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 0.3
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 2.7
+    }
+  ],
+  "CTAS": [
+    {
+      "quarter": "2025-06",
+      "surprise": -0.1
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": -0.8
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -0.9
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": -1.8
+    }
+  ],
+  "NSC": [
+    {
+      "quarter": "2025-06",
+      "surprise": -1.4
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 2.5
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 15.4
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 4.5
+    }
+  ],
+  "WBD": [
+    {
+      "quarter": "2025-06",
+      "surprise": 398.6
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": -43.9
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -222.6
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 30.0
+    }
+  ],
+  "NKE": [
+    {
+      "quarter": "2025-06",
+      "surprise": 7.5
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 78.1
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 39.2
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 22.9
+    }
+  ],
+  "F": [
+    {
+      "quarter": "2025-06",
+      "surprise": 9.7
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 21.2
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -31.9
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 245.4
+    }
+  ],
+  "TRV": [
+    {
+      "quarter": "2025-06",
+      "surprise": 76.2
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 27.0
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 24.6
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 7.9
+    }
+  ],
+  "RSG": [
+    {
+      "quarter": "2000-09",
+      "surprise": -17.9
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 5.6
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 7.4
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 2.8
+    }
+  ],
+  "GWW": [
+    {
+      "quarter": "2025-06",
+      "surprise": -1.9
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 1.6
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -1.2
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 13.0
+    }
+  ],
+  "PCAR": [
+    {
+      "quarter": "2025-06",
+      "surprise": 4.0
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": -5.8
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -2.1
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": -1.7
+    }
+  ],
+  "OXY": [
+    {
+      "quarter": "2025-06",
+      "surprise": 35.2
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 23.0
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 68.2
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 77.5
+    }
+  ],
+  "D": [
+    {
+      "quarter": "2025-06",
+      "surprise": 8.6
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 9.5
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -0.2
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 2.3
+    }
+  ],
+  "AFL": [
+    {
+      "quarter": "2025-06",
+      "surprise": 3.7
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 38.8
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -8.3
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": -4.4
+    }
+  ],
+  "O": [
+    {
+      "quarter": "2025-06",
+      "surprise": -38.8
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": -3.8
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -19.9
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": -19.8
+    }
+  ],
+  "TGT": [
+    {
+      "quarter": "2025-12",
+      "surprise": 2.6
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 12.1
+    },
+    {
+      "quarter": "2026-06",
+      "surprise": 15.8
+    }
+  ],
+  "PSA": [
+    {
+      "quarter": "2025-06",
+      "surprise": -31.9
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 2.5
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 3.0
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 12.4
+    }
+  ],
+  "ROK": [
+    {
+      "quarter": "2000-09",
+      "surprise": 5.4
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 12.7
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 10.5
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 13.1
+    }
+  ],
+  "FAST": [
+    {
+      "quarter": "2025-06",
+      "surprise": 1.1
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": -3.9
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -1.6
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": -1.8
+    }
+  ],
+  "EA": [
+    {
+      "quarter": "2025-06",
+      "surprise": 122.4
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": -9.8
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -0.9
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": -36.0
+    }
+  ],
+  "EW": [
+    {
+      "quarter": "2025-06",
+      "surprise": 4.4
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 9.6
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -8.8
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 4.2
+    }
+  ],
+  "ON": [
+    {
+      "quarter": "2025-06",
+      "surprise": -3.5
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 3.7
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -0.2
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 3.3
+    }
+  ],
+  "EBAY": [
+    {
+      "quarter": "2025-06",
+      "surprise": 3.6
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 0.0
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 3.3
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 3.1
+    }
+  ],
+  "ODFL": [
+    {
+      "quarter": "2025-06",
+      "surprise": -3.3
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 3.1
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 0.8
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 6.5
+    }
+  ],
+  "GRMN": [
+    {
+      "quarter": "2025-06",
+      "surprise": 12.3
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": -0.6
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 14.2
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 12.1
+    }
+  ],
+  "EXC": [
+    {
+      "quarter": "2025-06",
+      "surprise": 5.0
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 9.6
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 6.8
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 1.8
+    }
+  ],
+  "COIN": [
+    {
+      "quarter": "2025-06",
+      "surprise": 53.0
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 39.1
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -519.8
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": -559.7
+    }
+  ],
+  "YUM": [
+    {
+      "quarter": "2025-06",
+      "surprise": -2.3
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 5.2
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -3.3
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 7.6
+    }
+  ],
+  "BDX": [
+    {
+      "quarter": "2025-06",
+      "surprise": 7.1
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": -0.0
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 2.4
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 3.5
+    }
+  ],
+  "ADM": [
+    {
+      "quarter": "2025-06",
+      "surprise": 11.0
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 6.8
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 8.2
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 6.6
+    }
+  ],
+  "PYPL": [
+    {
+      "quarter": "2025-06",
+      "surprise": 5.8
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 9.4
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -6.1
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 3.6
+    }
+  ],
+  "AIG": [
+    {
+      "quarter": "2025-06",
+      "surprise": 12.1
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 27.3
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 2.1
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 10.1
+    }
+  ],
+  "HUM": [
+    {
+      "quarter": "2025-06",
+      "surprise": 4.9
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 13.8
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 2.1
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 0.2
+    }
+  ],
+  "ED": [
+    {
+      "quarter": "2025-06",
+      "surprise": 1.6
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 5.9
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -8.8
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": -6.9
+    }
+  ],
+  "KR": [
+    {
+      "quarter": "2025-06",
+      "surprise": -0.9
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 1.6
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -1.3
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 3.5
+    }
+  ],
+  "CMG": [
+    {
+      "quarter": "2025-06",
+      "surprise": 0.3
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 0.3
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 3.4
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": -0.4
+    }
+  ],
+  "HSY": [
+    {
+      "quarter": "2025-06",
+      "surprise": 20.8
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 20.4
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 20.6
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 13.8
+    }
+  ],
+  "WDAY": [
+    {
+      "quarter": "2025-09",
+      "surprise": 2.5
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 4.1
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 4.2
+    },
+    {
+      "quarter": "2026-06",
+      "surprise": 4.0
+    }
+  ],
+  "PAYX": [
+    {
+      "quarter": "2025-06",
+      "surprise": -1.9
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": -0.8
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 0.5
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 0.3
+    }
+  ],
+  "WEC": [
+    {
+      "quarter": "2025-06",
+      "surprise": 6.9
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 1.8
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -31.3
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 6.7
+    }
+  ],
+  "SATS": [
+    {
+      "quarter": "2025-06",
+      "surprise": -3.7
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 1142.6
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -463.3
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 76.9
+    }
+  ],
+  "PRU": [
+    {
+      "quarter": "2025-06",
+      "surprise": 10.4
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 14.1
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -3.0
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 15.4
+    }
+  ],
+  "HIG": [
+    {
+      "quarter": "2025-06",
+      "surprise": 19.1
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 16.4
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 25.0
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": -10.0
+    }
+  ],
+  "ROP": [
+    {
+      "quarter": "2025-12",
+      "surprise": 0.4
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 2.6
+    }
+  ],
+  "FSLR": [
+    {
+      "quarter": "2025-06",
+      "surprise": 17.5
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": -2.3
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -7.9
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 10.0
+    }
+  ],
+  "KVUE": [
+    {
+      "quarter": "2025-06",
+      "surprise": 0.6
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 3.5
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 19.7
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 19.6
+    }
+  ],
+  "KMB": [
+    {
+      "quarter": "2025-06",
+      "surprise": -3.6
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 2.6
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 1.7
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 3.1
+    }
+  ],
+  "MTB": [
+    {
+      "quarter": "2025-06",
+      "surprise": 5.1
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 7.8
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 3.4
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 2.0
+    }
+  ],
+  "NTRS": [
+    {
+      "quarter": "2025-06",
+      "surprise": 1.9
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": -0.0
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 11.5
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 14.3
+    }
+  ],
+  "EXR": [
+    {
+      "quarter": "2025-06",
+      "surprise": 1.0
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": -35.6
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 15.1
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 1.2
+    }
+  ],
+  "EL": [
+    {
+      "quarter": "2025-06",
+      "surprise": 0.4
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 75.9
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 3.4
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 36.2
+    }
+  ],
+  "SMCI": [
+    {
+      "quarter": "2025-06",
+      "surprise": -8.4
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": -14.9
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 38.7
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 32.3
+    }
+  ],
+  "FISV": [
+    {
+      "quarter": "2025-06",
+      "surprise": -0.4
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": -24.3
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 2.8
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 11.7
+    }
+  ],
+  "CNC": [
+    {
+      "quarter": "2025-06",
+      "surprise": -118.5
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 454.9
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 3.7
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 56.4
+    }
+  ],
+  "CBOE": [
+    {
+      "quarter": "2025-06",
+      "surprise": -0.4
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 3.6
+    },
+    {
+      "quarter": "2025-03",
+      "surprise": 2.1
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 10.3
+    }
+  ],
+  "RJF": [
+    {
+      "quarter": "2025-06",
+      "surprise": -8.4
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 9.1
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -1.6
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 1.0
+    }
+  ],
+  "BIIB": [
+    {
+      "quarter": "2025-06",
+      "surprise": 38.9
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 21.5
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 20.9
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 26.3
+    }
+  ],
+  "KHC": [
+    {
+      "quarter": "2025-06",
+      "surprise": 7.5
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 4.4
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 8.6
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 14.2
+    }
+  ],
+  "FOXA": [
+    {
+      "quarter": "2025-06",
+      "surprise": 25.8
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 37.4
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 61.7
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 33.9
+    }
+  ],
+  "EXPE": [
+    {
+      "quarter": "2025-06",
+      "surprise": 1.5
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 7.3
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 10.4
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 38.4
+    }
+  ],
+  "VRSN": [
+    {
+      "quarter": "2025-06",
+      "surprise": -1.4
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": -1.1
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -4.3
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 2.1
+    }
+  ],
+  "OTIS": [
+    {
+      "quarter": "2025-06",
+      "surprise": 0.0
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 3.0
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -2.5
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": -1.9
+    }
+  ],
+  "AVB": [
+    {
+      "quarter": "2025-06",
+      "surprise": 47.2
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 84.0
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -14.3
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 81.5
+    }
+  ],
+  "CTSH": [
+    {
+      "quarter": "2025-06",
+      "surprise": 1.9
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 4.7
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 0.2
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 3.0
+    }
+  ],
+  "FOX": [
+    {
+      "quarter": "2025-06",
+      "surprise": 25.8
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 37.4
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 61.7
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 33.9
+    }
+  ],
+  "JBHT": [
+    {
+      "quarter": "2025-06",
+      "surprise": -2.6
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 17.8
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 2.7
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 1.4
+    }
+  ],
+  "TPL": [
+    {
+      "quarter": "2025-06",
+      "surprise": -72.7
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": -9.6
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 3.0
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 1.5
+    }
+  ],
+  "EQR": [
+    {
+      "quarter": "2025-06",
+      "surprise": 35.1
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 71.8
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 155.7
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": -25.7
+    }
+  ],
+  "WRB": [
+    {
+      "quarter": "2025-06",
+      "surprise": 1.2
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": -0.5
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -0.7
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 12.4
+    }
+  ],
+  "PPG": [
+    {
+      "quarter": "2025-06",
+      "surprise": -1.4
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 0.9
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -5.5
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 2.4
+    }
+  ],
+  "HPQ": [
+    {
+      "quarter": "2025-09",
+      "surprise": -1.1
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -0.2
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 4.9
+    },
+    {
+      "quarter": "2026-06",
+      "surprise": 19.8
+    }
+  ],
+  "AWK": [
+    {
+      "quarter": "2025-06",
+      "surprise": -3.2
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 2.3
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -3.5
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": -9.3
+    }
+  ],
+  "WSM": [
+    {
+      "quarter": "2025-09",
+      "surprise": 9.7
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 3.9
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 3.9
+    },
+    {
+      "quarter": "2026-06",
+      "surprise": 5.7
+    }
+  ],
+  "DG": [
+    {
+      "quarter": "2025-09",
+      "surprise": 15.2
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 31.4
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 13.7
+    },
+    {
+      "quarter": "2026-06",
+      "surprise": 3.0
+    }
+  ],
+  "LEN": [
+    {
+      "quarter": "2025-06",
+      "surprise": -7.7
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 7.9
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -13.7
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": -3.9
+    }
+  ],
+  "TROW": [
+    {
+      "quarter": "2025-06",
+      "surprise": 2.9
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 9.7
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -3.1
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 5.0
+    }
+  ],
+  "PFG": [
+    {
+      "quarter": "2025-06",
+      "surprise": 8.4
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": -5.4
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -2.5
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 2.3
+    }
+  ],
+  "L": null,
+  "DGX": [
+    {
+      "quarter": "2025-06",
+      "surprise": 0.9
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 2.8
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 1.5
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 5.5
+    }
+  ],
+  "DLTR": [
+    {
+      "quarter": "2025-09",
+      "surprise": 36.8
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 8.6
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": -0.6
+    },
+    {
+      "quarter": "2026-06",
+      "surprise": 10.6
+    }
+  ],
+  "TSN": [
+    {
+      "quarter": "2025-06",
+      "surprise": 15.0
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 36.5
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 2.1
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 10.4
+    }
+  ],
+  "SBAC": [
+    {
+      "quarter": "2025-06",
+      "surprise": -3.2
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": -1.8
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -10.3
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": -4.1
+    }
+  ],
+  "LUV": [
+    {
+      "quarter": "2025-06",
+      "surprise": -16.1
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 432.3
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -0.6
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": -5.8
+    }
+  ],
+  "EXPD": [
+    {
+      "quarter": "2025-06",
+      "surprise": 6.2
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 15.1
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -0.2
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 26.2
+    }
+  ],
+  "ALB": [
+    {
+      "quarter": "2025-06",
+      "surprise": 113.2
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 75.9
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -28.5
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 166.8
+    }
+  ],
+  "GPN": [
+    {
+      "quarter": "2025-06",
+      "surprise": 0.4
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": -0.5
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -0.3
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 3.7
+    }
+  ],
+  "CHTR": [
+    {
+      "quarter": "2025-06",
+      "surprise": -7.8
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": -12.4
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 3.6
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": -11.8
+    }
+  ],
+  "SNA": [
+    {
+      "quarter": "2000-03",
+      "surprise": -5.1
+    },
+    {
+      "quarter": "2000-06",
+      "surprise": -3.1
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -0.5
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": -2.3
+    }
+  ],
+  "BRO": [
+    {
+      "quarter": "2025-06",
+      "surprise": 3.0
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 10.8
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 2.3
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 0.8
+    }
+  ],
+  "ESS": [
+    {
+      "quarter": "2025-06",
+      "surprise": 130.0
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 73.1
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -16.4
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 17.4
+    }
+  ],
+  "INCY": [
+    {
+      "quarter": "2025-06",
+      "surprise": 4.7
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 33.7
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -8.5
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 29.4
+    }
+  ],
+  "FTV": [
+    {
+      "quarter": "2025-06",
+      "surprise": -3.2
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 17.9
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 6.5
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 8.0
+    }
+  ],
+  "MRNA": [
+    {
+      "quarter": "2025-06",
+      "surprise": 29.6
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 76.3
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 21.7
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 15.8
+    }
+  ],
+  "GIS": [
+    {
+      "quarter": "2025-06",
+      "surprise": 3.1
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 4.5
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 6.1
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": -12.7
+    }
+  ],
+  "CF": [
+    {
+      "quarter": "2025-06",
+      "surprise": -10.3
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 0.7
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 24.9
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 8.2
+    }
+  ],
+  "INVH": [
+    {
+      "quarter": "2025-06",
+      "surprise": 17.5
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 19.2
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 30.7
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 42.3
+    }
+  ],
+  "NVR": [
+    {
+      "quarter": "2025-06",
+      "surprise": 1.0
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 1.7
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 13.6
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": -12.2
+    }
+  ],
+  "ZBH": [
+    {
+      "quarter": "2025-06",
+      "surprise": 3.3
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 0.7
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 0.0
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 11.0
+    }
+  ],
+  "BEN": [
+    {
+      "quarter": "2025-06",
+      "surprise": -1.7
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 15.0
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 25.2
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 27.7
+    }
+  ],
+  "KIM": [
+    {
+      "quarter": "2025-06",
+      "surprise": 34.0
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 8.3
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 16.9
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 18.3
+    }
+  ],
+  "LDOS": [
+    {
+      "quarter": "2025-09",
+      "surprise": 10.3
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 3.8
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 5.9
+    }
+  ],
+  "TXT": [
+    {
+      "quarter": "2025-06",
+      "surprise": 6.4
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 5.7
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 0.5
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 10.1
+    }
+  ],
+  "TSCO": [
+    {
+      "quarter": "2025-06",
+      "surprise": -1.0
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": -0.4
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -8.9
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": -11.2
+    }
+  ],
+  "MAA": [
+    {
+      "quarter": "2025-06",
+      "surprise": 5.3
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": -7.0
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -48.2
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 31.0
+    }
+  ],
+  "DECK": [
+    {
+      "quarter": "2025-06",
+      "surprise": 33.3
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 12.8
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 18.1
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 13.4
+    }
+  ],
+  "BBY": [
+    {
+      "quarter": "2025-09",
+      "surprise": 4.6
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 6.0
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 4.8
+    },
+    {
+      "quarter": "2026-06",
+      "surprise": 3.3
+    }
+  ],
+  "LULU": [
+    {
+      "quarter": "2025-09",
+      "surprise": 5.6
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 12.6
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 2.8
+    },
+    {
+      "quarter": "2026-06",
+      "surprise": -1.5
+    }
+  ],
+  "REG": [
+    {
+      "quarter": "2025-06",
+      "surprise": 2.8
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 2.5
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 15.3
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 7.4
+    }
+  ],
+  "MAS": [
+    {
+      "quarter": "2025-06",
+      "surprise": 18.5
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": -7.0
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 2.6
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 17.6
+    }
+  ],
+  "GPC": [
+    {
+      "quarter": "2025-06",
+      "surprise": 0.5
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": -1.6
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -15.6
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": -0.5
+    }
+  ],
+  "DOC": [
+    {
+      "quarter": "2025-06",
+      "surprise": -19.4
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 37.7
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 179.7
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 515.4
+    }
+  ],
+  "APA": [
+    {
+      "quarter": "2025-06",
+      "surprise": 79.5
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 16.7
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 40.4
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 21.9
+    }
+  ],
+  "UDR": [
+    {
+      "quarter": "2025-06",
+      "surprise": -14.0
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": -8.6
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -47.6
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 413.1
+    }
+  ],
+  "HRL": [
+    {
+      "quarter": "2025-09",
+      "surprise": -15.3
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 5.0
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 4.8
+    },
+    {
+      "quarter": "2026-06",
+      "surprise": 11.0
+    }
+  ],
+  "EG": [
+    {
+      "quarter": "2025-06",
+      "surprise": 12.5
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": -49.1
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -2.2
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 11.7
+    }
+  ],
+  "SWK": [
+    {
+      "quarter": "2000-09",
+      "surprise": -2.2
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 19.8
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 8.9
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 26.8
+    }
+  ],
+  "IVZ": [
+    {
+      "quarter": "2025-06",
+      "surprise": -12.9
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 33.5
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 5.7
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": -3.4
+    }
+  ],
+  "PSKY": [
+    {
+      "quarter": "2025-06",
+      "surprise": 25.7
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": -131.1
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -1279.3
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 51.8
+    }
+  ],
+  "DVA": [
+    {
+      "quarter": "2025-06",
+      "surprise": 4.2
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": -37.3
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 6.7
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 22.6
+    }
+  ],
+  "PNW": [
+    {
+      "quarter": "2025-06",
+      "surprise": -1.6
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 7.7
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 217.1
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 2331.4
+    }
+  ],
+  "SWKS": [
+    {
+      "quarter": "2025-06",
+      "surprise": 6.6
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 23.6
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 8.0
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 9.1
+    }
+  ],
+  "HII": [
+    {
+      "quarter": "2025-06",
+      "surprise": 16.6
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 8.5
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 3.1
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 0.9
+    }
+  ],
+  "IT": [
+    {
+      "quarter": "2025-06",
+      "surprise": 3.7
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 10.4
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 9.1
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 10.6
+    }
+  ],
+  "CPT": [
+    {
+      "quarter": "2025-06",
+      "surprise": -0.6
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 243.1
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 308.9
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 43.4
+    }
+  ],
+  "BXP": [
+    {
+      "quarter": "2025-06",
+      "surprise": 10.3
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": -177.3
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 171.0
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 89.1
+    }
+  ],
+  "ERIE": [
+    {
+      "quarter": "2025-06",
+      "surprise": -5.8
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 1.8
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -25.4
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": -7.7
+    }
+  ],
+  "CLX": [
+    {
+      "quarter": "2025-06",
+      "surprise": 28.7
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 7.0
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -4.0
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 4.7
+    }
+  ],
+  "AES": [
+    {
+      "quarter": "2025-03",
+      "surprise": -23.8
+    },
+    {
+      "quarter": "2025-06",
+      "surprise": 27.7
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": -1.8
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 80.3
+    }
+  ],
+  "DPZ": [
+    {
+      "quarter": "2025-06",
+      "surprise": -4.6
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 1.7
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -1.4
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": -8.1
+    }
+  ],
+  "TTD": [
+    {
+      "quarter": "2025-06",
+      "surprise": 0.2
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 1.1
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 0.3
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": -13.3
+    }
+  ],
+  "BAX": [
+    {
+      "quarter": "2025-06",
+      "surprise": -4.3
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 14.2
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -18.7
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 15.9
+    }
+  ],
+  "FDS": [
+    {
+      "quarter": "2025-06",
+      "surprise": -1.6
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": -2.9
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 2.2
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 0.9
+    }
+  ],
+  "ARE": [
+    {
+      "quarter": "2025-06",
+      "surprise": -205.6
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": -374.4
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -2332.0
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 1459.0
+    }
+  ],
+  "UHS": [
+    {
+      "quarter": "2025-06",
+      "surprise": 7.6
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 16.5
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -1.3
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 2.9
+    }
+  ],
+  "NCLH": [
+    {
+      "quarter": "2025-06",
+      "surprise": -3.1
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 1.6
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 5.3
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 58.3
+    }
+  ],
+  "BLDR": [
+    {
+      "quarter": "2025-06",
+      "surprise": 2.4
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 12.5
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -11.6
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": -28.4
+    }
+  ],
+  "AOS": [
+    {
+      "quarter": "2025-06",
+      "surprise": 7.6
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 2.6
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 5.8
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": -10.7
+    }
+  ],
+  "MOS": [
+    {
+      "quarter": "2025-06",
+      "surprise": -30.5
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 4.5
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -53.3
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": -79.1
+    }
+  ],
+  "TAP": [
+    {
+      "quarter": "2000-09",
+      "surprise": 11.6
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": -2.8
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 3.6
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 67.2
+    }
+  ],
+  "POOL": [
+    {
+      "quarter": "2025-06",
+      "surprise": -0.3
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": -1.8
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": -15.7
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": 3.7
+    }
+  ],
+  "CPB": [
+    {
+      "quarter": "2025-06",
+      "surprise": 10.2
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 9.4
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 3.8
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": -10.9
+    }
+  ],
+  "CAG": [
+    {
+      "quarter": "2025-06",
+      "surprise": -4.5
+    },
+    {
+      "quarter": "2025-09",
+      "surprise": 15.8
+    },
+    {
+      "quarter": "2025-12",
+      "surprise": 2.1
+    },
+    {
+      "quarter": "2026-03",
+      "surprise": -3.6
+    }
   ]
 }

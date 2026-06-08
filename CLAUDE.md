@@ -152,7 +152,7 @@ BS_SECRET=$(python3 -c "import secrets;print(secrets.token_hex(32))") python3 au
 
 | Source | What we get | Licensing |
 |--------|-------------|-----------|
-| Finnhub | Analyst Buy/Hold/Sell, prices, EPS earnings, economic calendar | API key — **commercial plan required for the public paid site** (see LICENSING.md) |
+| Finnhub | Analyst Buy/Hold/Sell, prices, 1-day change, EPS earnings, insider trades, company news, economic calendar | API key — **commercial plan required for the public paid site** (see LICENSING.md). Historical candles (`/stock/candle`, for multi-period price change) are **premium / not on the current plan**. |
 | FRED (Federal Reserve) | Fed funds rate history + target range | Free, public domain |
 
 Bundled `data/sp500_symbols.json` provides the S&P 500 membership list (public
@@ -171,9 +171,13 @@ yfinance (unofficial endpoints), stockanalysis.com. The old `scraper.py`,
 - **Analyst ratings table** — all stocks passing the Buy/Hold/Sell filter
 - **Signal % bar** — buy % of total analyst votes per stock
 - **Earnings column** — last 4 quarters of EPS surprise % (green = beat, red = miss)
+- **Insider Trades column** — most significant open-market exec buy/sell per stock
 - **Prices** — current price per stock, pre-loaded from `filtered_stocks.json` (licensed Finnhub data)
+- **1D Change column** — 1-day % change vs previous close (green ▲ / red ▼), stored as `change` in the data files via `quote_full()`. Longer periods (1wk/1mo/6mo/1yr) are shown in the filter but **locked** — they need historical `/stock/candle` data (premium, not on the current plan).
+- **News panel** — 📰 button per row opens an inline panel of recent headlines (source + time + summary, links out). Served by `GET /api/news/<symbol>` (15-min server cache) → `Finnhub /company-news`. No extra cost; same licensed plan.
 - **TradingView charts** — inline chart panel on hover/click per stock
-- **Sort + search** — sort by Buy/Hold/Sell/Symbol, live search
+- **Filters + sort + search** — filter panel (price, sector, ratings, signal, earnings, insider, 1-day change); sort by Buy/Hold/Sell/Price/Earnings/Insider/1D-Change/Symbol; live search
+- **Value-prop banner** — horizontal "What you get" banner below the hero (feature chips + "Free to start · Pro $5/mo" CTA → opens the Register modal) to convert visitors
 
 ### Left panel — Fed Interest Rate
 - Slides in from the left on hover
@@ -225,3 +229,6 @@ yfinance (unofficial endpoints), stockanalysis.com. The old `scraper.py`,
 
 Everytime when we add a new source of information to the project or add new functionality which in a some way required buying something like API's, data access etc. And when I ask you how much money will be my costs, you calculate all the costs and tell me how much it will be per day/mounth/year and give me this information. 
 
+## Rule about the fit 
+
+When adding new feature, button, section, pannel or something like this, make it fit with the elements which are surrounding it. For example do not put the new button over another element, make them fit together. 

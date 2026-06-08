@@ -126,6 +126,20 @@ class Finnhub:
         c = d.get("c")
         return round(float(c), 2) if c else None
 
+    def quote_full(self, symbol: str):
+        """Current price + 1-day % change → {price, change}.
+
+        Uses /quote's `c` (current price) and `dp` (percent change vs the
+        previous close) — both available on the current plan, so this is the
+        standard "today's change" figure with no extra/historical data needed.
+        """
+        d = self._get("/quote", symbol=symbol)
+        c, dp = d.get("c"), d.get("dp")
+        return {
+            "price":  round(float(c), 2) if c else None,
+            "change": round(float(dp), 2) if dp is not None else None,
+        }
+
     # ── EPS earnings surprise (replaces yfinance) ──────────────
     def earnings(self, symbol: str, quarters: int = 4):
         """Last `quarters` of EPS surprise % → [{quarter, surprise}] or None.
@@ -175,6 +189,50 @@ class Finnhub:
             "sector": d.get("finnhubIndustry"),
             "logo":   d.get("logo"),
         }
+
+    def company_news(self, symbol: str, days: int = 7, limit: int = 10):
+        """Recent company news → [{headline, source, url, summary, datetime, image}]
+        newest first, or [].
+
+        Pulls the last `days` days from Finnhub's /company-news, which is an
+        aggregator spanning many publishers (Reuters, CNBC, Bloomberg,
+        MarketWatch, etc.). We surface each article's `source` name and link
+        out to the original `url` to honour attribution. `from` is passed via a
+        dict because it is a reserved word in Python.
+        """
+        import datetime as _dt
+        today = _dt.date.today()
+        params = {
+            "symbol": symbol,
+            "from":   (today - _dt.timedelta(days=days)).isoformat(),
+            "to":     today.isoformat(),
+        }
+        try:
+            rows = self._get("/company-news", **params)
+        except FinnhubError:
+            return []
+        if not isinstance(rows, list):
+            return []
+        out, seen = [], set()
+        for r in rows:
+            headline = (r.get("headline") or "").strip()
+            url = r.get("url") or ""
+            if not headline or not url:
+                continue
+            key = headline.lower()
+            if key in seen:          # drop duplicate headlines across sources
+                continue
+            seen.add(key)
+            out.append({
+                "headline": headline,
+                "source":   r.get("source") or "",
+                "url":      url,
+                "summary":  (r.get("summary") or "").strip(),
+                "datetime": r.get("datetime") or 0,
+                "image":    r.get("image") or "",
+            })
+        out.sort(key=lambda x: x["datetime"], reverse=True)  # newest first
+        return out[:limit]
 
     def insider_trades(self, symbol: str, since: str | None = None):
         """Open-market insider TRADES (Form 4 codes 'P' buy / 'S' sell) →

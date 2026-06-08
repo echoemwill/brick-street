@@ -411,6 +411,38 @@ def quote(symbol):
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+# ── tiny in-memory news cache (15 min) so flipping through stocks
+#    doesn't burn Finnhub calls or feel slow ──
+_news_cache = {}            # symbol -> (timestamp, payload)
+_news_lock  = threading.Lock()
+NEWS_TTL    = 15 * 60
+
+@app.route('/api/news/<symbol>', methods=['GET'])
+def news(symbol):
+    symbol = symbol.strip().upper()[:10]
+    if not symbol:
+        return jsonify({'error': 'Invalid symbol'}), 400
+
+    now = time.time()
+    with _news_lock:
+        hit = _news_cache.get(symbol)
+        if hit and now - hit[0] < NEWS_TTL:
+            return jsonify(hit[1])
+
+    try:
+        fh = get_finnhub()
+    except FinnhubError as e:
+        return jsonify({'error': f'Data source not configured: {e}'}), 503
+    try:
+        payload = {'symbol': symbol, 'news': fh.company_news(symbol)}
+        with _news_lock:
+            _news_cache[symbol] = (now, payload)
+        return jsonify(payload)
+    except FinnhubError as e:
+        return jsonify({'error': str(e)}), 502
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 # ── Compliance preflight (only enforced in production) ──────
 def preflight_production_checks():
     """Refuse to go public with unfinished legal docs or a configured-but-unusable

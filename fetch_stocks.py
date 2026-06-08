@@ -122,18 +122,22 @@ def main():
     # Stocks with real analyst data (skip the "no_data" placeholders)
     scored = [s for s, d in ratings.items() if not d.get("no_data")]
 
-    # ── Step 3: prices for EVERY scored stock (resume-safe) ───
-    todo_p = [s for s in scored if "price" not in ratings[s]]
-    print(f"\n💰 Prices — {len(scored) - len(todo_p)} done, {len(todo_p)} to fetch")
+    # ── Step 3: prices + 1-day change for EVERY scored stock (resume-safe) ──
+    # Refetch any stock missing EITHER field, so rows from an older run that
+    # only have "price" pick up the new "change" (1-day %) too.
+    todo_p = [s for s in scored if "price" not in ratings[s] or "change" not in ratings[s]]
+    print(f"\n💰 Prices + 1d change — {len(scored) - len(todo_p)} done, {len(todo_p)} to fetch")
     for i, symbol in enumerate(todo_p, 1):
         try:
-            price = client.quote(symbol)
+            q = client.quote_full(symbol)
         except FinnhubError as e:
             print(f"[{i}/{len(todo_p)}] {symbol:6s}  ✗ {str(e)[:60]}")
-            price = None
-        ratings[symbol]["price"] = price  # None = "tried, no price" (won't refetch)
-        if price:
-            print(f"[{i}/{len(todo_p)}] {symbol:6s}  ${price:.2f}")
+            q = {"price": None, "change": None}
+        ratings[symbol]["price"]  = q["price"]   # None = "tried, no price" (won't refetch)
+        ratings[symbol]["change"] = q["change"]  # 1-day % vs previous close, or None
+        if q["price"]:
+            chg = f"  ({q['change']:+.2f}% 1d)" if q["change"] is not None else ""
+            print(f"[{i}/{len(todo_p)}] {symbol:6s}  ${q['price']:.2f}{chg}")
         else:
             print(f"[{i}/{len(todo_p)}] {symbol:6s}  — no price")
         _save_json(ALL_RESULTS_FILE, ratings)
@@ -158,7 +162,7 @@ def main():
     # ── Step 5: filtered_stocks.json (survivors, backward compat) ──
     survivors = {s: d for s, d in ratings.items() if passes_filter(d)}
     filtered_out = {
-        s: {k: d[k] for k in ("buy", "hold", "sell", "price") if d.get(k) is not None}
+        s: {k: d[k] for k in ("buy", "hold", "sell", "price", "change") if d.get(k) is not None}
         for s, d in survivors.items()
     }
     _save_json(FILTERED_FILE, filtered_out)

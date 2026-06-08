@@ -6,7 +6,7 @@
   <title>Brick Street — Analyst Intelligence</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css?v=24" />
+  <link rel="stylesheet" href="style.css?v=30" />
   <link rel="stylesheet" href="journal.css?v=1" />
 </head>
 <body>
@@ -135,6 +135,32 @@
         <div class="criteria-pill hold-pill"><span class="pill-key">HOLD</span> neutral / wait</div>
         <div class="criteria-pill sell-pill"><span class="pill-key">SELL</span> bearish analysts</div>
       </div>
+    </div>
+  </section>
+
+  <!-- VALUE-PROP BANNER (horizontal) — explains the offering & drives sign-ups -->
+  <section class="intro-banner" id="introBanner">
+    <div class="intro-banner-main">
+      <div class="intro-banner-head">
+        <span class="intro-kicker">WHAT YOU GET</span>
+        <h3 class="intro-title">Everything Wall Street watches — in one dashboard</h3>
+      </div>
+      <div class="intro-chips">
+        <span class="intro-chip">Analyst Buy/Hold/Sell</span>
+        <span class="intro-chip">Prices &amp; 1-day change</span>
+        <span class="intro-chip">Earnings surprise</span>
+        <span class="intro-chip">Insider trades</span>
+        <span class="intro-chip">Latest news</span>
+        <span class="intro-chip">Fed · CPI · GDP · jobs</span>
+        <span class="intro-chip">Price prediction</span>
+        <span class="intro-chip">Trading journal</span>
+        <span class="intro-chip">Watchlist sync</span>
+      </div>
+    </div>
+    <div class="intro-banner-cta">
+      <div class="intro-price"><span class="intro-price-free">Free to start</span><span class="intro-price-pro">Pro $5/mo</span></div>
+      <button class="intro-cta-btn" id="introRegisterBtn">Create your free account</button>
+      <p class="intro-cta-note">Upgrade to Pro anytime · cancel whenever</p>
     </div>
   </section>
 
@@ -283,9 +309,163 @@
         <button class="sort-btn" data-sort="price">Price</button>
         <button class="sort-btn" data-sort="earnings">Earnings</button>
         <button class="sort-btn" data-sort="insider">Insider</button>
+        <button class="sort-btn" data-sort="change">1D Change</button>
         <button class="sort-btn" data-sort="symbol">Symbol</button>
-        <div class="search-wrap">
-          <input class="search-input" type="text" placeholder="Search symbol…" id="searchInput" />
+
+        <div class="filter-search-group">
+          <!-- FILTERS -->
+          <div class="filter-wrap">
+            <button class="filter-btn" id="filterBtn" aria-expanded="false" title="Filter the feed">
+              <svg class="filter-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+              </svg>
+              <span>Filters</span>
+              <span class="filter-count" id="filterCount" hidden>0</span>
+            </button>
+
+            <div class="filter-panel" id="filterPanel" hidden>
+              <div class="filter-panel-head">
+                <span class="fp-title">Filters</span>
+                <button class="fp-reset" id="filterReset">Reset all</button>
+              </div>
+
+              <div class="filter-panel-body">
+                <!-- PRICE -->
+                <section class="fp-group">
+                  <div class="fp-group-title">Price <span class="fp-val" id="priceVal"></span></div>
+                  <div class="fp-fields">
+                    <label class="fp-field"><span class="fp-prefix">$</span><input type="number" id="priceMin" placeholder="Min" min="0"></label>
+                    <span class="fp-dash">–</span>
+                    <label class="fp-field"><span class="fp-prefix">$</span><input type="number" id="priceMax" placeholder="Max" min="0"></label>
+                  </div>
+                  <div class="dual-slider" id="priceSlider">
+                    <div class="ds-track"><div class="ds-fill"></div></div>
+                    <input type="range" class="ds-input ds-min"><input type="range" class="ds-input ds-max">
+                  </div>
+                </section>
+
+                <!-- PRICE CHANGE -->
+                <section class="fp-group">
+                  <div class="fp-group-title">Price change</div>
+                  <div class="fp-sub">Period</div>
+                  <div class="fp-chips" id="changePeriod">
+                    <button class="fp-chip is-active" data-period="1d">1 day</button>
+                    <button class="fp-chip" data-period="1w" disabled title="Requires a Finnhub historical-data plan">1 week 🔒</button>
+                    <button class="fp-chip" data-period="1m" disabled title="Requires a Finnhub historical-data plan">1 month 🔒</button>
+                    <button class="fp-chip" data-period="6m" disabled title="Requires a Finnhub historical-data plan">6 months 🔒</button>
+                    <button class="fp-chip" data-period="1y" disabled title="Requires a Finnhub historical-data plan">1 year 🔒</button>
+                  </div>
+                  <div class="fp-sub">Change %</div>
+                  <div class="fp-fields">
+                    <label class="fp-field"><input type="number" id="changeMin" placeholder="Min %"></label>
+                    <span class="fp-dash">–</span>
+                    <label class="fp-field"><input type="number" id="changeMax" placeholder="Max %"></label>
+                  </div>
+                </section>
+
+                <!-- SECTOR -->
+                <section class="fp-group">
+                  <div class="fp-group-title">Sector
+                    <span class="fp-group-actions">
+                      <button class="fp-link" id="secAll">All</button>
+                      <button class="fp-link" id="secNone">Clear</button>
+                    </span>
+                  </div>
+                  <input type="text" class="fp-search" id="sectorSearch" placeholder="Search sectors…">
+                  <div class="fp-checklist" id="sectorList"></div>
+                </section>
+
+                <!-- RATINGS -->
+                <section class="fp-group">
+                  <div class="fp-group-title">Analyst ratings</div>
+                  <div class="fp-minmax" data-key="buy">
+                    <span class="fp-mm-label buy-text">Buy</span>
+                    <input type="number" class="fp-mm-min" placeholder="min" min="0">
+                    <span class="fp-dash">–</span>
+                    <input type="number" class="fp-mm-max" placeholder="max" min="0">
+                  </div>
+                  <div class="fp-minmax" data-key="hold">
+                    <span class="fp-mm-label hold-text">Hold</span>
+                    <input type="number" class="fp-mm-min" placeholder="min" min="0">
+                    <span class="fp-dash">–</span>
+                    <input type="number" class="fp-mm-max" placeholder="max" min="0">
+                  </div>
+                  <div class="fp-minmax" data-key="sell">
+                    <span class="fp-mm-label sell-text">Sell</span>
+                    <input type="number" class="fp-mm-min" placeholder="min" min="0">
+                    <span class="fp-dash">–</span>
+                    <input type="number" class="fp-mm-max" placeholder="max" min="0">
+                  </div>
+                </section>
+
+                <!-- SIGNAL -->
+                <section class="fp-group">
+                  <div class="fp-group-title">Buy signal <span class="fp-val" id="signalVal">Any</span></div>
+                  <div class="fp-chips" id="signalChips">
+                    <button class="fp-chip is-active" data-min="">Any</button>
+                    <button class="fp-chip" data-min="60">≥60%</button>
+                    <button class="fp-chip" data-min="70">≥70%</button>
+                    <button class="fp-chip" data-min="80">≥80%</button>
+                    <button class="fp-chip" data-min="90">≥90%</button>
+                  </div>
+                  <div class="dual-slider" id="signalSlider">
+                    <div class="ds-track"><div class="ds-fill"></div></div>
+                    <input type="range" class="ds-input ds-min"><input type="range" class="ds-input ds-max">
+                  </div>
+                </section>
+
+                <!-- EARNINGS -->
+                <section class="fp-group">
+                  <div class="fp-group-title">Earnings — EPS surprise</div>
+                  <div class="fp-sub">Average surprise %</div>
+                  <div class="fp-fields">
+                    <label class="fp-field"><input type="number" id="earnAvgMin" placeholder="Min %"></label>
+                    <span class="fp-dash">–</span>
+                    <label class="fp-field"><input type="number" id="earnAvgMax" placeholder="Max %"></label>
+                  </div>
+                  <div class="fp-sub">Quarters beaten</div>
+                  <div class="fp-chips" id="beatChips">
+                    <button class="fp-chip is-active" data-beats="">Any</button>
+                    <button class="fp-chip" data-beats="1">1+</button>
+                    <button class="fp-chip" data-beats="2">2+</button>
+                    <button class="fp-chip" data-beats="3">3+</button>
+                    <button class="fp-chip" data-beats="4">All 4</button>
+                  </div>
+                  <label class="fp-check"><input type="checkbox" id="lastBeat"><span>Latest quarter beat estimates</span></label>
+                </section>
+
+                <!-- INSIDER -->
+                <section class="fp-group">
+                  <div class="fp-group-title">Insider trades</div>
+                  <div class="fp-sub">Direction</div>
+                  <div class="fp-chips" id="insiderDir">
+                    <button class="fp-chip is-active" data-dir="any">Any</button>
+                    <button class="fp-chip" data-dir="buy">Buys</button>
+                    <button class="fp-chip" data-dir="sell">Sells</button>
+                  </div>
+                  <div class="fp-sub">Minimum shares traded</div>
+                  <label class="fp-field fp-field--full"><input type="number" id="insiderMinShares" placeholder="e.g. 1000" min="0"></label>
+                  <div class="fp-sub">Traded within</div>
+                  <div class="fp-chips" id="insiderWithin">
+                    <button class="fp-chip is-active" data-days="">Any time</button>
+                    <button class="fp-chip" data-days="7">7 days</button>
+                    <button class="fp-chip" data-days="30">30 days</button>
+                    <button class="fp-chip" data-days="90">90 days</button>
+                    <button class="fp-chip" data-days="365">1 year</button>
+                  </div>
+                </section>
+              </div>
+
+              <div class="filter-panel-foot">
+                <span class="fp-result" id="filterResult"></span>
+                <button class="fp-done" id="filterDone">Done</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="search-wrap">
+            <input class="search-input" type="text" placeholder="Search symbol…" id="searchInput" />
+          </div>
         </div>
       </div>
 
@@ -319,6 +499,12 @@
             <div class="earn-head">
               <span class="earn-head-title">Insider Trades <span class="sort-caret"></span></span>
               <span class="earn-head-sub">major exec buys &amp; sells</span>
+            </div>
+          </div>
+          <div class="col col-change col--sortable" data-sort="change" title="Sort by 1-day price change">
+            <div class="earn-head">
+              <span class="earn-head-title">1D Change <span class="sort-caret"></span></span>
+              <span class="earn-head-sub">vs previous close</span>
             </div>
           </div>
         </div>
@@ -575,7 +761,7 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  <script src="app.js?v=24"></script>
+  <script src="app.js?v=27"></script>
   <script src="journal.js?v=1"></script>
 </body>
 </html>

@@ -11,6 +11,28 @@ let visibleCount = 30;
 const PAGE_SIZE  = 30;
 let watchlistSymbols = new Set();
 
+/* ─── Small shared helpers ─────────────────────────────── */
+function escapeHtml(str) {
+  return String(str ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+// Unix seconds → "just now" / "3h ago" / "2d ago" / a date for older items.
+function relativeTime(unixSeconds) {
+  if (!unixSeconds) return '';
+  const diff = Date.now() / 1000 - unixSeconds;
+  if (diff < 0)        return 'just now';
+  if (diff < 60)       return 'just now';
+  if (diff < 3600)     return `${Math.floor(diff / 60)}m ago`;
+  if (diff < 86400)    return `${Math.floor(diff / 3600)}h ago`;
+  if (diff < 604800)   return `${Math.floor(diff / 86400)}d ago`;
+  return new Date(unixSeconds * 1000).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+}
+
 /* ─── Static PCB Background + Signal Animation ─────────── */
 (function initPCB() {
   const canvas = document.getElementById('gridCanvas');
@@ -472,6 +494,14 @@ function buildRow(stock, rank) {
               <polyline points="16,5 22,5 22,11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </button>
+          <button class="nw-btn" title="Latest ${stock.symbol} news">
+            <svg class="nw-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 5h13v14H5a1 1 0 0 1-1-1V5z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              <path d="M17 8h3v9a2 2 0 0 1-2 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <line x1="7" y1="9" x2="14" y2="9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <line x1="7" y1="13" x2="14" y2="13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
           <button class="wl-btn${watchlistSymbols.has(stock.symbol) ? ' wl-btn--active' : ''}" data-symbol="${stock.symbol}" title="${watchlistSymbols.has(stock.symbol) ? 'Remove from watchlist' : 'Save to watchlist'}">
             <svg class="wl-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -509,6 +539,10 @@ function buildRow(stock, rank) {
       <div class="row-insider">
         ${insiderHtml(stock)}
       </div>
+
+      <div class="row-change">
+        ${changeHtml(stock)}
+      </div>
     </div>
 
     <!-- Inline chart panel -->
@@ -525,6 +559,20 @@ function buildRow(stock, rank) {
         </div>
       </div>
     </div>
+
+    <!-- Inline news panel -->
+    <div class="news-panel">
+      <div class="news-panel-inner">
+        <div class="news-toolbar">
+          <span class="news-symbol-label">${stock.symbol} — Latest News</span>
+          <button class="news-close" title="Close news">✕</button>
+        </div>
+        <div class="news-list-wrap">
+          <div class="news-loading">Loading news…</div>
+        </div>
+        <div class="news-attribution">News via Finnhub — headlines link to their original publishers.</div>
+      </div>
+    </div>
   `;
 
   const row          = entry.querySelector('.stock-row');
@@ -532,6 +580,11 @@ function buildRow(stock, rank) {
   const panelInner   = entry.querySelector('.chart-panel-inner');
   const frameWrap    = entry.querySelector('.chart-frame-wrap');
   const tvBtn        = entry.querySelector('.tv-btn');
+  const nwBtn        = entry.querySelector('.nw-btn');
+  const newsPanel    = entry.querySelector('.news-panel');
+  const newsInner    = entry.querySelector('.news-panel-inner');
+  const newsListWrap = entry.querySelector('.news-list-wrap');
+  const newsClose    = entry.querySelector('.news-close');
   const wlBtn        = entry.querySelector('.wl-btn');
   const symbolSpan   = entry.querySelector('.sym-label');
 
@@ -583,6 +636,81 @@ function buildRow(stock, rank) {
       onComplete: () => gsap.set(panel, { display: 'none' })
     });
   }
+
+  /* ── News panel (separate from chart, toggled by click) ── */
+  let newsExpanded = false;
+  let newsLoaded   = false;
+
+  function renderNews(items) {
+    if (!items || !items.length) {
+      newsListWrap.innerHTML = '<div class="news-empty">No recent news found for this stock.</div>';
+      return;
+    }
+    newsListWrap.innerHTML = items.map(n => {
+      const src  = n.source ? escapeHtml(n.source) : 'Source';
+      const when = relativeTime(n.datetime);
+      const sum  = n.summary ? `<p class="news-item-summary">${escapeHtml(n.summary).slice(0, 220)}${n.summary.length > 220 ? '…' : ''}</p>` : '';
+      return `
+        <a class="news-item" href="${escapeHtml(n.url)}" target="_blank" rel="noopener noreferrer">
+          <div class="news-item-head">
+            <span class="news-item-source">${src}</span>
+            ${when ? `<span class="news-item-time">${when}</span>` : ''}
+          </div>
+          <div class="news-item-headline">${escapeHtml(n.headline)}</div>
+          ${sum}
+        </a>`;
+    }).join('');
+  }
+
+  async function loadNews() {
+    if (newsLoaded) return;
+    newsLoaded = true;
+    try {
+      const res = await fetch(`/api/news/${encodeURIComponent(stock.symbol)}`);
+      if (!res.ok) throw new Error('news fetch failed');
+      const data = await res.json();
+      renderNews(data.news);
+    } catch (err) {
+      newsLoaded = false;  // allow a retry on next open
+      newsListWrap.innerHTML = '<div class="news-empty">Couldn’t load news right now. Try again shortly.</div>';
+    }
+  }
+
+  function openNews() {
+    if (newsExpanded) return;
+    newsExpanded = true;
+    nwBtn.classList.add('nw-btn--active');
+    loadNews();
+    gsap.set(newsPanel, { display: 'block' });
+    gsap.fromTo(newsPanel,
+      { height: 0, opacity: 0 },
+      { height: 'auto', opacity: 1, duration: 0.55, ease: 'power3.inOut' }
+    );
+    gsap.fromTo(newsInner,
+      { y: -16, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.45, delay: 0.12, ease: 'power2.out' }
+    );
+  }
+
+  function closeNews() {
+    if (!newsExpanded) return;
+    newsExpanded = false;
+    nwBtn.classList.remove('nw-btn--active');
+    gsap.to(newsInner, { y: -10, opacity: 0, duration: 0.22, ease: 'power2.in' });
+    gsap.to(newsPanel, {
+      height: 0, opacity: 0, duration: 0.5, ease: 'power3.inOut', delay: 0.08,
+      onComplete: () => gsap.set(newsPanel, { display: 'none' })
+    });
+  }
+
+  nwBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    newsExpanded ? closeNews() : openNews();
+  });
+  newsClose.addEventListener('click', (e) => {
+    e.stopPropagation();
+    closeNews();
+  });
 
   /* ── Watchlist star button ── */
   wlBtn.addEventListener('click', (e) => {
@@ -653,6 +781,112 @@ function insiderMag(stock) {
   return b.direction === 'sell' ? -b.shares : b.shares;
 }
 
+/* ─── Feed filters ─────────────────────────────────────── */
+const filters = {
+  price:    { min: null, max: null },
+  sectors:  new Set(),
+  buy:      { min: null, max: null },
+  hold:     { min: null, max: null },
+  sell:     { min: null, max: null },
+  signal:   { min: null, max: null },
+  earnings: { avgMin: null, avgMax: null, minBeats: null, lastBeat: false },
+  insider:  { direction: 'any', minShares: null, withinDays: null },
+  change:   { period: '1d', min: null, max: null },
+};
+
+function signalOf(s) {
+  const total = s.buy + s.hold + s.sell;
+  return total > 0 ? (s.buy / total) * 100 : 0;
+}
+
+/* True if a stock satisfies every active filter (defaults = no constraint). */
+function passesFilters(s) {
+  const f = filters;
+
+  if (f.price.min != null && (s.price == null || s.price < f.price.min)) return false;
+  if (f.price.max != null && (s.price == null || s.price > f.price.max)) return false;
+
+  if (f.sectors.size && (!s.sector || !f.sectors.has(s.sector))) return false;
+
+  for (const k of ['buy', 'hold', 'sell']) {
+    if (f[k].min != null && s[k] < f[k].min) return false;
+    if (f[k].max != null && s[k] > f[k].max) return false;
+  }
+
+  const sig = signalOf(s);
+  if (f.signal.min != null && sig < f.signal.min) return false;
+  if (f.signal.max != null && sig > f.signal.max) return false;
+
+  const e = f.earnings;
+  if (e.avgMin != null || e.avgMax != null) {
+    const avg = earnAvg(s.symbol);
+    if (avg == null) return false;
+    if (e.avgMin != null && avg < e.avgMin) return false;
+    if (e.avgMax != null && avg > e.avgMax) return false;
+  }
+  if (e.minBeats != null || e.lastBeat) {
+    const qs = (earningsData && earningsData[s.symbol]) || [];
+    if (e.minBeats != null) {
+      const beats = qs.filter(q => q.surprise != null && q.surprise > 0).length;
+      if (beats < e.minBeats) return false;
+    }
+    if (e.lastBeat) {
+      const last = qs[qs.length - 1];   // quarters are oldest → latest
+      if (!last || last.surprise == null || last.surprise <= 0) return false;
+    }
+  }
+
+  const ins = f.insider;
+  if (ins.direction !== 'any' || ins.minShares != null || ins.withinDays != null) {
+    const b = s.insider;
+    if (!b) return false;
+    if (ins.direction !== 'any' && b.direction !== ins.direction) return false;
+    if (ins.minShares != null && (b.shares || 0) < ins.minShares) return false;
+    if (ins.withinDays != null) {
+      if (!b.date) return false;
+      const days = (Date.now() - new Date(b.date).getTime()) / 86400000;
+      if (!(days <= ins.withinDays)) return false;
+    }
+  }
+
+  // Price change (currently 1-day only; longer periods need a historical plan).
+  const ch = f.change;
+  if (ch.min != null || ch.max != null) {
+    if (s.change == null) return false;
+    if (ch.min != null && s.change < ch.min) return false;
+    if (ch.max != null && s.change > ch.max) return false;
+  }
+
+  return true;
+}
+
+function filtersActiveCount() {
+  const f = filters;
+  let n = 0;
+  if (f.price.min != null || f.price.max != null) n++;
+  if (f.sectors.size) n++;
+  if (f.buy.min  != null || f.buy.max  != null) n++;
+  if (f.hold.min != null || f.hold.max != null) n++;
+  if (f.sell.min != null || f.sell.max != null) n++;
+  if (f.signal.min != null || f.signal.max != null) n++;
+  if (f.earnings.avgMin != null || f.earnings.avgMax != null ||
+      f.earnings.minBeats != null || f.earnings.lastBeat) n++;
+  if (f.insider.direction !== 'any' || f.insider.minShares != null ||
+      f.insider.withinDays != null) n++;
+  if (f.change.min != null || f.change.max != null) n++;
+  return n;
+}
+
+function updateFilterBadge() {
+  const n   = filtersActiveCount();
+  const btn = document.getElementById('filterBtn');
+  const cnt = document.getElementById('filterCount');
+  if (!btn || !cnt) return;
+  btn.classList.toggle('has-active', n > 0);
+  if (n > 0) { cnt.textContent = n; cnt.hidden = false; }
+  else cnt.hidden = true;
+}
+
 function renderTable(resetCount = true) {
   const body = document.getElementById('tableBody');
 
@@ -666,6 +900,11 @@ function renderTable(resetCount = true) {
   if (searchQuery) {
     stocks = stocks.filter(s => s.symbol.includes(searchQuery.toUpperCase()));
   }
+
+  stocks = stocks.filter(passesFilters);
+
+  const fr = document.getElementById('filterResult');
+  if (fr) fr.textContent = `${stocks.length} of ${allStocks.length} stocks`;
 
   stocks.sort((a, b) => {
     if (sortKey === 'symbol') return sortDir * a.symbol.localeCompare(b.symbol);
@@ -698,6 +937,13 @@ function renderTable(resetCount = true) {
       if (av == null) return 1;
       if (bv == null) return -1;
       return sortDir * (av - bv);
+    }
+    if (sortKey === 'change') {
+      // 1-day % change; stocks with no change data sink to the bottom.
+      if (a.change == null && b.change == null) return 0;
+      if (a.change == null) return 1;
+      if (b.change == null) return -1;
+      return sortDir * (a.change - b.change);
     }
     return sortDir * (a[sortKey] - b[sortKey]);
   });
@@ -897,6 +1143,255 @@ attachAutocomplete(searchInput, {
   onSelect: () => { searchQuery = searchInput.value.trim(); renderTable(); },
 });
 
+/* ─── Filter panel ─────────────────────────────────────── */
+/* Reusable dual-handle range slider. Returns { set(lo,hi,silent) }. */
+function initDualSlider(rootId, { min, max, step, onChange }) {
+  const root = document.getElementById(rootId);
+  const fill = root.querySelector('.ds-fill');
+  const lo   = root.querySelector('.ds-min');
+  const hi   = root.querySelector('.ds-max');
+  [lo, hi].forEach(inp => { inp.min = min; inp.max = max; inp.step = step; });
+  lo.value = min; hi.value = max;
+
+  const pct = v => ((v - min) / (max - min)) * 100;
+  function paint() {
+    fill.style.left  = pct(+lo.value) + '%';
+    fill.style.right = (100 - pct(+hi.value)) + '%';
+  }
+  function onInput(which) {
+    let a = +lo.value, b = +hi.value;
+    if (a > b) { if (which === 'min') lo.value = b; else hi.value = a; }
+    paint();
+    onChange(+lo.value, +hi.value);
+  }
+  lo.addEventListener('input', () => onInput('min'));
+  hi.addEventListener('input', () => onInput('max'));
+  paint();
+
+  return {
+    set(a, b, silent) {
+      lo.value = Math.max(min, Math.min(a, max));
+      hi.value = Math.max(min, Math.min(b, max));
+      if (+lo.value > +hi.value) lo.value = hi.value;
+      paint();
+      if (!silent) onChange(+lo.value, +hi.value);
+    },
+  };
+}
+
+let _filtersReady = false;
+function initFilters() {
+  if (_filtersReady) return;
+  const btn   = document.getElementById('filterBtn');
+  const panel = document.getElementById('filterPanel');
+  if (!btn || !panel) return;
+  _filtersReady = true;
+
+  /* open / close */
+  const open  = () => { panel.hidden = false; panel.classList.add('animate-in'); btn.setAttribute('aria-expanded', 'true'); };
+  const close = () => { panel.hidden = true;  panel.classList.remove('animate-in'); btn.setAttribute('aria-expanded', 'false'); };
+  btn.addEventListener('click', e => { e.stopPropagation(); panel.hidden ? open() : close(); });
+  panel.addEventListener('click', e => e.stopPropagation());
+  document.addEventListener('click', () => { if (!panel.hidden) close(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !panel.hidden) close(); });
+  document.getElementById('filterDone').addEventListener('click', close);
+
+  const apply = () => { updateFilterBadge(); renderTable(); };
+
+  /* ---- Price ---- */
+  const prices    = allStocks.map(s => s.price).filter(v => v != null);
+  const priceMax  = prices.length ? Math.ceil(Math.max(...prices) / 50) * 50 : 1000;
+  const priceMinEl = document.getElementById('priceMin');
+  const priceMaxEl = document.getElementById('priceMax');
+  const priceVal   = document.getElementById('priceVal');
+  const setPriceVal = (a, b) => { priceVal.textContent = `$${a} – $${b}${b >= priceMax ? '+' : ''}`; };
+  const priceSlider = initDualSlider('priceSlider', {
+    min: 0, max: priceMax, step: 1,
+    onChange: (a, b) => {
+      priceMinEl.value = a > 0 ? a : '';
+      priceMaxEl.value = b < priceMax ? b : '';
+      filters.price.min = a > 0 ? a : null;
+      filters.price.max = b < priceMax ? b : null;
+      setPriceVal(a, b);
+      apply();
+    },
+  });
+  const syncPrice = () => {
+    let a = parseFloat(priceMinEl.value), b = parseFloat(priceMaxEl.value);
+    a = isNaN(a) ? 0 : Math.max(0, a);
+    b = isNaN(b) ? priceMax : Math.min(priceMax, b);
+    priceSlider.set(a, b);
+  };
+  priceMinEl.addEventListener('change', syncPrice);
+  priceMaxEl.addEventListener('change', syncPrice);
+
+  /* ---- Signal ---- */
+  const signalVal   = document.getElementById('signalVal');
+  const signalChips = document.getElementById('signalChips');
+  function syncSignalChips() {
+    [...signalChips.children].forEach(c => {
+      const m = c.dataset.min === '' ? null : +c.dataset.min;
+      const maxOpen = filters.signal.max == null || filters.signal.max === 100;
+      const active = maxOpen && ((m == null && filters.signal.min == null) ||
+                                 (m != null && filters.signal.min === m));
+      c.classList.toggle('is-active', active);
+    });
+  }
+  const signalSlider = initDualSlider('signalSlider', {
+    min: 0, max: 100, step: 1,
+    onChange: (a, b) => {
+      filters.signal.min = a > 0 ? a : null;
+      filters.signal.max = b < 100 ? b : null;
+      signalVal.textContent = (a === 0 && b === 100) ? 'Any' : `${a}–${b}%`;
+      syncSignalChips();
+      apply();
+    },
+  });
+  signalChips.addEventListener('click', e => {
+    const chip = e.target.closest('.fp-chip'); if (!chip) return;
+    signalSlider.set(chip.dataset.min === '' ? 0 : +chip.dataset.min, 100);
+  });
+
+  /* ---- Sectors ---- */
+  const sectors = [...new Set(allStocks.map(s => s.sector).filter(Boolean))].sort();
+  const list = document.getElementById('sectorList');
+  list.innerHTML = sectors.map(sec => {
+    const esc = sec.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+    return `<label class="fp-sector"><input type="checkbox" value="${esc}"><span>${esc}</span></label>`;
+  }).join('');
+  list.addEventListener('change', e => {
+    const cb = e.target.closest('input[type=checkbox]'); if (!cb) return;
+    if (cb.checked) filters.sectors.add(cb.value); else filters.sectors.delete(cb.value);
+    cb.closest('.fp-sector').classList.toggle('is-checked', cb.checked);
+    apply();
+  });
+  document.getElementById('sectorSearch').addEventListener('input', e => {
+    const q = e.target.value.trim().toLowerCase();
+    [...list.children].forEach(l => { l.style.display = l.textContent.toLowerCase().includes(q) ? '' : 'none'; });
+  });
+  document.getElementById('secAll').addEventListener('click', () => {
+    sectors.forEach(s => filters.sectors.add(s));
+    list.querySelectorAll('input').forEach(cb => { cb.checked = true; cb.closest('.fp-sector').classList.add('is-checked'); });
+    apply();
+  });
+  document.getElementById('secNone').addEventListener('click', () => {
+    filters.sectors.clear();
+    list.querySelectorAll('input').forEach(cb => { cb.checked = false; cb.closest('.fp-sector').classList.remove('is-checked'); });
+    apply();
+  });
+
+  /* ---- Analyst ratings (buy / hold / sell) ---- */
+  document.querySelectorAll('.fp-minmax').forEach(row => {
+    const key   = row.dataset.key;
+    const minEl = row.querySelector('.fp-mm-min');
+    const maxEl = row.querySelector('.fp-mm-max');
+    const upd = () => {
+      const a = parseInt(minEl.value, 10), b = parseInt(maxEl.value, 10);
+      filters[key].min = isNaN(a) ? null : a;
+      filters[key].max = isNaN(b) ? null : b;
+      apply();
+    };
+    minEl.addEventListener('input', upd);
+    maxEl.addEventListener('input', upd);
+  });
+
+  /* ---- Earnings ---- */
+  const earnAvgMin = document.getElementById('earnAvgMin');
+  const earnAvgMax = document.getElementById('earnAvgMax');
+  const updEarn = () => {
+    const a = parseFloat(earnAvgMin.value), b = parseFloat(earnAvgMax.value);
+    filters.earnings.avgMin = isNaN(a) ? null : a;
+    filters.earnings.avgMax = isNaN(b) ? null : b;
+    apply();
+  };
+  earnAvgMin.addEventListener('input', updEarn);
+  earnAvgMax.addEventListener('input', updEarn);
+  const beatChips = document.getElementById('beatChips');
+  beatChips.addEventListener('click', e => {
+    const chip = e.target.closest('.fp-chip'); if (!chip) return;
+    [...beatChips.children].forEach(c => c.classList.toggle('is-active', c === chip));
+    filters.earnings.minBeats = chip.dataset.beats === '' ? null : +chip.dataset.beats;
+    apply();
+  });
+  document.getElementById('lastBeat').addEventListener('change', e => {
+    filters.earnings.lastBeat = e.target.checked; apply();
+  });
+
+  /* ---- Insider ---- */
+  const insiderDir = document.getElementById('insiderDir');
+  insiderDir.addEventListener('click', e => {
+    const chip = e.target.closest('.fp-chip'); if (!chip) return;
+    [...insiderDir.children].forEach(c => c.classList.toggle('is-active', c === chip));
+    filters.insider.direction = chip.dataset.dir; apply();
+  });
+  document.getElementById('insiderMinShares').addEventListener('input', e => {
+    const v = parseInt(e.target.value, 10);
+    filters.insider.minShares = isNaN(v) ? null : v; apply();
+  });
+  const insiderWithin = document.getElementById('insiderWithin');
+  insiderWithin.addEventListener('click', e => {
+    const chip = e.target.closest('.fp-chip'); if (!chip) return;
+    [...insiderWithin.children].forEach(c => c.classList.toggle('is-active', c === chip));
+    filters.insider.withinDays = chip.dataset.days === '' ? null : +chip.dataset.days; apply();
+  });
+
+  /* ---- Price change ---- */
+  // Only the 1-day period has data on the current plan; the longer-period
+  // chips are disabled in the markup until a historical-data plan is enabled.
+  const changePeriod = document.getElementById('changePeriod');
+  changePeriod.addEventListener('click', e => {
+    const chip = e.target.closest('.fp-chip'); if (!chip || chip.disabled) return;
+    [...changePeriod.children].forEach(c => c.classList.toggle('is-active', c === chip));
+    filters.change.period = chip.dataset.period; apply();
+  });
+  const changeMin = document.getElementById('changeMin');
+  const changeMax = document.getElementById('changeMax');
+  const updChange = () => {
+    const a = parseFloat(changeMin.value), b = parseFloat(changeMax.value);
+    filters.change.min = isNaN(a) ? null : a;
+    filters.change.max = isNaN(b) ? null : b;
+    apply();
+  };
+  changeMin.addEventListener('input', updChange);
+  changeMax.addEventListener('input', updChange);
+
+  /* ---- Reset all ---- */
+  document.getElementById('filterReset').addEventListener('click', () => {
+    filters.price    = { min: null, max: null };
+    filters.sectors.clear();
+    filters.buy = { min: null, max: null };
+    filters.hold = { min: null, max: null };
+    filters.sell = { min: null, max: null };
+    filters.signal   = { min: null, max: null };
+    filters.earnings = { avgMin: null, avgMax: null, minBeats: null, lastBeat: false };
+    filters.insider  = { direction: 'any', minShares: null, withinDays: null };
+    filters.change   = { period: '1d', min: null, max: null };
+
+    priceMinEl.value = ''; priceMaxEl.value = '';
+    priceSlider.set(0, priceMax, true); setPriceVal(0, priceMax);
+    signalSlider.set(0, 100, true); signalVal.textContent = 'Any'; syncSignalChips();
+    list.querySelectorAll('input').forEach(cb => { cb.checked = false; cb.closest('.fp-sector').classList.remove('is-checked'); });
+    document.getElementById('sectorSearch').value = '';
+    [...list.children].forEach(l => l.style.display = '');
+    document.querySelectorAll('.fp-minmax input').forEach(i => i.value = '');
+    earnAvgMin.value = ''; earnAvgMax.value = '';
+    [...beatChips.children].forEach(c => c.classList.toggle('is-active', c.dataset.beats === ''));
+    document.getElementById('lastBeat').checked = false;
+    [...insiderDir.children].forEach(c => c.classList.toggle('is-active', c.dataset.dir === 'any'));
+    document.getElementById('insiderMinShares').value = '';
+    [...insiderWithin.children].forEach(c => c.classList.toggle('is-active', c.dataset.days === ''));
+    changeMin.value = ''; changeMax.value = '';
+    [...changePeriod.children].forEach(c => c.classList.toggle('is-active', c.dataset.period === '1d'));
+
+    apply();
+  });
+
+  /* initial slider positions (silent — keep filters at default null) */
+  priceSlider.set(0, priceMax, true);  setPriceVal(0, priceMax);
+  signalSlider.set(0, 100, true);
+  updateFilterBadge();
+}
+
 /* ─── Earnings — pre-fetched from data/earnings.json ────── */
 let earningsData = null;
 
@@ -987,6 +1482,7 @@ async function loadData() {
         hold:   vals.hold  || 0,
         sell:   vals.sell  || 0,
         price:  vals.price ?? (filtJson[symbol] && filtJson[symbol].price) ?? null,
+        change: vals.change ?? (filtJson[symbol] && filtJson[symbol].change) ?? null,
         sector: prof(symbol).sector || null,
         logo:   prof(symbol).logo   || null,
         insider: insider(symbol),
@@ -999,6 +1495,7 @@ async function loadData() {
         hold:   vals.hold  || 0,
         sell:   vals.sell  || 0,
         price:  vals.price || null,
+        change: vals.change ?? null,
         sector: prof(symbol).sector || null,
         logo:   prof(symbol).logo   || null,
         insider: insider(symbol),
@@ -1015,6 +1512,7 @@ async function loadData() {
   buildStats(data);
   await loadEarningsFile();
   initRotatingStat();
+  initFilters();          // wire the filter panel (needs allStocks for sectors + price range)
   renderTable();
   renderWatchlist();
   // Prices come pre-loaded from the data files (licensed Finnhub data).
@@ -1036,6 +1534,15 @@ function insiderHtml(stock) {
       <span class="insider-shares">${arrow}${(b.shares).toLocaleString()}</span>
       <span class="insider-meta">${who} · ${smAgo(b.date)}</span>
     </div>`;
+}
+
+/* ─── 1-day price change cell (vs previous close) ── */
+function changeHtml(stock) {
+  const c = stock.change;
+  if (c == null) return `<span class="chg chg--na">—</span>`;
+  const cls   = c > 0 ? 'chg--up' : c < 0 ? 'chg--down' : 'chg--flat';
+  const arrow = c > 0 ? '▲' : c < 0 ? '▼' : '•';
+  return `<span class="chg ${cls}" title="Change vs previous close">${arrow} ${Math.abs(c).toFixed(2)}%</span>`;
 }
 
 function smFmtValue(v) {
@@ -2683,6 +3190,9 @@ function fillIndicator(key, ind) {
 
   document.getElementById('openLoginBtn').addEventListener('click',    () => openModal('loginModal'));
   document.getElementById('openRegisterBtn').addEventListener('click', () => openModal('registerModal'));
+  // Value-prop panel CTA → open the register modal
+  const introReg = document.getElementById('introRegisterBtn');
+  if (introReg) introReg.addEventListener('click', () => openModal('registerModal'));
   document.getElementById('closeLoginBtn').addEventListener('click',    () => closeModal('loginModal'));
   document.getElementById('closeRegisterBtn').addEventListener('click', () => closeModal('registerModal'));
   document.getElementById('switchToRegister').addEventListener('click', () => { closeModal('loginModal');    openModal('registerModal'); });
