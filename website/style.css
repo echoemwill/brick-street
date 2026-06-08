@@ -1565,14 +1565,14 @@ body.wl-open .cal-panel {
 }
 
 .stock-row:hover .row-symbol {
-  transform: scale(1.08);
+  transform: scale(1.04);
   transform-origin: left center;
 }
 
 .symbol-text {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   min-width: 0;
 }
 
@@ -1592,6 +1592,11 @@ body.wl-open .cal-panel {
   display: flex;
   align-items: center;
   min-width: 0;
+  /* Buffer so a wide symbol cell (logo + ticker + price + action buttons + star)
+     never visually overlaps the sector chip, even with the hover zoom. */
+  padding-left: 12px;
+  position: relative;
+  z-index: 1;
 }
 .sector-chip {
   display: inline-block;

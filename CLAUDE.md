@@ -85,7 +85,12 @@ StockPulse/
 > users get **server sync** (`journal_entries` table), an **analytics** dashboard,
 > and **CSV export**. On login, local entries migrate up to the account once.
 > API: `GET/POST /api/journal`, `DELETE /api/journal/<client_id>` (see `auth_server.py`).
-> Future: CSV import + optional broker API sync.
+> Logged-in users also get a **P&L Calendar** (button between New entry and Export):
+> a full-screen month grid colouring each day green/red by realised trade P&L; click
+> a day to jump to and pulse its trades. **Free** accounts are capped at **15 distinct
+> trading days** (the 16th prompts a **$5/mo Pro** upgrade paywall); **Pro** is unlimited.
+> Accounts carry a subscription `plan` (`'free'` | `'pro'`); emails in `OWNER_EMAILS`
+> (auth_server.py) are auto-promoted to Pro. Future: CSV import + optional broker API sync.
 
 > **Going commercial?** All stock data now comes from **Finnhub** (licensed) via
 > `data_sources.py` + `fetch_stocks.py`, replacing the deprecated scrapers. A public,
@@ -232,3 +237,21 @@ Everytime when we add a new source of information to the project or add new func
 ## Rule about the fit 
 
 When adding new feature, button, section, pannel or something like this, make it fit with the elements which are surrounding it. For example do not put the new button over another element, make them fit together. 
+
+## Subscriptions  access 
+
+The following features are available for the subsribers and Emil Toshev:
+1. Journal calendar 
+2. Journal export option 
+3. Watchlist 
+
+## Reqular account access 
+
+1. Journal calendar but only 15 entries  
+2. Journal export option 
+3. Watchlist 15 but only 15 entries
+
+## Rule regarding my rules 
+What ever I prompt you, do not edit ot remove the rules set by me. 
+
+

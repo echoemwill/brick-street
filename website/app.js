@@ -10,6 +10,15 @@ let searchQuery = '';
 let visibleCount = 30;
 const PAGE_SIZE  = 30;
 let watchlistSymbols = new Set();
+let currentUser = null;                       // {id,name,email,plan} when logged in
+const WATCHLIST_FREE_LIMIT = 15;              // free accounts cap; pro is unlimited
+const isProUser = () => !!(currentUser && currentUser.plan === 'pro');
+
+/* Pro upgrade prompt (reuses the journal paywall modal). */
+function showUpgradePrompt(opts) {
+  if (window.Journal && window.Journal.showUpgrade) window.Journal.showUpgrade(opts);
+  else { const b = document.getElementById('openRegisterBtn'); if (b) b.click(); }
+}
 
 /* ─── Small shared helpers ─────────────────────────────── */
 function escapeHtml(str) {
@@ -2125,6 +2134,15 @@ function clearWatchlist() {
   renderWatchlist();
 }
 
+function showWatchlistPaywall() {
+  showUpgradePrompt({
+    title: 'Your watchlist is full',
+    sub: `Free accounts can save up to <strong>${WATCHLIST_FREE_LIMIT} stocks</strong>. `
+       + `Upgrade to <strong>Brick Street Pro</strong> for an <strong>unlimited watchlist</strong>, `
+       + `the full P&amp;L calendar, analytics &amp; CSV export.`
+  });
+}
+
 async function toggleWatchlist(symbol) {
   const token = getAuthToken();
   if (!token) {
@@ -2143,14 +2161,21 @@ async function toggleWatchlist(symbol) {
       watchlistSymbols.delete(symbol);
     } catch (_) {}
   } else {
+    // Free accounts are capped at 15 saved stocks; pro is unlimited.
+    if (!isProUser() && watchlistSymbols.size >= WATCHLIST_FREE_LIMIT) {
+      showWatchlistPaywall();
+      return;
+    }
     try {
-      await fetch('/api/watchlist', {
+      const res = await fetch('/api/watchlist', {
         method: 'POST',
         headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json', 'ngrok-skip-browser-warning': 'true' },
         body: JSON.stringify({ symbol })
       });
+      if (res.status === 402) { showWatchlistPaywall(); return; }   // server enforced the cap
+      if (!res.ok) return;
       watchlistSymbols.add(symbol);
-    } catch (_) {}
+    } catch (_) { return; }
   }
 
   updateWatchlistButtons(symbol);
@@ -3150,6 +3175,7 @@ function fillIndicator(key, ind) {
   function clearToken()  { localStorage.removeItem(TOKEN_KEY); }
 
   function setAuthState(user) {
+    currentUser = user || null;
     const loggedIn = !!user;
     document.getElementById('authLoggedOut').style.display = loggedIn ? 'none' : 'flex';
     document.getElementById('authLoggedIn').style.display  = loggedIn ? 'flex' : 'none';

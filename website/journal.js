@@ -7,7 +7,11 @@
 (function () {
   const LS_KEY = 'bs_journal_entries';
 
-  const state = { type: 'trade', entries: [], formOpen: false, editingId: null };
+  const state = {
+    type: 'trade', entries: [], formOpen: false, editingId: null,
+    user: null,                      // {id,name,email,plan} when logged in
+    cal: null,                       // {year, month} when the calendar overlay is open
+  };
   const priceCache = {};            // symbol → {price, company} | null
 
   // ── tiny helpers ──────────────────────────────────────────
@@ -16,6 +20,8 @@
     ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const token  = () => localStorage.getItem('bs_token');
   const authed = () => !!token();
+  // Pro ($5/mo) subscription gate — the P&L calendar is a pro-only feature.
+  const isPro  = () => !!(state.user && state.user.plan === 'pro');
   const uuid   = () => (crypto.randomUUID ? crypto.randomUUID()
     : 'id-' + Date.now() + '-' + Math.random().toString(16).slice(2));
   const num = v => (v === '' || v == null || isNaN(+v)) ? null : +v;
@@ -25,6 +31,13 @@
     : (v < 0 ? '-$' : '$') + Math.abs(v).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   const pct = v => v == null ? '—' : (v >= 0 ? '+' : '') + v.toFixed(1) + '%';
   const rfmt = v => v == null ? '—' : (v >= 0 ? '+' : '') + v.toFixed(2) + 'R';
+
+  // Compact money for the big calendar squares: no cents, sign, grouped (e.g. -$200, +$1,250).
+  const moneyShort = v => v == null ? ''
+    : (v < 0 ? '-$' : '+$') + Math.round(Math.abs(v)).toLocaleString('en-US');
+
+  // The day a trade's P&L belongs to: its close date (realised), else its open date.
+  const tradeDay = e => (e.closedAt || e.openedAt || (e.createdAt || '').slice(0, 10) || '');
 
   // ── API ───────────────────────────────────────────────────
   async function api(path, opts = {}) {
@@ -119,8 +132,10 @@
     renderBanner();
     renderAnalytics();
     renderList();
+    // Export always presents as available — for subscription accounts, Emil, and
+    // regular accounts alike (guests clicking it are nudged to register).
     const exp = $('jrExportBtn');
-    if (exp) exp.classList.toggle('jr-locked', !authed());
+    if (exp) exp.classList.remove('jr-locked');
   }
 
   function renderBanner() {
@@ -259,7 +274,7 @@
     const statusCls = c.closed ? 'closed' : 'open';
     const pnlCls = c.pnl == null ? '' : c.pnl >= 0 ? 'pos' : 'neg';
     return `
-      <div class="jr-card jr-card--${dirCls}">
+      <div class="jr-card jr-card--${dirCls}" data-card="${e.id}" data-day="${tradeDay(e)}">
         <div class="jr-card-main">
           <div class="jr-card-head">
             <span class="jr-sym">${esc(e.symbol)}</span>
@@ -437,6 +452,7 @@
       e.preventDefault();
       const entry = collect(type);
       if (!entry.symbol) { symEl.focus(); return; }
+      if (dayLimitBlocks(entry)) { showPaywall(); return; }   // free 15-day cap
       await saveEntry(entry);
       closeForm(); render();
     });
@@ -513,6 +529,300 @@
     URL.revokeObjectURL(a.href);
   }
 
+  // ── P&L calendar ──────────────────────────────────────────
+  // Available to every logged-in account. Free accounts may journal trades on
+  // up to FREE_DAY_LIMIT distinct days; the next new day prompts a Pro upgrade.
+  const FREE_DAY_LIMIT = 15;
+  const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'];
+  const WEEKDAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  const pad2 = n => String(n).padStart(2, '0');
+  const dayKey = (y, m, d) => `${y}-${pad2(m + 1)}-${pad2(d)}`;
+
+  // Net realised P&L per calendar day, keyed 'YYYY-MM-DD' → {pnl, count}.
+  function pnlByDay() {
+    const map = {};
+    state.entries.filter(e => e.type === 'trade').forEach(e => {
+      const c = computeTrade(e);
+      if (!c.closed || c.pnl == null) return;
+      const day = tradeDay(e);
+      if (!day) return;
+      (map[day] || (map[day] = { pnl: 0, count: 0 }));
+      map[day].pnl += c.pnl;
+      map[day].count += 1;
+    });
+    return map;
+  }
+
+  // Distinct days that already hold a trade (optionally ignoring one entry id).
+  function distinctTradeDays(excludeId) {
+    const set = new Set();
+    state.entries.forEach(e => {
+      if (e.type !== 'trade' || e.id === excludeId) return;
+      const d = tradeDay(e);
+      if (d) set.add(d);
+    });
+    return set;
+  }
+
+  // Would saving this entry push a free account past its day allowance?
+  function dayLimitBlocks(entry) {
+    if (entry.type !== 'trade') return false;       // calendar tracks trades only
+    if (!authed() || isPro()) return false;         // guests (local) & pro: unlimited
+    const day = tradeDay(entry);
+    if (!day) return false;
+    const used = distinctTradeDays(entry.id);
+    if (used.has(day)) return false;                // day already logged — fine
+    return used.size >= FREE_DAY_LIMIT;             // brand-new day beyond the cap
+  }
+
+  function ensureCalEl() {
+    let el = $('jrCalOverlay');
+    if (el) return el;
+    el = document.createElement('div');
+    el.className = 'jr-cal-overlay';
+    el.id = 'jrCalOverlay';
+    document.body.appendChild(el);
+    el.addEventListener('click', ev => { if (ev.target === el) closeCalendar(); });
+    return el;
+  }
+
+  function openCalendar() {
+    if (!authed()) return;                          // logged-in accounts only
+    const now = new Date();
+    state.cal = { year: now.getFullYear(), month: now.getMonth() };
+    const el = ensureCalEl();
+    // Build the static shell once so the expand animation plays only on open,
+    // not on every month/year change.
+    el.innerHTML = `
+      <div class="jr-cal-modal" role="dialog" aria-label="Trading P&L calendar">
+        <div class="jr-cal-top">
+          <div class="jr-cal-title">📅 Trading P&amp;L Calendar</div>
+          <button class="jr-cal-close" id="jrCalClose" aria-label="Close">✕</button>
+        </div>
+        <div class="jr-cal-nav">
+          <button class="jr-cal-navbtn" data-nav="py" title="Previous year">«</button>
+          <button class="jr-cal-navbtn" data-nav="pm" title="Previous month">‹</button>
+          <div class="jr-cal-period" id="jrCalPeriod"></div>
+          <button class="jr-cal-navbtn" data-nav="nm" title="Next month">›</button>
+          <button class="jr-cal-navbtn" data-nav="ny" title="Next year">»</button>
+          <button class="jr-cal-todaybtn" data-nav="today">Today</button>
+        </div>
+        <div class="jr-cal-summary" id="jrCalSummary"></div>
+        <div class="jr-cal-weekdays">${WEEKDAYS.map(w => `<div>${w}</div>`).join('')}</div>
+        <div class="jr-cal-grid" id="jrCalGrid"></div>
+        <div class="jr-cal-foot" id="jrCalFoot"></div>
+      </div>`;
+    $('jrCalClose').onclick = closeCalendar;
+    el.querySelectorAll('[data-nav]').forEach(b => b.onclick = () => {
+      const n = b.dataset.nav;
+      if (n === 'py') shiftCal(-1, 0);
+      else if (n === 'ny') shiftCal(1, 0);
+      else if (n === 'pm') shiftCal(0, -1);
+      else if (n === 'nm') shiftCal(0, 1);
+      else { const t = new Date(); state.cal = { year: t.getFullYear(), month: t.getMonth() }; renderCalendar(false); }
+    });
+    document.body.style.overflow = 'hidden';        // lock page scroll behind the overlay
+    document.addEventListener('keydown', onCalKey);
+    // Add .open on the next frame so the CSS expand transition fires from scratch.
+    requestAnimationFrame(() => el.classList.add('open'));
+    renderCalendar(true);
+  }
+
+  function closeCalendar() {
+    const el = $('jrCalOverlay');
+    if (el) el.classList.remove('open');
+    state.cal = null;
+    document.body.style.overflow = '';
+    document.removeEventListener('keydown', onCalKey);
+  }
+
+  function onCalKey(ev) {
+    if (ev.key === 'Escape') closeCalendar();
+    else if (ev.key === 'ArrowLeft')  shiftCal(0, -1);
+    else if (ev.key === 'ArrowRight') shiftCal(0, 1);
+  }
+
+  function shiftCal(dy, dm) {
+    if (!state.cal) return;
+    const d = new Date(state.cal.year, state.cal.month + dm, 1);
+    state.cal = { year: d.getFullYear() + dy, month: d.getMonth() };
+    renderCalendar(false);
+  }
+
+  // Fill the dynamic parts of the calendar. `firstOpen` triggers the staggered
+  // day-cell reveal; month/year changes get a quick grid crossfade instead.
+  function renderCalendar(firstOpen) {
+    if (!state.cal) return;
+    const periodEl = $('jrCalPeriod');
+    if (!periodEl) return;
+    const { year, month } = state.cal;
+    const data = pnlByDay();
+
+    const first   = new Date(year, month, 1);
+    const lead    = (first.getDay() + 6) % 7;          // Monday-start offset
+    const nDays   = new Date(year, month + 1, 0).getDate();
+    const now     = new Date();
+    const todayK  = dayKey(now.getFullYear(), now.getMonth(), now.getDate());
+
+    periodEl.innerHTML = `${MONTHS[month]} <span>${year}</span>`;
+
+    // month totals
+    let monthPnl = 0, winDays = 0, lossDays = 0, tradeCount = 0;
+    for (let d = 1; d <= nDays; d++) {
+      const cell = data[dayKey(year, month, d)];
+      if (!cell) continue;
+      monthPnl += cell.pnl; tradeCount += cell.count;
+      if (cell.pnl > 0) winDays++; else if (cell.pnl < 0) lossDays++;
+    }
+    const sumCls = monthPnl > 0 ? 'pos' : monthPnl < 0 ? 'neg' : '';
+    $('jrCalSummary').innerHTML = `
+      <span class="jr-cal-sum-item">Net <strong class="${sumCls}">${tradeCount ? moneyShort(monthPnl) : '—'}</strong></span>
+      <span class="jr-cal-sum-item">Green days <strong class="pos">${winDays}</strong></span>
+      <span class="jr-cal-sum-item">Red days <strong class="neg">${lossDays}</strong></span>
+      <span class="jr-cal-sum-item">Trades <strong>${tradeCount}</strong></span>`;
+
+    let pos = 0;
+    const delay = () => `style="animation-delay:${(pos++) * 9}ms"`;   // wave on open
+    const cells = [];
+    for (let i = 0; i < lead; i++) cells.push(`<div class="jr-cal-day jr-cal-day--blank" ${delay()}></div>`);
+    for (let d = 1; d <= nDays; d++) {
+      const k = dayKey(year, month, d);
+      const cell = data[k];
+      const cls = ['jr-cal-day'];
+      if (k === todayK) cls.push('jr-cal-day--today');
+      if (cell) {
+        cls.push('jr-cal-day--has');
+        cls.push(cell.pnl > 0 ? 'jr-cal-day--win' : cell.pnl < 0 ? 'jr-cal-day--loss' : 'jr-cal-day--flat');
+      }
+      cells.push(`
+        <div class="${cls.join(' ')}" ${cell ? `data-goday="${k}"` : ''} ${delay()}>
+          <span class="jr-cal-daynum">${d}</span>
+          ${cell ? `<span class="jr-cal-amt">${moneyShort(cell.pnl)}</span>
+                    <span class="jr-cal-count">${cell.count} trade${cell.count > 1 ? 's' : ''}</span>` : ''}
+        </div>`);
+    }
+
+    const grid = $('jrCalGrid');
+    grid.className = 'jr-cal-grid' + (firstOpen ? ' jr-cal-grid--stagger' : '');
+    grid.innerHTML = cells.join('');
+    if (!firstOpen) {                                   // replay the quick crossfade
+      grid.classList.remove('jr-cal-grid--swap');
+      void grid.offsetWidth;
+      grid.classList.add('jr-cal-grid--swap');
+    }
+    grid.querySelectorAll('[data-goday]').forEach(c => c.onclick = () => gotoDay(c.dataset.goday));
+
+    // Footer: free-tier quota + jump hint.
+    const isFree = authed() && !isPro();
+    const used   = distinctTradeDays(null).size;
+    $('jrCalFoot').innerHTML =
+      (isFree ? `<div class="jr-cal-quota">
+           <span>Free plan · <strong>${used}/${FREE_DAY_LIMIT}</strong> trading days used</span>
+           <button class="jr-cal-upsell" id="jrCalUpsell">Upgrade to Pro — unlimited →</button>
+         </div>` : '') +
+      `<div class="jr-cal-hint">Click a day to jump to its trades in the list.</div>`;
+    const up = $('jrCalUpsell');
+    if (up) up.onclick = showPaywall;
+  }
+
+  // Jump from a calendar day to its trade card(s) in the list and pulse them.
+  function gotoDay(day) {
+    closeCalendar();
+    if (state.type !== 'trade') setType('trade'); else render();
+    requestAnimationFrame(() => {
+      const cards = [...document.querySelectorAll(`.jr-card[data-day="${day}"]`)];
+      if (!cards.length) return;
+      cards[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(() => cards.forEach(c => {
+        c.classList.remove('jr-card--flash');
+        void c.offsetWidth;                       // restart the animation
+        c.classList.add('jr-card--flash');
+        setTimeout(() => c.classList.remove('jr-card--flash'), 1300);
+      }), 220);
+    });
+  }
+
+  // ── Pro upgrade paywall ───────────────────────────────────
+  function ensurePaywallEl() {
+    let el = $('jrPaywall');
+    if (el) return el;
+    el = document.createElement('div');
+    el.className = 'jr-pay-overlay';
+    el.id = 'jrPaywall';
+    document.body.appendChild(el);
+    el.addEventListener('click', ev => { if (ev.target === el) closePaywall(); });
+    return el;
+  }
+
+  function showPaywall(opts) {
+    opts = (opts && typeof opts.title === 'string') ? opts : {};   // ignore event args
+    const title = opts.title || "You've reached the free limit";
+    const sub = opts.sub || `Free accounts can journal up to <strong>${FREE_DAY_LIMIT} trading days</strong>.
+          Upgrade to <strong>Brick Street Pro</strong> for unlimited days, the full P&amp;L calendar,
+          analytics &amp; CSV export.`;
+    const el = ensurePaywallEl();
+    el.innerHTML = `
+      <div class="jr-pay-modal" role="dialog" aria-label="Upgrade to Pro">
+        <button class="jr-pay-close" id="jrPayClose" aria-label="Close">✕</button>
+        <div class="jr-pay-badge">PRO</div>
+        <div class="jr-pay-title">${title}</div>
+        <div class="jr-pay-sub">${sub}</div>
+        <div class="jr-pay-price">$5<span>/month</span></div>
+        <button class="jr-pay-cta" id="jrPayCta">Upgrade to Pro</button>
+        <button class="jr-pay-later" id="jrPayLater">Maybe later</button>
+        <div class="jr-pay-note" id="jrPayNote"></div>
+      </div>`;
+    $('jrPayClose').onclick = closePaywall;
+    $('jrPayLater').onclick = closePaywall;
+    $('jrPayCta').onclick = () => {
+      const note = $('jrPayNote');
+      if (note) note.textContent = 'Card checkout is launching soon — your account is flagged for early access.';
+    };
+    requestAnimationFrame(() => el.classList.add('open'));
+  }
+  function closePaywall() { const el = $('jrPaywall'); if (el) el.classList.remove('open'); }
+
+  // Guests clicking the locked calendar get a teaser that previews the feature
+  // and nudges them to register (a free account already unlocks it).
+  function showLockedTeaser() {
+    const el = ensurePaywallEl();
+    el.innerHTML = `
+      <div class="jr-pay-modal jr-pay-modal--teaser" role="dialog" aria-label="Unlock the P&L Calendar">
+        <button class="jr-pay-close" id="jrPayClose" aria-label="Close">✕</button>
+        <div class="jr-pay-badge jr-pay-badge--lock">🔒 LOCKED</div>
+        <div class="jr-pay-title">Unlock the P&amp;L Calendar</div>
+        <div class="jr-teaser-grid" aria-hidden="true">
+          <div class="jr-teaser-cell win"><span>8</span><b>+$320</b></div>
+          <div class="jr-teaser-cell loss"><span>9</span><b>-$140</b></div>
+          <div class="jr-teaser-cell win"><span>10</span><b>+$95</b></div>
+          <div class="jr-teaser-cell"><span>11</span></div>
+          <div class="jr-teaser-cell loss"><span>12</span><b>-$60</b></div>
+          <div class="jr-teaser-cell win"><span>15</span><b>+$210</b></div>
+        </div>
+        <div class="jr-pay-sub">See every trade on a calendar — <strong>green days</strong> and
+          <strong>red days</strong> at a glance. Spot your patterns and click any day to jump
+          straight to those trades. <strong>Free to start.</strong></div>
+        <button class="jr-pay-cta" id="jrTeaserReg">Create a free account</button>
+        <button class="jr-pay-later" id="jrTeaserLogin">Already have an account? Log in</button>
+      </div>`;
+    $('jrPayClose').onclick = closePaywall;
+    $('jrTeaserReg').onclick   = () => { closePaywall(); const b = $('openRegisterBtn') || $('openLoginBtn'); if (b) b.click(); };
+    $('jrTeaserLogin').onclick = () => { closePaywall(); const b = $('openLoginBtn'); if (b) b.click(); };
+    requestAnimationFrame(() => el.classList.add('open'));
+  }
+
+  // Calendar button is always visible; guests see it locked (clicking it shows
+  // a "register to unlock" teaser instead of opening the calendar).
+  function updateCalBtn() {
+    const btn = $('jrCalBtn');
+    if (btn) {
+      btn.style.display = 'inline-flex';
+      btn.classList.toggle('jr-locked', !authed());
+    }
+    if (!authed() && state.cal) closeCalendar();
+  }
+
   // ── type toggle + buttons ─────────────────────────────────
   function setType(t) {
     if (state.type === t) return;
@@ -525,6 +835,8 @@
   // ── login/logout: migrate local → account, then refresh ───
   window.addEventListener('bs:auth', async ev => {
     const user = ev.detail && ev.detail.user;
+    state.user = user || null;
+    updateCalBtn();
     if (user) {
       const local = localGet();
       if (local.length) {
@@ -538,11 +850,26 @@
     render();
   });
 
+  // Independently confirm the tier on load (covers a reload with an existing
+  // token, in case the bs:auth broadcast fired before this module was listening).
+  async function refreshUser() {
+    if (!authed()) { state.user = null; updateCalBtn(); return; }
+    try {
+      const r = await api('/api/auth/me');
+      state.user = r.user || null;
+    } catch (_) { /* keep whatever bs:auth gave us */ }
+    updateCalBtn();
+  }
+
   // ── init ──────────────────────────────────────────────────
   function init() {
     document.querySelectorAll('.jr-type-btn').forEach(b => b.onclick = () => setType(b.dataset.jtype));
     $('jrAddBtn').onclick = () => { state.formOpen ? closeForm() : openForm(state.type, null); };
     $('jrExportBtn').onclick = exportCSV;
+    const calBtn = $('jrCalBtn');
+    if (calBtn) calBtn.onclick = () => { authed() ? openCalendar() : showLockedTeaser(); };
+    updateCalBtn();
+    refreshUser();
     loadEntries().then(render);
   }
 
@@ -556,6 +883,9 @@
       openForm('trade', { symbol: (symbol || '').toUpperCase() });
       const s = $('jf-symbol'); if (s) s.dispatchEvent(new Event('blur'));
     },
+    // Reusable Pro upgrade modal — pass {title, sub} to tailor the message
+    // (used by the watchlist 15-stock cap, etc.).
+    showUpgrade: showPaywall,
   };
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);

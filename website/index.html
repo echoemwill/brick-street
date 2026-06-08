@@ -286,6 +286,15 @@
       </div>
       <div class="jr-head-actions">
         <button class="jr-add-btn" id="jrAddBtn">+ New entry</button>
+        <button class="jr-cal-btn" id="jrCalBtn" title="P&amp;L calendar" style="display:none">
+          <svg class="jr-cal-icon" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+            <rect x="2" y="3.5" width="14" height="12.5" rx="2" stroke="currentColor" stroke-width="1.4"/>
+            <line x1="2" y1="7" x2="16" y2="7" stroke="currentColor" stroke-width="1.4"/>
+            <line x1="5.5" y1="1.5" x2="5.5" y2="4.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+            <line x1="12.5" y1="1.5" x2="12.5" y2="4.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+          </svg>
+          Calendar
+        </button>
         <button class="jr-export-btn" id="jrExportBtn" title="Export to CSV">⭳ Export</button>
       </div>
     </div>
@@ -303,14 +312,14 @@
       <!-- SORT CONTROLS -->
       <div class="controls-bar">
         <span class="controls-label">Sort by</span>
+        <button class="sort-btn" data-sort="symbol">Symbol</button>
+        <button class="sort-btn" data-sort="price">Price</button>
         <button class="sort-btn active" data-sort="buy">Buy</button>
         <button class="sort-btn" data-sort="hold">Hold</button>
         <button class="sort-btn" data-sort="sell">Sell</button>
-        <button class="sort-btn" data-sort="price">Price</button>
         <button class="sort-btn" data-sort="earnings">Earnings</button>
         <button class="sort-btn" data-sort="insider">Insider</button>
         <button class="sort-btn" data-sort="change">1D Change</button>
-        <button class="sort-btn" data-sort="symbol">Symbol</button>
 
         <div class="filter-search-group">
           <!-- FILTERS -->

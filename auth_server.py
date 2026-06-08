@@ -30,6 +30,15 @@ DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
 PORT     = int(os.environ.get('PORT', '8080'))
 IS_PROD  = os.environ.get('BS_ENV', 'development').lower() == 'production'
 
+# Owner / comp'd accounts that are always granted the pro subscription tier.
+# Extra emails can be added via BS_PRO_EMAILS (comma-separated) in .env.
+OWNER_EMAILS = {'emo_stil_stils@abv.bg'} | {
+    e.strip().lower() for e in os.environ.get('BS_PRO_EMAILS', '').split(',') if e.strip()
+}
+
+# Free accounts may save up to this many watchlist stocks; pro is unlimited.
+WATCHLIST_FREE_LIMIT = 15
+
 # JWT signing secret. NEVER hardcode this — a leaked secret lets anyone
 # forge a login token for any account. Must be set via env/.env in prod.
 SECRET = os.environ.get('BS_SECRET')
@@ -107,9 +116,25 @@ def init_db():
             FOREIGN KEY (user_id) REFERENCES users(id)
         )
     ''')
+    # ── migrations ──────────────────────────────────────────
+    # Subscription tier per user: 'free' (default) | 'pro' ($5/mo plan).
+    cols = [r[1] for r in conn.execute("PRAGMA table_info(users)").fetchall()]
+    if 'plan' not in cols:
+        conn.execute("ALTER TABLE users ADD COLUMN plan TEXT NOT NULL DEFAULT 'free'")
+    # Always keep the owner account(s) on the pro tier.
+    for em in OWNER_EMAILS:
+        conn.execute("UPDATE users SET plan = 'pro' WHERE email = ?", (em,))
+
     conn.commit()
     conn.close()
     print(f'  Database ready: {DB_PATH}')
+
+def user_plan(user_id) -> str:
+    """Current subscription tier for a user ('free' | 'pro')."""
+    conn = get_db()
+    row = conn.execute('SELECT plan FROM users WHERE id = ?', (user_id,)).fetchone()
+    conn.close()
+    return (row['plan'] if row and row['plan'] else 'free')
 
 # ── Token helpers ───────────────────────────────────────────
 def make_token(user):
@@ -117,6 +142,7 @@ def make_token(user):
         'user_id': user['id'],
         'name':    user['name'],
         'email':   user['email'],
+        'plan':    (user['plan'] if 'plan' in user.keys() else 'free'),
         'exp':     datetime.datetime.utcnow() + datetime.timedelta(days=30)
     }
     return jwt.encode(payload, SECRET, algorithm='HS256')
@@ -160,15 +186,17 @@ def register():
         return jsonify({'error': 'Please enter a valid email'}), 400
 
     conn = get_db()
+    plan = 'pro' if email in OWNER_EMAILS else 'free'
     try:
         conn.execute(
-            'INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)',
-            (name, email, generate_password_hash(password, method='pbkdf2:sha256'))
+            'INSERT INTO users (name, email, password_hash, plan) VALUES (?, ?, ?, ?)',
+            (name, email, generate_password_hash(password, method='pbkdf2:sha256'), plan)
         )
         conn.commit()
         user = conn.execute('SELECT * FROM users WHERE email = ?', (email,)).fetchone()
         return jsonify({'token': make_token(user), 'user': {
-            'id': user['id'], 'name': user['name'], 'email': user['email']
+            'id': user['id'], 'name': user['name'], 'email': user['email'],
+            'plan': (user['plan'] if 'plan' in user.keys() else 'free')
         }})
     except sqlite3.IntegrityError:
         return jsonify({'error': 'This email is already registered'}), 409
@@ -191,7 +219,8 @@ def login():
         return jsonify({'error': 'Incorrect email or password'}), 401
 
     return jsonify({'token': make_token(user), 'user': {
-        'id': user['id'], 'name': user['name'], 'email': user['email']
+        'id': user['id'], 'name': user['name'], 'email': user['email'],
+        'plan': (user['plan'] if 'plan' in user.keys() else 'free')
     }})
 
 @app.route('/api/auth/me', methods=['GET'])
@@ -201,7 +230,8 @@ def me():
         return jsonify({'error': 'No token provided'}), 401
     try:
         p = decode_token(auth[7:])
-        return jsonify({'user': {'id': p['user_id'], 'name': p['name'], 'email': p['email']}})
+        return jsonify({'user': {'id': p['user_id'], 'name': p['name'],
+                                 'email': p['email'], 'plan': user_plan(p['user_id'])}})
     except jwt.ExpiredSignatureError:
         return jsonify({'error': 'Session expired, please log in again'}), 401
     except jwt.InvalidTokenError:
@@ -231,6 +261,16 @@ def add_to_watchlist():
         return jsonify({'error': 'Symbol required'}), 400
     conn = get_db()
     try:
+        # Enforce the free-tier cap server-side (pro is unlimited). Re-adding a
+        # symbol already saved is always allowed.
+        if user_plan(payload['user_id']) != 'pro':
+            rows = conn.execute('SELECT symbol FROM watchlist WHERE user_id = ?',
+                                (payload['user_id'],)).fetchall()
+            saved = {r['symbol'] for r in rows}
+            if symbol not in saved and len(saved) >= WATCHLIST_FREE_LIMIT:
+                return jsonify({'error': f'Free plan is limited to {WATCHLIST_FREE_LIMIT} '
+                                         f'saved stocks. Upgrade to Pro for unlimited.',
+                                'code': 'watchlist_limit'}), 402
         conn.execute('INSERT INTO watchlist (user_id, symbol) VALUES (?, ?)', (payload['user_id'], symbol))
         conn.commit()
     except sqlite3.IntegrityError:
